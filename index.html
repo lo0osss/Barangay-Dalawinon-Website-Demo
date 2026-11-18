@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barangay Dalawinon Information Portal (local demo copy)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#1c5134; --green-dark:#10361f; --green-lt:#2b6e48;
+  --gold:#a9741a; --gold-lt:#d9a63f;
+  --bg:#f7f5ef; --surface:#ffffff; --surface-2:#f1ede3;
+  --ink:#1a1c18; --ink-2:#4a4f46; --ink-3:#777d71;
+  --line:#ddd8cb; --line-2:#ebe6da;
+  --ok:#1f6b3f; --warn:#8a5a12;
+  --radius:14px; --radius-sm:9px;
+  --shadow:0 1px 2px rgba(26,28,24,.05),0 8px 24px -12px rgba(26,28,24,.18);
+  --maxw:1140px;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+input,select,textarea{color:var(--ink);background-color:#fff;-webkit-text-fill-color:var(--ink);caret-color:var(--ink)}
+input::placeholder,textarea::placeholder{color:#8b9086;-webkit-text-fill-color:#8b9086;opacity:1}
+select option{color:var(--ink);background-color:#fff}
+.sel{
+  border:1px solid var(--line);border-radius:7px;padding:5px 8px;font-size:12.5px;font-weight:600;
+  font-family:inherit;cursor:pointer;background-color:#fff;color:var(--ink)
+}
+.sel:hover{border-color:var(--green)}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:'Libre Baskerville','Times New Roman',Georgia,serif;font-weight:700;line-height:1.28;margin:0;letter-spacing:-.005em}
+p{margin:0 0 1em}
+a{color:var(--green);text-decoration-thickness:1px;text-underline-offset:2px}
+img,svg{max-width:100%}
+button{font-family:inherit;font-size:inherit}
+:focus-visible{outline:3px solid var(--gold-lt);outline-offset:2px;border-radius:4px}
+h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--green);color:#fff;padding:10px 16px;z-index:200;border-radius:0 0 8px 0}
+.skip:focus{left:0}
+
+/* ---------- prototype banner ---------- */
+.proto{background:#2d2f2a;color:#f3efe4;font-size:13.5px;padding:9px 0;line-height:1.5}
+.proto .wrap{display:flex;gap:10px;align-items:flex-start}
+.proto svg{flex:none;margin-top:2px}
+
+/* ---------- header ---------- */
+header.site .wrap{max-width:1320px}
+header.site{position:sticky;top:0;z-index:100;background:rgba(247,245,239,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:14px;height:68px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);margin-right:auto;flex:0 0 auto}
+.seal{width:44px;height:44px;flex:none;border-radius:50%;object-fit:contain;background:#fff}
+.herologo{width:92px;height:92px;border-radius:50%;background:#fff;padding:5px;object-fit:contain;box-shadow:0 8px 24px -10px rgba(0,0,0,.6);margin-bottom:20px}
+.footlogo{width:62px;height:62px;border-radius:50%;background:#fff;padding:4px;object-fit:contain;margin-bottom:14px}
+.brand b{font-family:'Libre Baskerville','Times New Roman',serif;font-size:15px;font-weight:700;display:block;line-height:1.25;letter-spacing:.005em;white-space:nowrap}
+.brand span{font-size:11.5px;color:var(--ink-3);letter-spacing:.07em;text-transform:uppercase;font-weight:500;white-space:nowrap}
+nav.main{display:flex;gap:2px;align-items:center;min-width:0;flex-shrink:1}
+nav.main a{
+  padding:8px 13px;border-radius:8px;text-decoration:none;color:var(--ink-2);
+  font-size:14.5px;font-weight:500;white-space:nowrap
+}
+nav.main a:hover{background:var(--surface-2);color:var(--ink)}
+nav.main a.on{background:var(--green);color:#fff}
+/* staffbar — always-visible group of staff buttons in header */
+.staffbar{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:8px}
+.lockbtn{
+  display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink-2);padding:8px 13px;border-radius:8px;cursor:pointer;
+  font-size:14px;font-weight:500;font-family:inherit;white-space:nowrap
+}
+.lockbtn:hover{border-color:var(--green);color:var(--green)}
+.accesslogbtn{
+  display:none;align-items:center;gap:7px;cursor:pointer;
+  border:1px solid #d9a63f;background:#fdf6e8;color:#8a5a12;
+  padding:8px 13px;border-radius:8px;font-size:14px;font-weight:500;font-family:inherit;white-space:nowrap
+}
+.accesslogbtn:hover{border-color:var(--gold);background:#faefd5;color:#6b430d}
+.accesslogbtn.on{background:var(--gold);border-color:var(--gold);color:#fff}
+.accesslogbtn.show{display:inline-flex}
+.signout{
+  display:none;align-items:center;gap:7px;cursor:pointer;
+  border:1px solid #e0a9a5;background:#fbdedb;color:#9f201a;
+  padding:8px 13px;border-radius:8px;font-size:14px;font-weight:600;font-family:inherit;white-space:nowrap
+}
+.signout:hover{border-color:#b3261e;background:#f8cbc7}
+.signout.show{display:inline-flex}
+.burger{display:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 11px;cursor:pointer}
+@media(max-width:1260px){
+  nav.main{
+    position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;
+    background:var(--surface);border-bottom:1px solid var(--line);padding:10px;gap:2px;display:none;
+    box-shadow:var(--shadow)
+  }
+  nav.main.open{display:flex}
+  nav.main a{padding:12px 14px}
+  .burger{display:block}
+  /* on mobile, hide text labels to save space; icons remain */
+  .staffbar .t{display:none}
+  .staffbar{margin-left:4px;gap:4px}
+  .lockbtn,.accesslogbtn,.signout{padding:9px 11px}
+}
+
+@media(max-width:640px){
+  /* phones: let the brand give way so the staff buttons stay on screen */
+  .brand{flex:0 1 auto;min-width:0}
+  .brand b{white-space:normal;font-size:12.5px;line-height:1.2}
+  .brand>span>span{display:none}
+  .seal{width:36px;height:36px}
+  .bar{gap:8px}
+}
+
+/* ---------- sections ---------- */
+main>section{display:none;padding:44px 0 70px}
+main>section.live{display:block;animation:fade .28s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sechead{max-width:720px;margin-bottom:28px}
+.sechead h2{font-size:clamp(24px,3.4vw,31px)}
+.sechead p{color:var(--ink-2);margin-top:9px;font-size:17px}
+.eyebrow{
+  display:inline-block;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--gold);font-weight:700;margin-bottom:9px
+}
+
+/* ---------- hero ---------- */
+.hero{
+  background:#174428;
+  color:#f4f1e8;padding:62px 0 54px;position:relative;z-index:2
+}
+.herobg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.herobg .slide{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity .8s ease-in-out}
+.herobg .slide.on{opacity:1}
+.hero::after{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(160deg,rgba(10,32,19,.80) 0%,rgba(14,46,27,.64) 55%,rgba(8,26,15,.84) 100%)
+}
+@media (prefers-reduced-motion:reduce){.herobg .slide{transition:none}}
+.hero .wrap{position:relative;z-index:1}
+.hero h1{font-size:clamp(28px,4.7vw,45px);color:#fff;max-width:17ch;text-shadow:0 2px 14px rgba(0,0,0,.35)}
+.hero .tag{color:#e9c87c;font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:12.5px;margin-bottom:13px}
+.hero p.lede{color:#cfdcd2;font-size:17.5px;max-width:58ch;margin-top:14px}
+.searchwrap{margin-top:26px;max-width:620px;position:relative}
+.searchbox{display:flex;gap:8px;background:#fff;border-radius:12px;padding:7px;box-shadow:0 10px 30px -12px rgba(0,0,0,.5)}
+.searchbox input{
+  flex:1;border:0;padding:12px 13px;font-size:16px;font-family:inherit;background-color:#fff;color:var(--ink);min-width:0
+}
+.searchbox input:focus{outline:none}
+.searchbox button{
+  background:var(--green);color:#fff;border:0;padding:12px 20px;border-radius:8px;cursor:pointer;font-weight:600
+}
+.searchbox button:hover{background:var(--green-lt)}
+.hint{color:#b6c7bc;font-size:13.5px;margin-top:10px}
+#searchResults{
+  position:absolute;left:0;right:0;top:100%;margin-top:8px;z-index:60;
+  background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;
+  max-height:330px;overflow:auto;display:none;box-shadow:0 18px 44px -14px rgba(0,0,0,.45)
+}
+#searchResults.show{display:block}
+.sr{display:block;width:100%;text-align:left;border:0;background:transparent;padding:11px 12px;border-radius:8px;cursor:pointer;border-bottom:1px solid var(--line-2)}
+.sr:last-child{border-bottom:0}
+.sr:hover{background:var(--surface-2)}
+.sr b{display:block;font-size:15px;color:var(--ink);font-weight:600}
+.sr small{color:var(--ink-3);font-size:12.5px}
+.srtag{display:inline-block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:3px}
+
+/* ---------- cards ---------- */
+.grid{display:grid;gap:16px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:900px){.g3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.g3,.g2{grid-template-columns:1fr}}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;
+  text-align:left;width:100%;cursor:pointer;transition:transform .16s,box-shadow .16s,border-color .16s;
+  font-family:inherit;color:inherit
+}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#c9c2b1}
+.card .ico{
+  width:42px;height:42px;border-radius:11px;background:var(--surface-2);color:var(--green);
+  display:grid;place-items:center;margin-bottom:14px
+}
+.card h3{font-size:18px;margin-bottom:6px}
+.card p{color:var(--ink-2);font-size:14.5px;margin:0}
+.card .go{color:var(--green);font-weight:600;font-size:14px;margin-top:12px;display:inline-block}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.panel h3{font-size:17px;display:flex;align-items:center;gap:9px;margin-bottom:14px}
+.status{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding:5px 11px;border-radius:999px}
+.status.free{background:#e6f1e9;color:var(--ok)}
+.status.busy{background:#fbeedd;color:var(--warn)}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.kv{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--line-2);font-size:14.5px}
+.kv:last-child{border-bottom:0}
+.kv dt{color:var(--ink-3)}
+.kv dd{margin:0;font-weight:600;text-align:right}
+
+/* ---------- lists ---------- */
+.item{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin-bottom:12px
+}
+.item h3{font-size:18px;margin-bottom:6px}
+.item .meta{font-size:13px;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:9px}
+.chip{
+  display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+  padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2)
+}
+.chip.sk{background:#e8f0ea;color:var(--green)}
+.chip.brgy{background:#f6ecd9;color:var(--gold)}
+.chip.conf{background:#f7e3e3;color:#8c2d2d}
+.chip.restr{background:#f6ecd9;color:#8a5a12}
+.chip.draft{background:#e6eaf2;color:#3b4a66}
+.chip.ok{background:#e6f1e9;color:#1f6b3f}
+.chip.pend{background:#eceade;color:#6b6453}
+#staff .sechead h2::after{content:"";display:inline-block;width:0}
+.lockline{
+  display:flex;align-items:flex-start;gap:11px;background:#fdeceb;color:#7d2220;
+  border:1px solid #f0bfbc;border-left:4px solid #b3261e;border-radius:var(--radius-sm);
+  padding:13px 17px;font-size:14.5px;line-height:1.55;margin-bottom:24px
+}
+.lockline svg{flex:none;margin-top:2px}
+.lockline strong{color:#8c1d18}
+
+.toast{
+  position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(90px);
+  background:#2d2f2a;color:#f3efe4;padding:14px 22px;border-radius:11px;font-size:14.5px;
+  box-shadow:0 14px 36px -12px rgba(0,0,0,.6);z-index:400;opacity:0;
+  transition:transform .3s ease,opacity .3s ease;max-width:90vw;text-align:center
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+table.mini{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);margin-top:12px;font-size:13.5px}
+table.mini th,table.mini td{padding:7px 11px;border-bottom:1px solid var(--line-2);text-align:left}
+table.mini th{background:var(--surface-2);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase}
+table.mini td.num{color:var(--ink-3);width:38px}
+table.mini tr:last-child td{border-bottom:0}
+.redact{background:#e9e5da;color:transparent;border-radius:3px;user-select:none}
+.item p{color:var(--ink-2);font-size:15px;margin:0}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;align-items:center}
+.filters input[type=search]{
+  flex:1;min-width:200px;padding:11px 14px;border:1px solid var(--line);border-radius:9px;
+  font-family:inherit;font-size:15px;background:var(--surface)
+}
+.fbtn{
+  border:1px solid var(--line);background:var(--surface);padding:9px 14px;border-radius:999px;
+  cursor:pointer;font-size:14px;font-weight:500;color:var(--ink-2)
+}
+.fbtn.on{background:var(--green);border-color:var(--green);color:#fff}
+
+table.docs{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+table.docs th,table.docs td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line-2);font-size:14.5px;vertical-align:top}
+table.docs th{background:var(--surface-2);font-weight:600;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2)}
+table.docs tr:last-child td{border-bottom:0}
+table.docs td.t{font-weight:600;color:var(--ink)}
+.docbtn{border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:6px 11px;cursor:pointer;font-size:13px;font-weight:600;color:var(--green);white-space:nowrap}
+.docbtn:hover{border-color:var(--green);background:#f3f7f4}
+
+/* ---------- calendar ---------- */
+.cal{display:grid;grid-template-columns:92px 1fr;gap:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+.cal .date{background:var(--green);color:#fff;display:grid;place-content:center;text-align:center;padding:18px 10px}
+.cal .date .d{font-family:'Libre Baskerville','Times New Roman',serif;font-size:24px;font-weight:700;line-height:1}
+.cal .date .m{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin-top:4px;color:#d7e3da}
+.cal .body{padding:18px 22px}
+.cal .body h3{font-size:17.5px;margin-bottom:5px}
+
+/* ---------- officials ---------- */
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px}
+.person{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:15px 17px}
+.person .nm{font-weight:600;font-size:15.5px;line-height:1.3}
+.person .ro{font-size:13px;color:var(--ink-3);margin-top:3px}
+.lead{border-left:3px solid var(--gold)}
+
+/* ---------- form ---------- */
+form.fb{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+.field{margin-bottom:17px}
+.field label{display:block;font-weight:600;font-size:14.5px;margin-bottom:6px}
+.field .req{color:#9b2c2c}
+.field input,.field select,.field textarea{
+  width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:9px;
+  font-family:inherit;font-size:15.5px;background:#fff;color:var(--ink)
+}
+.field textarea{min-height:128px;resize:vertical}
+.field .help{font-size:13px;color:var(--ink-3);margin-top:5px}
+.submit{background:var(--green);color:#fff;border:0;padding:13px 26px;border-radius:9px;font-weight:600;cursor:pointer;font-size:15.5px}
+.submit:hover{background:var(--green-lt)}
+.notice{background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:var(--radius-sm);padding:15px 18px;font-size:14px;color:var(--ink-2);margin-bottom:20px}
+.notice strong{color:var(--ink)}
+.ok{background:#e6f1e9;border-color:#b9d6c3;border-left-color:var(--ok);color:#164a2b}
+
+/* ---------- staff ---------- */
+.modal{position:fixed;inset:0;background:rgba(20,22,19,.6);display:none;place-items:center;z-index:300;padding:16px;overflow-y:auto}
+.modal.open{display:grid}
+.modal .box{background:var(--surface);border-radius:var(--radius);padding:26px 22px;max-width:430px;width:100%;box-shadow:0 24px 60px -20px rgba(0,0,0,.5);margin:auto}
+@media(max-width:480px){.modal .box{padding:20px 16px}}
+.modal h3{font-size:21px;margin-bottom:7px}
+.modal p{font-size:14.5px;color:var(--ink-2)}
+.err{color:#9b2c2c;font-size:13.5px;margin-top:9px;display:none}
+.err.show{display:block}
+.row{display:flex;gap:9px;margin-top:6px}
+.ghost{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:13px 20px;cursor:pointer;font-weight:600;color:var(--ink-2)}
+
+footer.site{background:#1a2b20;color:#c3d2c8;padding:46px 0 30px;font-size:14.5px;margin-top:auto}
+footer.site h4{color:#fff;font-size:15.5px;margin-bottom:12px;font-family:'Inter',sans-serif;font-weight:600}
+footer.site a{color:#e9c87c}
+.fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:32px;margin-bottom:30px}
+@media(max-width:760px){.fgrid{grid-template-columns:1fr;gap:26px}}
+footer.site ul{list-style:none;padding:0;margin:0}
+footer.site li{margin-bottom:7px}
+footer.site .flist button{background:none;border:0;color:#c3d2c8;padding:0;cursor:pointer;font-size:14.5px;text-align:left}
+footer.site .flist button:hover{color:#fff;text-decoration:underline}
+.fbot{border-top:1px solid #2d4035;padding-top:20px;font-size:13px;color:#90a497}
+.tbd{color:var(--ink-3);font-style:italic}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<div class="proto">
+  <div class="wrap">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e9c87c" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>
+    <span><strong>Research prototype.</strong> Developed as the research output of a student paper on knowledge management and ICT in Barangay Dalawinon. This is not an official website of the barangay, and the records shown are sample entries for demonstration.</span>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#" data-go="home">
+      <img class="seal" src="logo.png" alt="Official seal of the Municipality of Magsaysay, Davao del Sur" width="44" height="44">
+      <span>
+        <b>Barangay Dalawinon</b>
+        <span>Magsaysay, Davao del Sur</span>
+      </span>
+    </a>
+
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+
+    <nav class="main" id="nav" aria-label="Main">
+      <a href="#" data-go="home" class="on">Home</a>
+      <a href="#" data-go="announcements">Announcements</a>
+      <a href="#" data-go="documents">Documents</a>
+      <a href="#" data-go="programs">Programs</a>
+      <a href="#" data-go="officials">Officials</a>
+      <a href="#" data-go="feedback">Feedback</a>
+    </nav>
+    <div class="staffbar" id="staffbar">
+      <button class="lockbtn" id="lockbtn" aria-label="Staff access">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+        <span class="t">Staff</span>
+      </button>
+      <button class="accesslogbtn" id="accesslogbtn" aria-label="View access logs">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+        <span class="t">Access Logs</span>
+      </button>
+      <button class="signout" id="signout" aria-label="Sign out of the staff area">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+        <span class="t">Sign out</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ================= HOME ================= -->
+<section id="home" class="live" style="padding-top:0">
+  <div class="hero">
+    <div class="herobg" id="herobg" aria-hidden="true">
+      <div class="slide on" style="background-image:url('images/hero-ricefields.jpg');background-position:center 62%"></div>
+      <div class="slide" style="background-image:url('images/hero-farm.jpg');background-position:center 60%"></div>
+      <div class="slide" style="background-image:url('images/hero-poblacion.jpg');background-position:center 55%"></div>
+      <div class="slide" style="background-image:url('images/hero-harvest.jpg');background-position:center 40%"></div>
+      <div class="slide" style="background-image:url('images/hero-municipalhall.jpg');background-position:center 35%"></div>
+    </div>
+    <div class="wrap">
+      <img class="herologo" src="logo.png" alt="Official seal of the Municipality of Magsaysay, Davao del Sur" width="92" height="92">
+      <div class="tag">Rice Granary of Magsaysay</div>
+      <h1>Official information for every purok of Dalawinon</h1>
+      <p class="lede">A single place for barangay and Sangguniang Kabataan announcements, public documents, program schedules, and a direct line for your questions and suggestions.</p>
+
+      <div class="searchwrap">
+        <div class="searchbox">
+          <label for="q" class="skip">Search announcements, documents and programs</label>
+          <input id="q" type="search" placeholder="Search announcements, documents, programs…" autocomplete="off">
+          <button id="qbtn" type="button">Search</button>
+        </div>
+        <div class="hint">Try &ldquo;financial report&rdquo;, &ldquo;CBYDP&rdquo;, &ldquo;clean-up&rdquo; or &ldquo;purok&rdquo;.</div>
+        <div id="searchResults" role="region" aria-live="polite" aria-label="Search results"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-top:46px">
+    <div class="sechead">
+      <span class="eyebrow">Quick access</span>
+      <h2>What would you like to do?</h2>
+    </div>
+
+    <div class="grid g3" id="quick"></div>
+
+    <div class="sechead" style="margin-top:52px">
+      <span class="eyebrow">At a glance</span>
+      <h2>Barangay today</h2>
+    </div>
+
+    <div class="grid g2">
+      <div class="panel">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+          Common room availability
+        </h3>
+        <p style="font-size:14px;color:var(--ink-2)">The councils have no separate office or meeting room, so the barangay hall&rsquo;s common room is shared for all meetings and activities.</p>
+        <div id="roomStatus"></div>
+      </div>
+
+      <div class="panel">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          Next scheduled activity
+        </h3>
+        <div id="nextEvent"></div>
+      </div>
+    </div>
+
+    <div class="sechead" style="margin-top:52px">
+      <span class="eyebrow">Latest</span>
+      <h2>Recent announcements</h2>
+    </div>
+    <div id="homeAnn"></div>
+    <button class="ghost" data-go="announcements" style="margin-top:4px">View all announcements</button>
+  </div>
+</section>
+
+<!-- ================= ANNOUNCEMENTS ================= -->
+<section id="announcements">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="eyebrow">Official notices</span>
+      <h2>Announcements</h2>
+      <p>Notices published by the Barangay Council and the Sangguniang Kabataan. Each post is dated so residents can tell what is current.</p>
+    </div>
+    <div class="filters" role="group" aria-label="Filter announcements">
+      <input type="search" id="annSearch" placeholder="Search announcements…" aria-label="Search announcements">
+      <button class="fbtn on" data-af="all">All</button>
+      <button class="fbtn" data-af="SK">Sangguniang Kabataan</button>
+      <button class="fbtn" data-af="Barangay">Barangay Council</button>
+    </div>
+    <div id="annList"></div>
+  </div>
+</section>
+
+<!-- ================= DOCUMENTS ================= -->
+<section id="documents">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="eyebrow">Digital repository</span>
+      <h2>Public documents</h2>
+      <p>Approved resolutions, minutes, development plans, accomplishment reports and financial reports, published openly rather than released only on request.</p>
+    </div>
+
+    <div class="notice">
+      <strong>Sample entries.</strong> The records listed here are placeholders showing how the repository is organised. Actual documents are uploaded by the councils once approved and reviewed for publication.
+    </div>
+
+    <div class="notice">
+      <strong>Looking for something that is not here?</strong> Some records are not published &mdash; working drafts awaiting approval, financial attachments, and anything containing personal data under the Data Privacy Act of 2012. Residents may request these from the councils, and the request is passed to the responsible officer.
+      <div style="margin-top:12px"><button class="docbtn" id="reqDoc" style="padding:9px 15px">Request a document</button></div>
+    </div>
+
+    <div class="filters" role="group" aria-label="Filter documents">
+      <input type="search" id="docSearch" placeholder="Search by title, year or type…" aria-label="Search documents">
+      <button class="fbtn on" data-df="all">All</button>
+      <button class="fbtn" data-df="Resolution">Resolutions</button>
+      <button class="fbtn" data-df="Minutes">Minutes</button>
+      <button class="fbtn" data-df="Plan">Plans</button>
+      <button class="fbtn" data-df="Report">Reports</button>
+    </div>
+
+    <table class="docs">
+      <caption class="skip">List of public documents</caption>
+      <thead><tr><th scope="col">Document</th><th scope="col">Type</th><th scope="col">Council</th><th scope="col">Date</th><th scope="col"><span class="skip">Action</span></th></tr></thead>
+      <tbody id="docBody"></tbody>
+    </table>
+    <p id="docEmpty" style="display:none;color:var(--ink-3);margin-top:16px">No documents match that search.</p>
+  </div>
+</section>
+
+<!-- ================= PROGRAMS ================= -->
+<section id="programs">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="eyebrow">Calendar</span>
+      <h2>Programs and activities</h2>
+      <p>Upcoming programs under the Comprehensive Barangay Youth Development Plan and the barangay&rsquo;s regular services, so residents across the six puroks can plan ahead.</p>
+    </div>
+    <div id="calList"></div>
+
+    <div class="sechead" style="margin-top:46px">
+      <span class="eyebrow">Coverage</span>
+      <h2>The six puroks</h2>
+      <p>Each purok has a designated volunteer youth leader who relays updates and helps organise local activities.</p>
+    </div>
+    <div class="people" id="purokList"></div>
+  </div>
+</section>
+
+<!-- ================= OFFICIALS ================= -->
+<section id="officials">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="eyebrow">Your council</span>
+      <h2>Barangay and SK officials</h2>
+      <p>The Barangay Council is composed of the Punong Barangay, seven Sangguniang Barangay Members, the SK Chairperson as Ex-Officio Member, the Barangay Secretary, and the Barangay Treasurer, under the Local Government Code of 1991. The Sangguniang Kabataan is composed of the SK Chairperson, seven SK Kagawad, the SK Secretary, and the SK Treasurer, under the SK Reform Act of 2015.</p>
+    </div>
+
+    <h3 style="font-size:19px;margin-bottom:13px">Barangay Council</h3>
+    <div class="people" id="brgyList"></div>
+
+    <h3 style="font-size:19px;margin:36px 0 13px">Sangguniang Kabataan Council</h3>
+    <div class="people" id="skList"></div>
+
+    <div class="panel" style="margin-top:36px">
+      <h3>Mandate of the Sangguniang Kabataan</h3>
+      <p style="font-size:15px;color:var(--ink-2);margin-bottom:0">Under Republic Act No. 10742, as amended by Republic Act No. 11768, the SK represents the youth in local governance. It identifies the needs and concerns of young residents, formulates the Comprehensive Barangay Youth Development Plan (CBYDP) and the Annual Barangay Youth Investment Program (ABYIP), approves its annual budget, promulgates resolutions, and implements programs on education, environment, disaster risk reduction, employment and livelihood, health, anti-drug abuse, gender sensitivity, sports, and leadership training.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEEDBACK ================= -->
+<section id="feedback">
+  <div class="wrap" style="max-width:780px">
+    <div class="sechead">
+      <span class="eyebrow">We are listening</span>
+      <h2>Feedback and inquiries</h2>
+      <p>Send a question, suggestion or concern to the Barangay or SK Council. You may also still approach your purok leader or any official in person.</p>
+    </div>
+
+    <div class="notice">
+      <strong>Privacy notice.</strong> Only the details needed to respond to your message are collected. Submissions are accessible to authorised officials only and are handled in accordance with the Data Privacy Act of 2012 (Republic Act No. 10173). You may leave your name and contact blank if you prefer to stay anonymous, though the council will then have no way to reply.
+    </div>
+
+    <form class="fb" id="fbForm" novalidate>
+      <div class="field">
+        <label for="fbType">What is this about? <span class="req" aria-hidden="true">*</span></label>
+        <select id="fbType" required>
+          <option value="">Please choose…</option>
+          <option>Question or inquiry</option>
+          <option>Suggestion for a program</option>
+          <option>Request for a document</option>
+          <option>Concern or complaint</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="fbPurok">Your purok</label>
+        <select id="fbPurok">
+          <option value="">Prefer not to say</option>
+          <option>Purok 1</option><option>Purok 2</option><option>Purok 3</option>
+          <option>Purok 4</option><option>Purok 5</option><option>Purok 6</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="fbName">Name</label>
+        <input id="fbName" type="text" autocomplete="name">
+        <div class="help">Optional. Leave blank to send anonymously.</div>
+      </div>
+      <div class="field">
+        <label for="fbContact">Contact number or email</label>
+        <input id="fbContact" type="text" autocomplete="tel">
+        <div class="help">Optional, but needed if you would like a reply.</div>
+      </div>
+      <div class="field">
+        <label for="fbMsg">Your message <span class="req" aria-hidden="true">*</span></label>
+        <textarea id="fbMsg" required></textarea>
+      </div>
+      <button class="submit" type="submit">Submit</button>
+      <p id="fbErr" class="err">Please choose a topic and write your message.</p>
+    </form>
+
+    <div id="fbDone" style="display:none">
+      <div class="notice ok" style="margin-top:20px">
+        <strong>Your message has been recorded.</strong> In the live site the council reviews submissions and replies through the contact details you provided. In this prototype the message is kept in your own browser only — it is not sent to anyone.
+      </div>
+      <button class="ghost" id="fbAgain">Send another message</button>
+    </div>
+
+    <div id="fbLog" style="margin-top:30px"></div>
+  </div>
+</section>
+
+<!-- ================= STAFF ================= -->
+<section id="staff">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="eyebrow">Internal · authorised officials only</span>
+      <h2>Council knowledge repository</h2>
+      <p>Restricted records and working guidance for the officials who maintain this site. Kept separate from the public pages so documents, procedures and turnover notes stay in one institutional place rather than in any one officer&rsquo;s personal files.</p>
+    </div>
+
+    <div class="lockline">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      <span>
+        <strong>You are signed in to the staff area.</strong>
+        <span id="roleBadge" style="display:none;margin-left:6px;background:#7d2220;color:#fff;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;letter-spacing:.04em;vertical-align:middle"></span>
+        <br>This session closes automatically after 2 minutes without activity. STRICTLY sign out before leaving a shared device.
+      </span>
+    </div>
+    <div id="viewOnlyNotice" style="display:none;margin-bottom:20px" class="notice">
+      <strong>View only.</strong> Classification and document request status changes are restricted to the Punong Barangay and SK Chairperson. You can view all records but cannot edit them from this login.
+    </div>
+
+    <div class="grid g2">
+      <div class="panel">
+        <h3>Content managers</h3>
+        <dl style="margin:0">
+          <div class="kv"><dt>Announcements</dt><dd>SK Secretary</dd></div>
+          <div class="kv"><dt>Documents and minutes</dt><dd>SK Secretary</dd></div>
+          <div class="kv"><dt>Financial reports</dt><dd>SK Treasurer</dd></div>
+          <div class="kv"><dt>Programs calendar</dt><dd>SK Chairperson</dd></div>
+          <div class="kv"><dt>Backup officer</dt><dd class="tbd">To be designated</dd></div>
+        </dl>
+        <p style="font-size:13.5px;color:var(--ink-3);margin:13px 0 0">A backup keeps the site running when an officer is unavailable or when administrations change.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Administrative access</h3>
+        <p style="font-size:14.5px;color:var(--ink-2)">Login credentials are held under institutional control, not by any individual official. On turnover, access is reassigned to the incoming officer and the outgoing officer&rsquo;s access is removed.</p>
+        <dl style="margin:0">
+          <div class="kv"><dt>Account holder</dt><dd>Barangay / SK Council</dd></div>
+          <div class="kv"><dt>Review before publishing</dt><dd>Required</dd></div>
+          <div class="kv"><dt>Turnover guide</dt><dd>See below</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <h3 style="font-size:19px;margin:40px 0 6px">Restricted records</h3>
+    <p style="color:var(--ink-2);font-size:15px;max-width:72ch;margin-bottom:16px">Records held by the councils that are not published on the public pages. Each one is kept here because it contains personal data, is still a working draft, or is released only on a verified request. Residents may ask for any of these through the feedback form, and the request is logged below.</p>
+
+    <div class="filters" role="group" aria-label="Filter restricted records">
+      <input type="search" id="resSearch" placeholder="Search restricted records…" aria-label="Search restricted records">
+      <button class="fbtn on" data-rf="all">All</button>
+      <button class="fbtn" data-rf="Confidential">Confidential</button>
+      <button class="fbtn" data-rf="Restricted">Restricted</button>
+      <button class="fbtn" data-rf="Draft">Working draft</button>
+    </div>
+
+    <table class="docs">
+      <caption class="skip">Restricted records held by the councils</caption>
+      <thead><tr><th scope="col">Record</th><th scope="col">Classification</th><th scope="col">Why it is withheld</th><th scope="col">Released</th><th scope="col"><span class="skip">Action</span></th></tr></thead>
+      <tbody id="resBody"></tbody>
+    </table>
+    <p id="resEmpty" style="display:none;color:var(--ink-3);margin-top:16px">No records match that search.</p>
+
+    <h3 style="font-size:19px;margin:40px 0 6px">Document requests</h3>
+    <p style="color:var(--ink-2);font-size:15px;max-width:72ch;margin-bottom:16px">Requests sent by residents through the feedback form. Each one is assigned to a responsible officer and closed once the document is released or the reason for withholding it is explained.</p>
+    <div id="reqLog"></div>
+
+    <h3 style="font-size:19px;margin:40px 0 13px">Procedures</h3>
+    <div id="staffDocs"></div>
+
+    <div class="notice" style="margin-top:22px">
+      <strong>Handling feedback.</strong> Collect only what is needed to respond. Limit access to submitted messages to authorised personnel. Handle all personal information in accordance with the Data Privacy Act of 2012 (Republic Act No. 10173).
+    </div>
+  </div>
+</section>
+
+<!-- ================= ACCESS LOG ================= -->
+<section id="accesslog">
+  <div class="wrap" style="max-width:860px">
+    <div class="sechead">
+      <span class="eyebrow">Internal · Punong Barangay &amp; SK Chairperson only</span>
+      <h2>Access Logs</h2>
+      <p>Record of all staff logins made on this device. Each entry shows the position that logged in and when. This log is stored locally in this browser only.</p>
+    </div>
+    <div id="accessLogContent"></div>
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="ghost" id="clearLoginLog2" style="font-size:13.5px;padding:9px 16px;color:#9b2c2c;border-color:#e0a9a5">Clear log on this device</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <img class="footlogo" src="logo.png" alt="Official seal of the Municipality of Magsaysay, Davao del Sur" width="62" height="62">
+        <h4>Barangay Dalawinon</h4>
+        <p style="margin-bottom:10px">Municipality of Magsaysay, Province of Davao del Sur, Davao Region, Philippines. Six puroks, with roughly seven in ten residents depending on farming for their livelihood.</p>
+        <p style="margin:0"><span class="tbd">Barangay hall address, contact number, operating hours and official social media accounts to be supplied by the council.</span></p>
+      </div>
+      <div class="flist">
+        <h4>Services</h4>
+        <ul>
+          <li><button data-go="announcements">Announcements</button></li>
+          <li><button data-go="documents">Public documents</button></li>
+          <li><button data-go="programs">Programs calendar</button></li>
+          <li><button data-go="feedback">Feedback and inquiries</button></li>
+        </ul>
+      </div>
+      <div class="flist">
+        <h4>References</h4>
+        <ul>
+          <li><a href="https://magsaysay.gov.ph/list-of-barangays/barangay-dalawinon/">Municipal profile page</a></li>
+          <li><a href="https://www.lawphil.net/statutes/repacts/ra1991/ra_7160_1991.html">RA 7160 (LGC of 1991)</a></li>
+          <li><a href="https://lawphil.net/statutes/repacts/ra2016/ra_10742_2016.html">RA 10742 (SK Reform Act)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot">
+      Research prototype developed for an academic paper on knowledge management and ICT in barangay governance. Designed to complement, not replace, purok leaders, group chats and printed announcements.
+    </div>
+  </div>
+</footer>
+
+<!-- staff modal -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="box">
+    <h3 id="mTitle">Staff access</h3>
+    <p>Enter your council access code to continue.</p>
+    <label for="code" style="display:block;font-weight:600;font-size:14px;margin-bottom:6px">Access code</label>
+    <input id="code" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" placeholder="Enter code" style="width:100%;padding:14px;border:1px solid var(--line);border-radius:9px;font-family:inherit;font-size:18px;letter-spacing:4px;text-align:center;-webkit-text-security:disc">
+    <p class="err" id="codeErr">That code is not recognised. Please check and try again.</p>
+    <div class="row" style="margin-top:14px">
+      <button class="submit" id="codeGo" style="flex:1;padding:14px 20px;font-size:16px">Enter</button>
+      <button class="ghost" id="codeCancel" style="padding:14px 20px;font-size:16px">Cancel</button>
+    </div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin:14px 0 0">Demonstration gate for the prototype. The live site would use proper accounts issued to designated officers.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------- data ---------------- */
+var ANN = [
+  {t:"CBYDP consultation for the coming year",c:"SK",d:"2026-11-14",b:"The Sangguniang Kabataan invites youth from all six puroks to the consultation for the Comprehensive Barangay Youth Development Plan. Bring your suggestions for education, livelihood, sports and environment projects."},
+  {t:"Barangay clean-up drive, Purok 3 and 4",c:"Barangay",d:"2026-11-10",b:"The barangay council calls on residents of Purok 3 and Purok 4 to join the scheduled clean-up along the main road. Tools will be provided at the barangay hall."},
+  {t:"Posting of SK accomplishment report",c:"SK",d:"2026-11-05",b:"The SK accomplishment report for the past semester is now available in the public documents section. Printed copies may also be requested at the barangay hall."},
+  {t:"Advisory on requesting barangay certificates",c:"Barangay",d:"2026-10-28",b:"Residents requesting barangay certificates and clearances are advised of the requirements and the schedule for releasing documents."},
+  {t:"Youth leadership training for purok volunteers",c:"SK",d:"2026-10-20",b:"Volunteer youth leaders from each purok are invited to a leadership training session under the SK leadership development program."},
+  {t:"Notice on the use of the barangay common room",c:"Barangay",d:"2026-10-12",b:"Organisations and councils using the common room for meetings are asked to coordinate schedules in advance to avoid conflicts."}
+];
+
+var DOCS = [
+  {t:"SK Resolution No. 12, Series of 2026",ty:"Resolution",c:"SK",d:"2026-10-02"},
+  {t:"SK Resolution No. 11, Series of 2026",ty:"Resolution",c:"SK",d:"2026-08-19"},
+  {t:"Barangay Resolution No. 24, Series of 2026",ty:"Resolution",c:"Barangay",d:"2026-09-15"},
+  {t:"Minutes of the SK regular session, September 2026",ty:"Minutes",c:"SK",d:"2026-09-28"},
+  {t:"Minutes of the Barangay Council session, September 2026",ty:"Minutes",c:"Barangay",d:"2026-09-20"},
+  {t:"Comprehensive Barangay Youth Development Plan (CBYDP)",ty:"Plan",c:"SK",d:"2026-02-10"},
+  {t:"Annual Barangay Youth Investment Program (ABYIP) 2026",ty:"Plan",c:"SK",d:"2026-02-10"},
+  {t:"SK accomplishment report, first semester 2026",ty:"Report",c:"SK",d:"2026-11-05"},
+  {t:"SK financial report, third quarter 2026",ty:"Report",c:"SK",d:"2026-10-08"},
+  {t:"Barangay annual accomplishment report 2025",ty:"Report",c:"Barangay",d:"2026-01-22"}
+];
+
+var EVENTS = [
+  {t:"CBYDP consultation with youth representatives",d:"2026-11-22",time:"8:00 AM – 12:00 NN",v:"Barangay hall common room",b:"Open to youth from all six puroks. Purok leaders will confirm attendance.",room:true},
+  {t:"Barangay clean-up drive",d:"2026-11-29",time:"6:00 AM – 9:00 AM",v:"Purok 3 and Purok 4 main road",b:"Part of the barangay environment program.",room:false},
+  {t:"Youth leadership training",d:"2026-12-06",time:"1:00 PM – 5:00 PM",v:"Barangay hall common room",b:"For volunteer youth leaders under the SK leadership development program.",room:true},
+  {t:"SK regular session",d:"2026-12-13",time:"9:00 AM – 11:00 AM",v:"Barangay hall common room",b:"Regular session of the Sangguniang Kabataan Council.",room:true},
+  {t:"Sports development activity",d:"2026-12-20",time:"2:00 PM onwards",v:"Barangay covered court",b:"Inter-purok games under the SK sports development program.",room:false}
+];
+
+var BRGY = [
+  {n:"GO, CARLOS D.",r:"Punong Barangay",lead:true},
+  {n:"MUÑEZ, RAIN DENISE C.",r:"Sangguniang Barangay Member"},
+  {n:"LAGUNA, NAIZZER ADRIAN F.",r:"Sangguniang Barangay Member"},
+  {n:"LUCHANA, EZZER JUNE C.",r:"Sangguniang Barangay Member"},
+  {n:"MAEDA, CUESHE C.",r:"Sangguniang Barangay Member"},
+  {n:"MULDEZ, JAMES MARI S.",r:"Sangguniang Barangay Member"},
+  {n:"MUNDAS, JESENT D.",r:"Sangguniang Barangay Member"},
+  {n:"JAMIAS, CHELSEA AVJAY L.",r:"Sangguniang Barangay Member"},
+  {n:"RAMOS, CHARMAE C.",r:"SK Chairperson (Ex-Officio Member)"},
+  {n:"NAMOC, JOSHUA U.",r:"Barangay Treasurer"},
+  {n:"PAGATPATAN, VENISE P.",r:"Barangay Secretary"}
+];
+
+var SK = [
+  {n:"RAMOS, CHARMAE C.",r:"SK Chairperson",lead:true},
+  {n:"SALVALEON, CHRISTIAN JOSEPH C.",r:"SK Kagawad"},
+  {n:"SINTOS, CHRISTINE D.",r:"SK Kagawad"},
+  {n:"TAJONERA, FRANK LOUISE A.",r:"SK Kagawad"},
+  {n:"ABELLERA, CEBASTIAN NIL C.",r:"SK Kagawad"},
+  {n:"AMBROSIO, PAUL JAMES E.",r:"SK Kagawad"},
+  {n:"APAT, PAOLO JAKE R.",r:"SK Kagawad"},
+  {n:"CABINGATAN, FRANCOIS ELYSHA B.",r:"SK Kagawad"},
+  {n:"BARROT, XANDREY P.",r:"SK Treasurer"},
+  {n:"DEJARME, GWYN MARIE S.",r:"SK Secretary"}
+];
+
+var RESTRICTED = [
+  {t:"Katipunan ng Kabataan (KK) masterlist",cl:"Confidential",w:"Contains names, ages and addresses of youth residents. Personal data under RA 10173.",rel:"Not released. Aggregate counts only."},
+  {t:"Youth profiling forms, by purok",cl:"Confidential",w:"Individual profiling sheets with personal and household details.",rel:"Not released. Summary figures may be requested."},
+  {t:"Feedback and inquiry submissions",cl:"Confidential",w:"Messages from residents, some with contact details and personal concerns.",rel:"Not released. Authorised officers only."},
+  {t:"Disbursement vouchers and official receipts",cl:"Restricted",w:"Supporting financial records with supplier and payee details.",rel:"On written request, with approval of the Treasurer."},
+  {t:"SK liquidation report, third quarter 2026",cl:"Restricted",w:"Detailed liquidation attachments. The summary financial report is published.",rel:"On request at the barangay hall."},
+  {t:"Barangay and SK officials’ contact directory",cl:"Restricted",w:"Personal mobile numbers of officials and purok volunteer leaders.",rel:"Not released. Official contact only."},
+  {t:"Draft SK Resolution No. 13, Series of 2026",cl:"Draft",w:"Not yet deliberated or approved in session.",rel:"Published once approved."},
+  {t:"Minutes pending approval, October 2026 session",cl:"Draft",w:"Awaiting correction and approval at the next regular session.",rel:"Published once approved."},
+  {t:"Draft CBYDP revisions for the coming year",cl:"Draft",w:"Working copy under consultation with youth representatives.",rel:"Published once adopted."},
+  {t:"Turnover inventory and administrative credentials",cl:"Restricted",w:"Account access and institutional turnover records.",rel:"Incoming and outgoing officers only."},
+  {t:"Incident and complaint records",cl:"Confidential",w:"Identifies individuals involved in reported concerns.",rel:"Not released. Handled case by case."}
+];
+
+var STAFFDOCS = [
+  {t:"Naming and filing digital documents",b:"Save every approved file as Council_DocumentType_Number_Year, for example SK_Resolution_12_2026. Keep one folder per document type and one subfolder per year. Upload only documents that have been approved and reviewed for publication."},
+  {t:"Review before publishing",b:"Information is checked for accuracy by the responsible officer before it goes on the site, and updated whenever details change. Withdraw or correct a post as soon as an error is found rather than leaving it to stand."},
+  {t:"Turnover guide for incoming officers",b:"Before the end of term, the outgoing officer hands over the current document folders, the list of content managers, and the administrative access. Incoming officers are briefed on uploading documents, posting announcements, and handling feedback."},
+  {t:"Basic training and technical support",b:"Officers managing the site receive guidance on updating content, uploading documents, accessibility, and data privacy. Technical assistance may be requested from the Municipality of Magsaysay or the Department of the Interior and Local Government."},
+  {t:"Keeping offline channels active",b:"The site complements purok leaders, group chats and printed announcements. Every announcement posted here is also relayed through the purok leaders so residents with limited internet access are not left out."}
+];
+
+var QUICK = [
+  {t:"Announcements",d:"Official notices from the Barangay and SK Councils.",go:"announcements",i:'<path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>'},
+  {t:"Public documents",d:"Resolutions, minutes, plans and financial reports.",go:"documents",i:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>'},
+  {t:"Programs calendar",d:"Upcoming activities across the six puroks.",go:"programs",i:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/>'},
+  {t:"Your officials",d:"Barangay Council and Sangguniang Kabataan members.",go:"officials",i:'<path d="M17 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 20v-2a4 4 0 0 0-3-3.9"/>'},
+  {t:"Feedback and inquiries",d:"Send a question, suggestion or concern.",go:"feedback",i:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l2-5.2A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/>'},
+  {t:"Purok directory",d:"Who to reach in each of the six puroks.",go:"programs",i:'<path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'}
+];
+
+/* ---------------- helpers ---------------- */
+function $(s,r){return (r||document).querySelector(s);}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function parse(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+function longDate(s){var d=parse(s);return MONL[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();}
+function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k)||"null");localStorage.setItem(k,JSON.stringify(v));}catch(e){return null;}}
+
+/* ---------------- navigation ---------------- */
+var VALID=["home","announcements","documents","programs","officials","feedback","staff","accesslog"];
+var unlocked=false;
+
+function go(id,push){
+  if(VALID.indexOf(id)<0) id="home";
+  if(id==="staff"&&!unlocked){openModal();return;}
+  if(id==="accesslog"&&LOG_ROLES.indexOf(currentRole)<0){return;}
+  $$("main>section").forEach(function(s){s.classList.toggle("live",s.id===id);});
+  $$("nav.main a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-go")===id);});
+  /* highlight accesslogbtn when on that tab */
+  var alb=$("#accesslogbtn");
+  if(alb)alb.classList.toggle("on",id==="accesslog");
+  $("#nav").classList.remove("open");
+  $("#burger").setAttribute("aria-expanded","false");
+  if(push!==false){try{location.hash=id==="home"?"":id;}catch(e){}}
+  window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
+  var h=$("#"+id+" h1, #"+id+" h2");
+  if(h){h.setAttribute("tabindex","-1");h.focus({preventScroll:true});}
+  if(id==="accesslog")drawLoginLog();
+}
+
+document.addEventListener("click",function(e){
+  var el=e.target.closest("[data-go]");
+  if(el){e.preventDefault();go(el.getAttribute("data-go"));}
+});
+$("#burger").addEventListener("click",function(){
+  var n=$("#nav"),open=n.classList.toggle("open");
+  this.setAttribute("aria-expanded",open?"true":"false");
+});
+window.addEventListener("hashchange",function(){
+  var h=(location.hash||"").replace("#","");
+  go(h||"home",false);
+});
+
+/* ---------------- staff gate ---------------- */
+var STAFF_CODES={
+  "12345":"Punong Barangay",
+  "00000":"SK Chairperson",
+  "1111":"SK Kagawad",
+  "2222":"Barangay Kagawad"
+};
+/* roles that may see the login log */
+var LOG_ROLES=["Punong Barangay","SK Chairperson"];
+var currentRole="";
+
+function openModal(){$("#modal").classList.add("open");setTimeout(function(){$("#code").focus();},40);}
+function closeModal(){$("#modal").classList.remove("open");$("#code").value="";$("#codeErr").classList.remove("show");}
+$("#lockbtn").addEventListener("click",function(){ unlocked?go("staff"):openModal(); });
+$("#codeCancel").addEventListener("click",closeModal);
+$("#modal").addEventListener("click",function(e){if(e.target===this)closeModal();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeModal();});
+
+function recordLogin(role){
+  try{
+    var log=store("dalawinon_loginlog")||[];
+    var now=new Date();
+    var dateStr=MONL[now.getMonth()]+" "+now.getDate()+", "+now.getFullYear();
+    var h=now.getHours(),m=now.getMinutes();
+    var ampm=h>=12?"PM":"AM";h=h%12||12;
+    var timeStr=h+":"+(m<10?"0":"")+m+" "+ampm;
+    log.unshift({role:role,date:dateStr,time:timeStr});
+    store("dalawinon_loginlog",log.slice(0,50));
+  }catch(e){}
+}
+
+function drawLoginLog(){
+  var el=$("#accessLogContent");
+  if(!el)return;
+  var log=store("dalawinon_loginlog")||[];
+  if(!log.length){
+    el.innerHTML='<p style="color:var(--ink-3);font-size:14.5px">No logins recorded on this device yet.</p>';
+    return;
+  }
+  el.innerHTML='<table class="docs"><thead><tr>'+
+    '<th scope="col">#</th><th scope="col">Position</th><th scope="col">Date</th><th scope="col">Time</th></tr></thead><tbody>'+
+    log.map(function(e,i){
+      return '<tr><td style="color:var(--ink-3);width:36px">'+(i+1)+'</td>'+
+        '<td style="font-weight:600">'+esc(e.role)+'</td>'+
+        '<td>'+esc(e.date)+'</td>'+
+        '<td>'+esc(e.time)+'</td></tr>';
+    }).join("")+'</tbody></table>';
+}
+
+function clearLog(){
+  if(confirm("Clear the entire access log on this device?")){
+    try{store("dalawinon_loginlog",[]);}catch(e){}
+    drawLoginLog();
+    toast("Access log cleared.");
+  }
+}
+
+function tryCode(){
+  var entered=$("#code").value.trim();
+  var role=STAFF_CODES[entered];
+  if(role){
+    currentRole=role;
+    recordLogin(role);
+    setSignedIn(true);closeModal();go("staff");
+    updateRoleBadge();
+  }else{$("#codeErr").classList.add("show");}
+}
+function updateRoleBadge(){
+  var badge=$("#roleBadge");
+  if(badge){
+    badge.textContent=currentRole?currentRole:"";
+    badge.style.display=currentRole?"inline-block":"none";
+  }
+  /* show/hide the Access Logs nav button */
+  var alb=$("#accesslogbtn");
+  var priv=LOG_ROLES.indexOf(currentRole)>=0;
+  if(alb){
+    alb.classList.toggle("show",priv);
+    if(!priv)alb.classList.remove("on");
+  }
+  /* show view-only notice for limited roles when signed in */
+  var von=$("#viewOnlyNotice");
+  if(von)von.style.display=(currentRole&&!priv)?"block":"none";
+  /* re-render tables so dropdowns appear/disappear based on current role */
+  drawRestricted();
+  drawRequests();
+}
+$("#codeGo").addEventListener("click",tryCode);
+$("#accesslogbtn").addEventListener("click",function(){go("accesslog");});
+$("#clearLoginLog2").addEventListener("click",clearLog);
+
+/* ---- sign out, manual or after 2 minutes idle ---- */
+var IDLE_MS=120000, idleTimer=null;
+
+function toast(msg){
+  var t=document.createElement("div");
+  t.className="toast";t.setAttribute("role","status");t.textContent=msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(function(){t.classList.add("show");});
+  setTimeout(function(){t.classList.remove("show");setTimeout(function(){t.remove();},350);},4200);
+}
+function setSignedIn(on){
+  unlocked=on;
+  $("#signout").classList.toggle("show",on);
+  if(on){startIdle();}else{clearTimeout(idleTimer);idleTimer=null;}
+}
+function signOut(auto){
+  currentRole="";
+  updateRoleBadge();
+  setSignedIn(false);
+  go("home");
+  toast(auto?"Signed out automatically after 2 minutes without activity."
+            :"You have signed out of the staff area.");
+}
+function startIdle(){
+  clearTimeout(idleTimer);
+  idleTimer=setTimeout(function(){signOut(true);},IDLE_MS);
+}
+["mousemove","mousedown","keydown","scroll","touchstart","click"].forEach(function(ev){
+  document.addEventListener(ev,function(){ if(unlocked) startIdle(); },{passive:true});
+});
+$("#signout").addEventListener("click",function(){signOut(false);});
+$("#code").addEventListener("keydown",function(e){if(e.key==="Enter")tryCode();});
+
+/* ---------------- render ---------------- */
+$("#quick").innerHTML=QUICK.map(function(q){
+  return '<button class="card" data-go="'+q.go+'">'+
+    '<span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+q.i+'</svg></span>'+
+    '<h3>'+esc(q.t)+'</h3><p>'+esc(q.d)+'</p><span class="go">Open &rarr;</span></button>';
+}).join("");
+
+function annCard(a){
+  return '<article class="item"><div class="meta">'+
+    '<span class="chip '+(a.c==="SK"?"sk":"brgy")+'">'+(a.c==="SK"?"Sangguniang Kabataan":"Barangay Council")+'</span>'+
+    '<span>'+longDate(a.d)+'</span></div>'+
+    '<h3>'+esc(a.t)+'</h3><p>'+esc(a.b)+'</p></article>';
+}
+$("#homeAnn").innerHTML=ANN.slice(0,3).map(annCard).join("");
+
+var annFilter="all";
+function drawAnn(){
+  var q=$("#annSearch").value.trim().toLowerCase();
+  var rows=ANN.filter(function(a){
+    var okF=annFilter==="all"||a.c===annFilter;
+    var okQ=!q||(a.t+" "+a.b).toLowerCase().indexOf(q)>=0;
+    return okF&&okQ;
+  });
+  $("#annList").innerHTML=rows.length?rows.map(annCard).join("")
+    :'<p style="color:var(--ink-3)">No announcements match that search.</p>';
+}
+$("#annSearch").addEventListener("input",drawAnn);
+$$('[data-af]').forEach(function(b){
+  b.addEventListener("click",function(){
+    $$('[data-af]').forEach(function(x){x.classList.remove("on");});
+    this.classList.add("on");annFilter=this.getAttribute("data-af");drawAnn();
+  });
+});
+drawAnn();
+
+/* Placeholder previews for each published document, by type. */
+function paper(inner){
+  return '<div style="margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:22px 26px;max-height:330px;overflow:auto;font-size:14px;line-height:1.7">'+inner+'</div>';
+}
+function letterhead(council,kind,no,when){
+  return '<div style="text-align:center;font-family:\'Libre Baskerville\',serif;line-height:1.5">'+
+    '<div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Republic of the Philippines</div>'+
+    '<div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Province of Davao del Sur &middot; Municipality of Magsaysay</div>'+
+    '<div style="font-weight:700;margin-top:6px">'+council+' NG BARANGAY DALAWINON</div>'+
+    (no?'<div style="margin-top:16px;font-weight:700">'+kind+' NO. '+no+'</div>':'<div style="margin-top:16px;font-weight:700">'+kind+'</div>')+
+    (when?'<div style="font-size:13px;color:var(--ink-2)">'+when+'</div>':'')+'</div>';
+}
+function miniTable(head,rows,foot){
+  return '<table class="mini" style="margin-top:12px"><thead><tr>'+
+    head.map(function(h){return '<th>'+h+'</th>';}).join("")+'</tr></thead><tbody>'+
+    rows.map(function(r){return '<tr>'+r.map(function(c,i){
+      return '<td'+(i===r.length-1?' style="text-align:right;white-space:nowrap"':'')+'>'+c+'</td>';}).join("")+'</tr>';}).join("")+
+    '</tbody>'+(foot||"")+'</table>';
+}
+function docPreview(d){
+  var council=d.c==="SK"?"SANGGUNIANG KABATAAN":"SANGGUNIANG BARANGAY";
+  var note='<div style="margin-top:13px;padding:11px 14px;background:var(--surface-2);border-left:3px solid var(--gold);border-radius:7px;font-size:13px;color:var(--ink-2)"><strong>Sample content.</strong> Placeholder text standing in for the approved document.</div>';
+
+  if(d.ty==="Resolution"){
+    var no=(d.t.match(/No\.\s*(\d+)/)||[])[1]||"00";
+    return note+paper(letterhead(council,"RESOLUTION",no,"Series of 2026")+
+      '<p style="margin:18px 0 14px;font-weight:600;text-align:center;font-size:13.5px">A RESOLUTION APPROPRIATING FUNDS FOR THE CONDUCT OF YOUTH PROGRAMS AND ACTIVITIES IN BARANGAY DALAWINON</p>'+
+      '<p><strong>WHEREAS,</strong> the Council is mandated to implement programs that promote the welfare and development of its constituents;</p>'+
+      '<p><strong>WHEREAS,</strong> the proposed activities form part of the approved annual plan and investment program of the Council;</p>'+
+      '<p><strong>NOW THEREFORE,</strong> on motion duly seconded, be it <strong>RESOLVED,</strong> as it is hereby resolved, to approve the said appropriation and to direct the Treasurer to release the corresponding funds subject to accounting and auditing rules;</p>'+
+      '<p><strong>APPROVED</strong> this '+longDate(d.d)+' at Barangay Dalawinon, Magsaysay, Davao del Sur.</p>'+
+      '<p style="margin-top:18px;color:var(--ink-3);font-style:italic;font-size:13px">[ Signatures and attestation appear on the signed copy. ]</p>');
+  }
+  if(d.ty==="Minutes"){
+    return note+paper(letterhead(council,"MINUTES OF THE REGULAR SESSION","",longDate(d.d))+
+      '<p style="margin-top:16px"><strong>Call to order.</strong> The session was called to order by the presiding officer at the barangay hall common room.</p>'+
+      '<p><strong>Roll call.</strong> A quorum was declared present.</p>'+
+      '<p><strong>Business arising.</strong> The Council discussed the status of ongoing programs across the six puroks, including the clean-up drive and the youth leadership training.</p>'+
+      '<p><strong>New business.</strong> A proposal to adopt a centralised information platform for announcements and public documents was taken up and referred for drafting.</p>'+
+      '<p><strong>Adjournment.</strong> There being no further business, the session was adjourned.</p>'+
+      '<p style="margin-top:18px;color:var(--ink-3);font-style:italic;font-size:13px">[ Prepared by the Secretary. Approved at the following regular session. ]</p>');
+  }
+  if(d.ty==="Plan"){
+    var rows=[
+      ["Education","Scholarship assistance and school supplies drive","Q1 &ndash; Q2","&#8369;35,000.00"],
+      ["Health","Youth health orientation with the barangay health station","Q2","&#8369;12,000.00"],
+      ["Environment","Purok clean-up drives and tree planting","Q1 &ndash; Q4","&#8369;18,000.00"],
+      ["Sports development","Inter-purok games and equipment","Q3 &ndash; Q4","&#8369;40,000.00"],
+      ["Livelihood","Skills training for out-of-school youth","Q3","&#8369;25,000.00"],
+      ["Governance","Leadership training for purok youth volunteers","Q2 &ndash; Q3","&#8369;15,000.00"]
+    ];
+    return note+paper(letterhead(council,d.t.toUpperCase(),"","Barangay Dalawinon, Magsaysay, Davao del Sur")+
+      '<p style="margin-top:14px">Centers of participation and the corresponding programs adopted by the Council for the plan period:</p>'+
+      miniTable(["Center of participation","Program or project","Schedule","Budget"],rows,
+        '<tfoot><tr><td colspan="3" style="font-weight:700;border-top:2px solid var(--line)">Total</td><td style="text-align:right;font-weight:700;border-top:2px solid var(--line);white-space:nowrap">&#8369;145,000.00</td></tr></tfoot>'));
+  }
+  if(d.ty==="Report"){
+    if(d.t.toLowerCase().indexOf("financial")>=0){
+      var fr=[
+        ["Beginning balance","","&#8369;182,400.00"],
+        ["Add: SK fund allocation received","","&#8369;96,000.00"],
+        ["Less: Programs and activities","Clean-up drive, consultation, sports","&#8369;26,550.00"],
+        ["Less: Supplies and printing","Advisories, folders, bond paper","&#8369;4,370.00"],
+        ["Less: Other operating expenses","Transport and miscellaneous","&#8369;3,000.00"],
+        ["Ending balance","","&#8369;244,480.00"]
+      ];
+      return note+paper(letterhead(council,"FINANCIAL REPORT","",longDate(d.d))+
+        miniTable(["Particulars","Details","Amount"],fr)+
+        '<p style="margin-top:14px;font-size:13px;color:var(--ink-3)">Supporting vouchers and official receipts are held by the Treasurer and released on written request.</p>');
+    }
+    var ar=[
+      ["Purok clean-up drives","4 conducted","All six puroks covered"],
+      ["Youth leadership training","1 batch","26 volunteer leaders trained"],
+      ["Inter-purok sports activity","1 conducted","Participants from all puroks"],
+      ["CBYDP consultation","2 sessions","Youth representatives per purok"],
+      ["Information drive","Ongoing","Announcements relayed by purok leaders"]
+    ];
+    return note+paper(letterhead(council,"ACCOMPLISHMENT REPORT","",longDate(d.d))+
+      '<p style="margin-top:14px">Summary of programs and activities implemented during the covered period:</p>'+
+      miniTable(["Program or activity","Output","Remarks"],ar));
+  }
+  return note+paper('<p>Document summary not available in this placeholder.</p>');
+}
+
+var docFilter="all";
+function drawDocs(){
+  var q=$("#docSearch").value.trim().toLowerCase();
+  var rows=DOCS.filter(function(d){
+    var okF=docFilter==="all"||d.ty===docFilter;
+    var okQ=!q||(d.t+" "+d.ty+" "+d.c+" "+d.d).toLowerCase().indexOf(q)>=0;
+    return okF&&okQ;
+  });
+  $("#docBody").innerHTML=rows.map(function(d){
+    return '<tr><td class="t">'+esc(d.t)+'</td><td>'+esc(d.ty)+'</td><td>'+(d.c==="SK"?"Sangguniang Kabataan":"Barangay Council")+'</td><td>'+longDate(d.d)+'</td>'+
+      '<td><button class="docbtn" data-doc="'+esc(d.t)+'">View</button></td></tr>';
+  }).join("");
+  $("#docEmpty").style.display=rows.length?"none":"block";
+}
+$("#docSearch").addEventListener("input",drawDocs);
+$$('[data-df]').forEach(function(b){
+  b.addEventListener("click",function(){
+    $$('[data-df]').forEach(function(x){x.classList.remove("on");});
+    this.classList.add("on");docFilter=this.getAttribute("data-df");drawDocs();
+  });
+});
+drawDocs();
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-doc]");
+  if(!b)return;
+  var row=b.closest("tr");
+  if(row.nextElementSibling&&row.nextElementSibling.className==="prev"){row.nextElementSibling.remove();return;}
+  var title=b.getAttribute("data-doc");
+  var doc=DOCS.filter(function(d){return d.t===title;})[0]||{ty:"",c:"",d:""};
+  var tr=document.createElement("tr");
+  tr.className="prev";
+  tr.innerHTML='<td colspan="5" style="background:var(--surface-2);color:var(--ink-2);font-size:14px">'+
+    '<strong>'+esc(title)+'</strong><br>Placeholder entry. In the live site this opens the approved document file uploaded by the council.'+
+    docPreview(doc)+'</td>';
+  row.after(tr);
+});
+
+var today=new Date();today.setHours(0,0,0,0);
+var upcoming=EVENTS.filter(function(e){return parse(e.d)>=today;});
+var shown=upcoming.length?upcoming:EVENTS;
+$("#calList").innerHTML=shown.map(function(e){
+  var d=parse(e.d);
+  return '<article class="cal"><div class="date"><div><div class="d">'+d.getDate()+'</div><div class="m">'+MON[d.getMonth()]+'</div></div></div>'+
+    '<div class="body"><h3>'+esc(e.t)+'</h3>'+
+    '<div class="meta" style="font-size:13px;color:var(--ink-3);margin-bottom:8px">'+esc(e.time)+' &middot; '+esc(e.v)+'</div>'+
+    '<p style="font-size:14.5px;color:var(--ink-2);margin:0">'+esc(e.b)+'</p></div></article>';
+}).join("");
+
+var nx=shown[0];
+$("#nextEvent").innerHTML=nx?
+  '<div style="font-family:\'Libre Baskerville\',serif;font-size:18px;font-weight:700;margin-bottom:6px">'+esc(nx.t)+'</div>'+
+  '<dl style="margin:0"><div class="kv"><dt>Date</dt><dd>'+longDate(nx.d)+'</dd></div>'+
+  '<div class="kv"><dt>Time</dt><dd>'+esc(nx.time)+'</dd></div>'+
+  '<div class="kv"><dt>Venue</dt><dd>'+esc(nx.v)+'</dd></div></dl>'+
+  '<button class="ghost" data-go="programs" style="margin-top:14px;padding:9px 16px;font-size:14px">View full calendar</button>'
+  :'<p style="color:var(--ink-3)">No activities scheduled.</p>';
+
+var nextRoom=shown.filter(function(e){return e.room;})[0];
+$("#roomStatus").innerHTML=
+  '<div class="status free" style="margin:4px 0 14px"><span class="dot"></span>Available today</div>'+
+  (nextRoom?'<dl style="margin:0"><div class="kv"><dt>Next booked for</dt><dd>'+esc(nextRoom.t)+'</dd></div>'+
+  '<div class="kv"><dt>On</dt><dd>'+longDate(nextRoom.d)+'</dd></div>'+
+  '<div class="kv"><dt>Time</dt><dd>'+esc(nextRoom.time)+'</dd></div></dl>':"");
+
+$("#brgyList").innerHTML=BRGY.map(function(p){
+  return '<div class="person'+(p.lead?" lead":"")+'"><div class="nm">'+esc(p.n)+'</div><div class="ro">'+esc(p.r)+'</div></div>';
+}).join("");
+$("#skList").innerHTML=SK.map(function(p){
+  return '<div class="person'+(p.lead?" lead":"")+'"><div class="nm">'+esc(p.n)+'</div><div class="ro">'+esc(p.r)+'</div></div>';
+}).join("");
+
+var puroks="";
+for(var i=1;i<=6;i++){
+  puroks+='<div class="person"><div class="nm">Purok '+i+'</div><div class="ro tbd">Volunteer youth leader to be listed</div></div>';
+}
+$("#purokList").innerHTML=puroks;
+
+/* Sample KK masterlist. Invented names — never real residents, since the page is shareable. */
+var KK = [
+  ["MUÑEZ, RAIN DENISE C.","F"],["LAGUNA, NAIZZER ADRIAN F.","M"],["LUCHANA, EZZER JUNE C.","M"],
+  ["MAEDA, CUESHE C.","F"],["MULDEZ, JAMES MARI S.","F"],["MUNDAS, JESENT D.","M"],
+  ["JAMIAS, CHELSEA AVJAY L.","F"],["NAMOC, JOSHUA U.","M"],["PAGATPATAN, VENISE P.","F"],
+  ["RAMOS, CHARMAE C.","F"],["SALVALEON, CHRISTIAN JOSEPH C.","M"],["SINTOS, CHRISTINE D.","F"],
+  ["TAJONERA, FRANK LOUISE A.","M"],["ABELLERA, CEBASTIAN NIL C.","M"],["DEJARME, GWYN MARIE S.","F"],
+  ["AMBROSIO, PAUL JAMES E.","M"],["APAT, PAOLO JAKE R.","M"],["BARROT, XANDREY P.","F"],
+  ["CABINGATAN, FRANCOIS ELYSHA B.","F"],["CABONCE, KYLE BETTINA C.","F"],["GUDIO, LEIYAN ESTELLE E.","F"],
+  ["DELA PEÑA, NICOLAS III J.","M"],["DELOS SANTOS, BENNA LOUISE E.","F"],["ESTERON, HANNA JOY Y.","F"],
+  ["GALARIANA, KEN DOMINIC A.","M"],["GO, CARLOS D.","M","25&ndash;26"]
+];
+function kkPreview(){
+  var rows=KK.map(function(r,i){
+    return '<tr><td class="num">'+(i+1)+'</td><td>'+esc(r[0])+'</td><td>'+(r[2]||"20&ndash;21")+'</td><td>'+
+      (r[1]==="F"?"Female":"Male")+'</td><td><span class="redact">0000000000</span></td></tr>';
+  }).join("");
+  return '<div style="margin-top:14px;padding:13px 15px;background:#fdeceb;border:1px solid #f0bfbc;border-left:3px solid #b3261e;border-radius:8px;color:#7d2220;font-size:13.5px">'+
+    '<strong>Local copy only.</strong> This masterlist is personal data under the Data Privacy Act of 2012. This build is for offline demonstration on your own device and must not be deployed to the public site.</div>'+
+    '<div style="max-height:320px;overflow:auto;margin-top:4px">'+
+    '<table class="mini"><caption class="skip">Sample Katipunan ng Kabataan masterlist</caption>'+
+    '<thead><tr><th>#</th><th>Full name</th><th>Age band</th><th>Gender</th><th>Contact</th></tr></thead>'+
+    '<tbody>'+rows+'</tbody></table></div>'+
+    '<div style="font-size:12.5px;color:var(--ink-3);margin-top:9px">Contact numbers are withheld even inside the staff view. Officers see only the fields needed for the task at hand.</div>';
+}
+
+function sampleBanner(txt){
+  return '<div style="margin-top:14px;padding:13px 15px;background:#fdeceb;border:1px solid #f0bfbc;border-left:3px solid #b3261e;border-radius:8px;color:#7d2220;font-size:13.5px">'+txt+'</div>';
+}
+
+/* Sample disbursement vouchers — placeholder figures, not actual council records. */
+var VOUCHERS = [
+  ["SK-DV-2026-031","2026-10-02","Dalawinon Agri &amp; Hardware Supply","Materials for purok clean-up drive","4,850.00"],
+  ["SK-DV-2026-032","2026-10-07","Magsaysay Printing Services","Tarpaulins and printed advisories","2,400.00"],
+  ["SK-DV-2026-033","2026-10-11","Local catering, youth assembly","Meals for CBYDP consultation","6,200.00"],
+  ["SK-DV-2026-034","2026-10-18","Dalawinon Sports Supply","Equipment for inter-purok games","7,500.00"],
+  ["SK-DV-2026-035","2026-10-25","Office supplies vendor","Record folders and bond paper","1,970.00"],
+  ["SK-DV-2026-036","2026-11-04","Transport service provider","Hauling for clean-up drive","3,000.00"]
+];
+function voucherPreview(){
+  var total=VOUCHERS.reduce(function(a,v){return a+parseFloat(v[4].replace(/,/g,""));},0);
+  var rows=VOUCHERS.map(function(v){
+    return '<tr><td class="num" style="width:auto;white-space:nowrap">'+v[0]+'</td><td style="white-space:nowrap">'+v[1]+'</td>'+
+      '<td>'+v[2]+'</td><td>'+v[3]+'</td><td style="text-align:right;white-space:nowrap">&#8369;'+v[4]+'</td></tr>';
+  }).join("");
+  return sampleBanner('<strong>Sample data.</strong> Placeholder vouchers for demonstration &mdash; not actual council records. Supporting financial documents are released on written request with the approval of the Treasurer. The summary financial report is published on the public pages.')+
+    '<div style="max-height:320px;overflow:auto;margin-top:4px">'+
+    '<table class="mini"><caption class="skip">Sample disbursement vouchers</caption>'+
+    '<thead><tr><th>Voucher no.</th><th>Date</th><th>Payee</th><th>Particulars</th><th style="text-align:right">Amount</th></tr></thead>'+
+    '<tbody>'+rows+'</tbody>'+
+    '<tfoot><tr><td colspan="4" style="font-weight:700;border-top:2px solid var(--line)">Total for the period</td>'+
+    '<td style="text-align:right;font-weight:700;border-top:2px solid var(--line);white-space:nowrap">&#8369;'+
+    total.toLocaleString("en-PH",{minimumFractionDigits:2,maximumFractionDigits:2})+'</td></tr></tfoot></table></div>'+
+    '<div style="font-size:12.5px;color:var(--ink-3);margin-top:9px">Official receipts are filed with each voucher. Scanned attachments are held in the councils&rsquo; controlled storage.</div>';
+}
+
+/* Sample draft resolution — placeholder text, not an approved issuance. */
+function resolutionPreview(){
+  return sampleBanner('<strong>Working draft.</strong> Placeholder text for demonstration. This resolution has not been deliberated or approved in session, so it is not published on the public pages. Drafts appear there only once adopted and signed.')+
+    '<div style="margin-top:4px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:22px 26px;max-height:340px;overflow:auto;font-size:14px;line-height:1.7">'+
+    '<div style="text-align:center;font-family:\'Libre Baskerville\',serif;line-height:1.5">'+
+      '<div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Republic of the Philippines</div>'+
+      '<div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Province of Davao del Sur &middot; Municipality of Magsaysay</div>'+
+      '<div style="font-weight:700;margin-top:6px">SANGGUNIANG KABATAAN NG BARANGAY DALAWINON</div>'+
+      '<div style="margin-top:16px;font-weight:700">DRAFT SK RESOLUTION NO. 13</div>'+
+      '<div style="font-size:13px;color:var(--ink-2)">Series of 2026</div>'+
+    '</div>'+
+    '<p style="margin:20px 0 14px;font-weight:600;text-align:center;font-size:13.5px">A RESOLUTION ADOPTING THE BARANGAY DALAWINON YOUTH INFORMATION PORTAL AS AN OFFICIAL CHANNEL FOR PUBLISHING ANNOUNCEMENTS AND PUBLIC DOCUMENTS OF THE SANGGUNIANG KABATAAN</p>'+
+    '<p><strong>WHEREAS,</strong> under Republic Act No. 10742, as amended by Republic Act No. 11768, the Sangguniang Kabataan is mandated to represent the youth and promote their meaningful participation in local governance;</p>'+
+    '<p><strong>WHEREAS,</strong> official information of the Council is at present disseminated through the personal social media accounts of its officials, group chats, and designated purok leaders, without a single institutional source where announcements and public documents may be organised and retrieved;</p>'+
+    '<p><strong>WHEREAS,</strong> the Council recognises the need to publish its approved plans, resolutions, accomplishment reports, and financial reports proactively rather than upon request alone;</p>'+
+    '<p><strong>NOW THEREFORE,</strong> on motion duly seconded, be it <strong>RESOLVED,</strong> as it is hereby resolved, to adopt the Barangay Dalawinon Youth Information Portal as an official channel of the Council, and to designate responsible officers for its content, with a backup officer to ensure continuity across administrations;</p>'+
+    '<p><strong>RESOLVED FURTHER,</strong> that the portal shall complement, and shall not replace, existing community-based channels, so that residents with limited internet access continue to receive public information;</p>'+
+    '<p style="margin-top:18px;color:var(--ink-3);font-style:italic;font-size:13px">[ Draft ends here. Signatures and attestation follow upon approval in session. ]</p>'+
+    '</div>';
+}
+
+var resFilter="all";
+function drawRestricted(){
+  var q=$("#resSearch").value.trim().toLowerCase();
+  var rows=RESTRICTED.filter(function(r){
+    var okF=resFilter==="all"||r.cl===resFilter;
+    var okQ=!q||(r.t+" "+r.w+" "+r.cl).toLowerCase().indexOf(q)>=0;
+    return okF&&okQ;
+  });
+  var canEdit=["Punong Barangay","SK Chairperson"].indexOf(currentRole)>=0;
+  $("#resBody").innerHTML=rows.map(function(r){
+    var cls=r.cl==="Confidential"?"conf":(r.cl==="Draft"?"draft":"restr");
+    var i=RESTRICTED.indexOf(r);
+    var clsControl=canEdit
+      ? '<label class="skip" for="cls'+i+'">Classification for '+esc(r.t)+'</label>'+
+        '<select class="sel" id="cls'+i+'" data-cls="'+i+'" style="margin-top:7px;display:block">'+
+        ["Confidential","Restricted","Draft"].map(function(o){
+          return '<option'+(o===r.cl?" selected":"")+'>'+o+'</option>';}).join("")+
+        '</select>'
+      : '';
+    return '<tr><td class="t">'+r.t+'</td>'+
+      '<td><span class="chip '+cls+'">'+esc(r.cl)+'</span>'+clsControl+'</td>'+
+      '<td style="color:var(--ink-2)">'+r.w+'</td>'+
+      '<td style="color:var(--ink-2)">'+esc(r.rel)+'</td>'+
+      '<td><button class="docbtn" data-res="'+esc(r.t)+'">Open</button></td></tr>';
+  }).join("");
+  $("#resEmpty").style.display=rows.length?"none":"block";
+}
+$("#resSearch").addEventListener("input",drawRestricted);
+document.addEventListener("change",function(e){
+  var sel=e.target.closest("[data-cls]");
+  if(!sel)return;
+  var i=+sel.getAttribute("data-cls");
+  RESTRICTED[i].cl=sel.value;
+  saveOverrides();
+  drawRestricted();
+  toast("Classification changed to "+sel.value+".");
+});
+$$('[data-rf]').forEach(function(b){
+  b.addEventListener("click",function(){
+    $$('[data-rf]').forEach(function(x){x.classList.remove("on");});
+    this.classList.add("on");resFilter=this.getAttribute("data-rf");drawRestricted();
+  });
+});
+drawRestricted();
+
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-res]");
+  if(!b)return;
+  var row=b.closest("tr");
+  if(row.nextElementSibling&&row.nextElementSibling.className==="prev"){row.nextElementSibling.remove();return;}
+  var tr=document.createElement("tr");
+  tr.className="prev";
+  var title=b.getAttribute("data-res");
+  var extra="";
+  if(title.indexOf("Katipunan ng Kabataan")===0) extra=kkPreview();
+  else if(title.indexOf("Disbursement vouchers")===0) extra=voucherPreview();
+  else if(title.indexOf("Draft SK Resolution")===0) extra=resolutionPreview();
+  tr.innerHTML='<td colspan="5" style="background:var(--surface-2);color:var(--ink-2);font-size:14px">'+
+    '<strong>'+esc(title)+'</strong><br>Placeholder entry. In the live site this opens the stored file for authorised officers. Access is logged, and nothing here is published to the public pages.'+extra+'</td>';
+  row.after(tr);
+});
+
+/* Sample request log — placeholder entries showing the release workflow. */
+var SAMPLE_REQS = [
+  {st:"New",when:"November 14, 2026",purok:"Purok 2",rec:"SK accomplishment report, first semester 2026",
+   msg:"Good day po. May I ask for a copy of the SK accomplishment report? I am preparing a school requirement about youth programs in our barangay.",officer:"SK Secretary"},
+  {st:"In progress",when:"November 11, 2026",purok:"Purok 5",rec:"SK financial report, third quarter 2026",
+   msg:"Requesting the breakdown of the SK funds used for the sports activity last quarter.",officer:"SK Treasurer"},
+  {st:"Done",when:"November 6, 2026",purok:"Purok 1",rec:"Minutes of the SK regular session, September 2026",
+   msg:"Pwede po bang makakuha ng kopya ng minutes ng huling session? Salamat po.",officer:"SK Secretary"},
+  {st:"Done",when:"October 30, 2026",purok:"Purok 4",rec:"Comprehensive Barangay Youth Development Plan",
+   msg:"Requesting a copy of the CBYDP for our purok youth organisation reference.",officer:"SK Chairperson"},
+  {st:"Withheld",when:"October 24, 2026",purok:"Purok 3",rec:"Katipunan ng Kabataan masterlist",
+   msg:"Asking for the list of registered youth voters in our purok with their contact numbers.",officer:"SK Secretary",
+   note:"Withheld. The masterlist is personal data under RA 10173. Aggregate counts per purok were provided instead."}
+];
+var REQ_STATES=["New","In progress","Done","Withheld"];
+function reqCard(r,idx){
+  var cls=r.st==="Done"?"ok":(r.st==="Withheld"?"conf":(r.st==="In progress"?"brgy":"pend"));
+  var canEditReq=["Punong Barangay","SK Chairperson"].indexOf(currentRole)>=0;
+  var sel="";
+  if(idx!==undefined&&canEditReq){
+    sel='<label class="skip" for="req'+idx+'">Status of this request</label>'+
+      '<select class="sel" id="req'+idx+'" data-req="'+idx+'" style="margin-left:auto">'+
+      REQ_STATES.map(function(o){return '<option'+(o===r.st?" selected":"")+'>'+o+'</option>';}).join("")+
+      '</select>';
+  }
+  return '<article class="item"><div class="meta">'+
+    '<span class="chip '+cls+'">'+esc(r.st)+'</span><span>'+esc(r.when)+'</span>'+
+    '<span>'+esc(r.purok||"Purok not given")+'</span>'+
+    (r.officer?'<span>Assigned: '+esc(r.officer)+'</span>':'')+sel+'</div>'+
+    (r.rec?'<div style="font-weight:600;font-size:15px;margin-bottom:5px">'+esc(r.rec)+'</div>':'')+
+    '<p>'+esc(r.msg)+'</p>'+
+    (r.note?'<p style="margin-top:9px;font-size:13.5px;color:#7d2220;background:#fdeceb;border-left:3px solid #b3261e;border-radius:6px;padding:9px 12px">'+esc(r.note)+'</p>':'')+
+    '</article>';
+}
+function drawRequests(){
+  var log=(store("dalawinon_fb")||[]).filter(function(m){return m.type==="Request for a document";})
+    .map(function(m){return {st:"New",when:m.when,purok:m.purok,msg:m.msg,officer:"SK Secretary",rec:""};});
+  var head=log.length?'<p style="color:var(--ink-3);font-size:13.5px;margin-bottom:10px">Submitted from this device</p>':'';
+  $("#reqLog").innerHTML=head+log.map(function(r){return reqCard(r);}).join("")+
+    (log.length?'<p style="color:var(--ink-3);font-size:13.5px;margin:18px 0 10px">Earlier requests</p>':'')+
+    SAMPLE_REQS.map(function(r,i){return reqCard(r,i);}).join("");
+}
+document.addEventListener("change",function(e){
+  var sel=e.target.closest("[data-req]");
+  if(!sel)return;
+  var i=+sel.getAttribute("data-req");
+  SAMPLE_REQS[i].st=sel.value;
+  saveOverrides();
+  drawRequests();
+  toast("Request marked as "+sel.value+".");
+});
+
+/* remember classification and status changes on this device */
+function saveOverrides(){
+  try{
+    store("dalawinon_cls",RESTRICTED.map(function(r){return r.cl;}));
+    store("dalawinon_req",SAMPLE_REQS.map(function(r){return r.st;}));
+  }catch(e){}
+}
+(function loadOverrides(){
+  try{
+    var c=store("dalawinon_cls"),q=store("dalawinon_req");
+    if(c&&c.length===RESTRICTED.length)c.forEach(function(v,i){if(v)RESTRICTED[i].cl=v;});
+    if(q&&q.length===SAMPLE_REQS.length)q.forEach(function(v,i){if(v)SAMPLE_REQS[i].st=v;});
+  }catch(e){}
+})();
+drawRestricted();
+drawRequests();
+
+$("#staffDocs").innerHTML=STAFFDOCS.map(function(s){
+  return '<article class="item"><h3>'+esc(s.t)+'</h3><p>'+esc(s.b)+'</p></article>';
+}).join("");
+
+/* ---------------- search ---------------- */
+function searchAll(q){
+  q=q.trim().toLowerCase();
+  if(!q)return [];
+  var out=[];
+  ANN.forEach(function(a){
+    if((a.t+" "+a.b).toLowerCase().indexOf(q)>=0)
+      out.push({k:"Announcement",t:a.t,s:longDate(a.d),go:"announcements"});
+  });
+  DOCS.forEach(function(d){
+    if((d.t+" "+d.ty).toLowerCase().indexOf(q)>=0)
+      out.push({k:"Document",t:d.t,s:d.ty+" · "+longDate(d.d),go:"documents"});
+  });
+  EVENTS.forEach(function(e){
+    if((e.t+" "+e.b+" "+e.v).toLowerCase().indexOf(q)>=0)
+      out.push({k:"Program",t:e.t,s:longDate(e.d)+" · "+e.v,go:"programs"});
+  });
+  BRGY.concat(SK).forEach(function(p){
+    if((p.n+" "+p.r).toLowerCase().indexOf(q)>=0)
+      out.push({k:"Official",t:p.n,s:p.r,go:"officials"});
+  });
+  if("purok puroks six".indexOf(q)>=0||q.indexOf("purok")>=0)
+    out.push({k:"Directory",t:"The six puroks of Dalawinon",s:"Volunteer youth leaders in each purok",go:"programs"});
+  return out.slice(0,12);
+}
+function runSearch(){
+  var res=searchAll($("#q").value),box=$("#searchResults");
+  if(!$("#q").value.trim()){box.classList.remove("show");box.innerHTML="";return;}
+  box.innerHTML=res.length?res.map(function(r){
+    return '<button class="sr" data-go="'+r.go+'"><span class="srtag">'+esc(r.k)+'</span><b>'+esc(r.t)+'</b><small>'+esc(r.s)+'</small></button>';
+  }).join(""):'<div style="padding:14px;color:var(--ink-3);font-size:14.5px">Nothing found for that search. Try a shorter word.</div>';
+  box.classList.add("show");
+}
+$("#q").addEventListener("input",runSearch);
+$("#qbtn").addEventListener("click",runSearch);
+$("#q").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();runSearch();}});
+document.addEventListener("click",function(e){
+  if(!e.target.closest(".searchwrap"))$("#searchResults").classList.remove("show");
+});
+
+/* ---------------- feedback ---------------- */
+function drawLog(){
+  var log=store("dalawinon_fb")||[];
+  $("#fbLog").innerHTML=log.length?
+    '<h3 style="font-size:17px;margin-bottom:12px">Messages you sent from this device</h3>'+
+    log.map(function(m){
+      return '<article class="item"><div class="meta"><span class="chip">'+esc(m.type)+'</span><span>'+esc(m.when)+'</span>'+
+        (m.purok?'<span>'+esc(m.purok)+'</span>':'')+'</div><p>'+esc(m.msg)+'</p></article>';
+    }).join(""):"";
+}
+$("#fbForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var type=$("#fbType").value,msg=$("#fbMsg").value.trim();
+  if(!type||!msg){$("#fbErr").classList.add("show");return;}
+  $("#fbErr").classList.remove("show");
+  var log=store("dalawinon_fb")||[];
+  log.unshift({type:type,purok:$("#fbPurok").value,msg:msg,when:longDate(new Date().toISOString().slice(0,10))});
+  store("dalawinon_fb",log.slice(0,20));
+  drawRequests();
+  this.reset();
+  this.style.display="none";
+  $("#fbDone").style.display="block";
+  drawLog();
+});
+$("#reqDoc").addEventListener("click",function(){
+  go("feedback");
+  $("#fbForm").style.display="block";
+  $("#fbDone").style.display="none";
+  $("#fbType").value="Request for a document";
+  setTimeout(function(){$("#fbMsg").focus();},120);
+});
+
+$("#fbAgain").addEventListener("click",function(){
+  $("#fbForm").style.display="block";
+  $("#fbDone").style.display="none";
+  $("#fbType").focus();
+});
+drawLog();
+
+/* ---------------- boot ---------------- */
+go((location.hash||"").replace("#","")||"home",false);
+})();
+/* hero background slideshow: crossfade every 5 seconds */
+(function(){
+  var slides=document.querySelectorAll("#herobg .slide");
+  if(slides.length<2) return;
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var i=0;
+  setInterval(function(){
+    if(document.hidden) return;
+    slides[i].classList.remove("on");
+    i=(i+1)%slides.length;
+    slides[i].classList.add("on");
+  },5000);
+})();
+</script>
+</body>
+</html>
