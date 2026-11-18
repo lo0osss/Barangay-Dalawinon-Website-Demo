@@ -90,6 +90,20 @@ nav.main a.on{background:var(--green);color:#fff}
 .accesslogbtn:hover{border-color:var(--gold);background:#faefd5;color:#6b430d}
 .accesslogbtn.on{background:var(--gold);border-color:var(--gold);color:#fff}
 .accesslogbtn.show{display:inline-flex}
+.devbtn{
+  display:none;align-items:center;gap:7px;margin-left:8px;cursor:pointer;
+  border:1px solid #c3cada;background:#eef1f7;color:#3b4a66;
+  padding:8px 13px;border-radius:8px;font-size:14px;font-weight:600
+}
+.devbtn.show{display:inline-flex}
+.devbtn:hover{border-color:#3b4a66}
+.devbtn.on{background:#3b4a66;border-color:#3b4a66;color:#fff}
+body.devmode [contenteditable="true"]{outline:1px dashed #8a97b5;outline-offset:3px;border-radius:3px}
+body.devmode [contenteditable="true"]:hover{outline-style:solid;outline-color:#6b7899}
+body.devmode [contenteditable="true"]:focus{outline:2px solid #3b4a66;outline-offset:3px}
+.devbtn .devlabel{display:none}
+@media(min-width:1500px){.devbtn .devlabel{display:inline}}
+@media(max-width:1260px){.devbtn{width:100%;justify-content:center;margin:6px 0 0}.devbtn .devlabel{display:inline}}
 .signout{
   display:none;align-items:center;gap:7px;cursor:pointer;
   border:1px solid #e0a9a5;background:#fbdedb;color:#9f201a;
@@ -110,7 +124,21 @@ nav.main a.on{background:var(--green);color:#fff}
   /* on mobile, hide text labels to save space; icons remain */
   .staffbar .t{display:none}
   .staffbar{margin-left:4px;gap:4px}
-  .lockbtn,.accesslogbtn,.signout{padding:9px 11px}
+  .lockbtn,.accesslogbtn,.devbtn{
+  display:none;align-items:center;gap:7px;margin-left:8px;cursor:pointer;
+  border:1px solid #c3cada;background:#eef1f7;color:#3b4a66;
+  padding:8px 13px;border-radius:8px;font-size:14px;font-weight:600
+}
+.devbtn.show{display:inline-flex}
+.devbtn:hover{border-color:#3b4a66}
+.devbtn.on{background:#3b4a66;border-color:#3b4a66;color:#fff}
+body.devmode [contenteditable="true"]{outline:1px dashed #8a97b5;outline-offset:3px;border-radius:3px}
+body.devmode [contenteditable="true"]:hover{outline-style:solid;outline-color:#6b7899}
+body.devmode [contenteditable="true"]:focus{outline:2px solid #3b4a66;outline-offset:3px}
+.devbtn .devlabel{display:none}
+@media(min-width:1500px){.devbtn .devlabel{display:inline}}
+@media(max-width:1260px){.devbtn{width:100%;justify-content:center;margin:6px 0 0}.devbtn .devlabel{display:inline}}
+.signout{padding:9px 11px}
 }
 
 @media(max-width:640px){
@@ -258,13 +286,16 @@ table.mini tr:last-child td{border-bottom:0}
 }
 .fbtn.on{background:var(--green);border-color:var(--green);color:#fff}
 
-table.docs{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.tablewrap{border:1px solid var(--line);border-radius:var(--radius);overflow-x:auto;background:var(--surface)}
+table.docs{width:100%;min-width:660px;border-collapse:collapse;background:transparent}
 table.docs th,table.docs td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line-2);font-size:14.5px;vertical-align:top}
 table.docs th{background:var(--surface-2);font-weight:600;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2)}
-table.docs tr:last-child td{border-bottom:0}
+table.docs tbody tr:last-child td{border-bottom:0}
 table.docs td.t{font-weight:600;color:var(--ink)}
 .docbtn{border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:6px 11px;cursor:pointer;font-size:13px;font-weight:600;color:var(--green);white-space:nowrap}
 .docbtn:hover{border-color:var(--green);background:#f3f7f4}
+.delbtn{color:#b3261e;border-color:#e0a9a5}
+.delbtn:hover{border-color:#b3261e;background:#fdeceb}
 
 /* ---------- calendar ---------- */
 .cal{display:grid;grid-template-columns:92px 1fr;gap:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
@@ -279,6 +310,18 @@ table.docs td.t{font-weight:600;color:var(--ink)}
 .person{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:15px 17px}
 .person .nm{font-weight:600;font-size:15.5px;line-height:1.3}
 .person .ro{font-size:13px;color:var(--ink-3);margin-top:3px}
+button.person{display:block;width:100%;text-align:left;cursor:pointer;font-family:inherit;color:inherit;transition:border-color .15s,box-shadow .15s,transform .15s}
+.prow{display:flex;align-items:center;gap:11px}
+.prow>span{min-width:0}
+.prow .nm,.prow .ro{display:block}
+.face{width:46px;height:46px;flex:none;border-radius:50%;object-fit:cover;background:var(--surface-2)}
+.face.noimg{display:grid;place-items:center;background:var(--green);color:#f0d79a;font-family:'Libre Baskerville',serif;font-weight:700;font-size:14px}
+img.avatar{object-fit:cover}
+button.person:hover{border-color:var(--green);box-shadow:var(--shadow);transform:translateY(-2px)}
+.moreinfo{display:inline-block;margin-top:9px;font-size:12.5px;font-weight:600;color:var(--green)}
+.avatar{width:54px;height:54px;flex:none;border-radius:50%;background:var(--green);color:#f0d79a;display:grid;place-items:center;font-family:'Libre Baskerville',serif;font-weight:700;font-size:17px;letter-spacing:.02em}
+#personBody .kv dt{font-size:13.5px}
+#personBody .kv dd{font-size:13.5px;max-width:58%}
 .lead{border-left:3px solid var(--gold)}
 
 /* ---------- form ---------- */
@@ -364,6 +407,10 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
         <span class="t">Access Logs</span>
       </button>
+      <button class="devbtn" id="devbtn" aria-label="Toggle page text editing" title="Edit page text">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+        <span class="devlabel">Edit text</span>
+      </button>
       <button class="signout" id="signout" aria-label="Sign out of the staff area">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
         <span class="t">Sign out</span>
@@ -434,6 +481,8 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
       </div>
     </div>
 
+    <div id="todayNotices" style="margin-top:16px"></div>
+
     <div class="sechead" style="margin-top:52px">
       <span class="eyebrow">Latest</span>
       <h2>Recent announcements</h2>
@@ -471,10 +520,6 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
     </div>
 
     <div class="notice">
-      <strong>Sample entries.</strong> The records listed here are placeholders showing how the repository is organised. Actual documents are uploaded by the councils once approved and reviewed for publication.
-    </div>
-
-    <div class="notice">
       <strong>Looking for something that is not here?</strong> Some records are not published &mdash; working drafts awaiting approval, financial attachments, and anything containing personal data under the Data Privacy Act of 2012. Residents may request these from the councils, and the request is passed to the responsible officer.
       <div style="margin-top:12px"><button class="docbtn" id="reqDoc" style="padding:9px 15px">Request a document</button></div>
     </div>
@@ -488,11 +533,13 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
       <button class="fbtn" data-df="Report">Reports</button>
     </div>
 
+    <div class="tablewrap">
     <table class="docs">
       <caption class="skip">List of public documents</caption>
       <thead><tr><th scope="col">Document</th><th scope="col">Type</th><th scope="col">Council</th><th scope="col">Date</th><th scope="col"><span class="skip">Action</span></th></tr></thead>
       <tbody id="docBody"></tbody>
     </table>
+    </div>
     <p id="docEmpty" style="display:none;color:var(--ink-3);margin-top:16px">No documents match that search.</p>
   </div>
 </section>
@@ -543,7 +590,7 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
   <div class="wrap" style="max-width:780px">
     <div class="sechead">
       <span class="eyebrow">We are listening</span>
-      <h2>Feedback and inquiries</h2>
+      <h2>Feedback and Inquiries</h2>
       <p>Send a question, suggestion or concern to the Barangay or SK Council. You may also still approach your purok leader or any official in person.</p>
     </div>
 
@@ -606,7 +653,7 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
     <div class="sechead">
       <span class="eyebrow">Internal · authorised officials only</span>
       <h2>Council knowledge repository</h2>
-      <p>Restricted records and working guidance for the officials who maintain this site. Kept separate from the public pages so documents, procedures and turnover notes stay in one institutional place rather than in any one officer&rsquo;s personal files.</p>
+      <p>Records and working guidance for the officials who maintain this site. Kept separate from the public pages so documents, procedures and turnover notes stay in one institutional place rather than in any one officer&rsquo;s personal files.</p>
     </div>
 
     <div class="lockline">
@@ -645,26 +692,209 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
       </div>
     </div>
 
+    <div id="manageWrap" style="display:none">
+      <h3 style="font-size:19px;margin:40px 0 6px">Manage homepage content</h3>
+      <p style="color:var(--ink-2);font-size:15px;max-width:72ch;margin-bottom:16px">Publish to the public pages. Announcements appear under Announcements and in the recent list on the home page; programs appear in the calendar and feed the next-activity card; notices appear in the Barangay today panel.</p>
+
+      <div class="filters" role="group" aria-label="Choose what to publish">
+        <button class="fbtn on" data-mf="ann">Announcement</button>
+        <button class="fbtn" data-mf="prog">Program or activity</button>
+        <button class="fbtn" data-mf="today">Barangay today notice</button>
+      </div>
+
+      <form class="fb" id="mgForm" novalidate style="padding:22px">
+        <div class="field">
+          <label for="mgTitle">Title <span class="req" aria-hidden="true">*</span></label>
+          <input id="mgTitle" type="text" autocomplete="off">
+        </div>
+
+        <div class="grid g2" style="gap:14px">
+          <div class="field" id="mgDateField">
+            <label for="mgDate">Date <span class="req" aria-hidden="true">*</span></label>
+            <input id="mgDate" type="date">
+          </div>
+          <div class="field" id="mgCouncilField">
+            <label for="mgCouncil">Posted by</label>
+            <select id="mgCouncil">
+              <option value="SK">Sangguniang Kabataan</option>
+              <option value="Barangay">Barangay Council</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid g2" style="gap:14px;display:none" id="mgProgFields">
+          <div class="field">
+            <label for="mgStart">Start time</label>
+            <input id="mgStart" type="time" step="900" value="08:00">
+          </div>
+          <div class="field">
+            <label for="mgEnd">End time</label>
+            <input id="mgEnd" type="time" step="900" value="12:00">
+          </div>
+          <div class="field">
+            <label for="mgVenue">Venue</label>
+            <input id="mgVenue" type="text" placeholder="Barangay hall common room" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="field" id="mgRoomField" style="display:none">
+          <label for="mgRoom">Uses the common room?</label>
+          <select id="mgRoom"><option value="yes">Yes</option><option value="no">No</option></select>
+        </div>
+
+        <div class="field">
+          <label for="mgBody">Details <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="mgBody" style="min-height:104px"></textarea>
+        </div>
+
+        <div class="row" style="margin-top:0">
+          <button class="submit" type="submit">Publish</button>
+          <button class="ghost" id="mgCancel" type="button" style="display:none">Cancel edit</button>
+        </div>
+        <p id="mgErr" class="err">Please fill in the title, the date and the details.</p>
+      </form>
+
+      <div id="mgList" style="margin-top:22px"></div>
+    </div>
+
     <h3 style="font-size:19px;margin:40px 0 6px">Records</h3>
     <p style="color:var(--ink-2);font-size:15px;max-width:72ch;margin-bottom:16px">Records held by the councils that are not published on the public pages. Each one is kept here because it contains personal data, is still a working draft, or is released only on a verified request. Residents may ask for any of these through the feedback form, and the request is logged below.</p>
 
-    <div class="filters" role="group" aria-label="Filter restricted records">
-      <input type="search" id="resSearch" placeholder="Search restricted records…" aria-label="Search restricted records">
+    <div id="devWrap" style="display:none;margin-bottom:24px">
+      <div class="panel" style="border-left:4px solid #3b4a66">
+        <h3 style="font-size:17px;margin-bottom:6px">Developer mode</h3>
+        <p style="font-size:14.5px;color:var(--ink-2)">Signed in as <strong>BACKEND_CODER</strong>. You hold every permission on the site, and you can rewrite any text on any page directly.</p>
+        <p style="font-size:14px;color:var(--ink-2);margin-bottom:14px">Switch on <strong>Edit page text</strong> in the top bar, then click a heading, paragraph or label and type over it. Changes save when you click away and persist in this browser. Lists that the site builds automatically &mdash; announcements, programs, records, officials &mdash; are edited through their own panels instead.</p>
+        <div class="row" style="margin-top:0">
+          <button class="submit" type="button" id="devToggle2">Turn edit mode on</button>
+          <button class="ghost" type="button" id="devReset">Undo all text edits</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="addRecWrap" style="display:none;margin-bottom:22px">
+      <form class="fb" id="recForm" novalidate style="padding:22px">
+        <h4 style="font-size:16px;margin-bottom:4px">Add a record</h4>
+        <p id="recScope" style="color:var(--ink-3);font-size:13.5px;margin-bottom:16px"></p>
+
+        <div class="field">
+          <label for="recTitle">Record title <span class="req" aria-hidden="true">*</span></label>
+          <input id="recTitle" type="text" autocomplete="off">
+        </div>
+
+        <div class="grid g2" style="gap:14px">
+          <div class="field">
+            <label for="recCat">Category <span class="req" aria-hidden="true">*</span></label>
+            <select id="recCat">
+              <option value="Report">Financial report</option>
+              <option value="Report">Liquidation or voucher</option>
+              <option value="Resolution">Resolution</option>
+              <option value="Minutes">Minutes</option>
+              <option value="Plan">Plan or program document</option>
+              <option value="Report">Other report</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="recCls">Classification <span class="req" aria-hidden="true">*</span></label>
+            <select id="recCls">
+              <option>Confidential</option>
+              <option selected>Restricted</option>
+              <option>Draft</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid g2" style="gap:14px">
+          <div class="field">
+            <label for="recDate">Date of the record</label>
+            <input id="recDate" type="date">
+          </div>
+          <div class="field">
+            <label for="recCouncil">Council</label>
+            <select id="recCouncil">
+              <option value="SK">Sangguniang Kabataan</option>
+              <option value="Barangay">Barangay Council</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="recWhy">Why it is withheld <span class="req" aria-hidden="true">*</span></label>
+          <input id="recWhy" type="text" placeholder="Contains personal data under RA 10173" autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label for="recRel">How it is released</label>
+          <input id="recRel" type="text" placeholder="On written request, with approval of the Treasurer" autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label for="recFile">Attach a file</label>
+          <input id="recFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.csv,.md">
+          <div class="help">PDF, image, text or CSV, up to 2 MB. The file is stored in this browser only.</div>
+        </div>
+
+        <div class="field">
+          <label style="display:flex;gap:9px;align-items:flex-start;font-weight:500;cursor:pointer">
+            <input id="recPublish" type="checkbox" style="width:auto;margin-top:3px" checked>
+            <span>Also list it in the public Documents tab<br>
+              <span style="color:var(--ink-3);font-size:13px">Leave this unticked for anything confidential &mdash; listing it makes the title and the file public.</span></span>
+          </label>
+        </div>
+
+        <button class="submit" type="submit">Add record</button>
+        <p id="recErr" class="err">Please fill in the title, the category and why it is withheld.</p>
+      </form>
+    </div>
+
+    <div class="filters" role="group" aria-label="Filter records">
+      <input type="search" id="resSearch" placeholder="Search records…" aria-label="Search records">
       <button class="fbtn on" data-rf="all">All</button>
       <button class="fbtn" data-rf="Confidential">Confidential</button>
       <button class="fbtn" data-rf="Restricted">Restricted</button>
       <button class="fbtn" data-rf="Draft">Working draft</button>
     </div>
 
+    <div class="tablewrap">
     <table class="docs">
-      <caption class="skip">Restricted records held by the councils</caption>
+      <caption class="skip">Records held by the councils</caption>
       <thead><tr><th scope="col">Record</th><th scope="col">Classification</th><th scope="col">Why it is withheld</th><th scope="col">Released</th><th scope="col"><span class="skip">Action</span></th></tr></thead>
       <tbody id="resBody"></tbody>
     </table>
+    </div>
     <p id="resEmpty" style="display:none;color:var(--ink-3);margin-top:16px">No records match that search.</p>
 
-    <h3 style="font-size:19px;margin:40px 0 6px">Document requests</h3>
-    <p style="color:var(--ink-2);font-size:15px;max-width:72ch;margin-bottom:16px">Requests sent by residents through the feedback form. Each one is assigned to a responsible officer and closed once the document is released or the reason for withholding it is explained.</p>
+    <h3 style="font-size:19px;margin:40px 0 6px">Archive of previous administrations</h3>
+    <p style="color:var(--ink-2);font-size:15px;max-width:72ch;margin-bottom:16px">Records turned over by officials who served in earlier terms. Kept so that incoming officers inherit what was done before them instead of starting from nothing, and so past plans, budgets and accomplishments remain traceable.</p>
+
+    <div class="filters" role="group" aria-label="Filter archive by term">
+      <input type="search" id="arcSearch" placeholder="Search the archive…" aria-label="Search the archive">
+      <button class="fbtn on" data-af2="all">All terms</button>
+      <button class="fbtn" data-af2="2023&ndash;2026">2023&ndash;2026</button>
+      <button class="fbtn" data-af2="2018&ndash;2023">2018&ndash;2023</button>
+    </div>
+
+    <div class="tablewrap">
+    <table class="docs">
+      <caption class="skip">Archive of records from previous administrations</caption>
+      <thead><tr><th scope="col">Record</th><th scope="col">Term</th><th scope="col">Turned over by</th><th scope="col">Condition</th><th scope="col"><span class="skip">Action</span></th></tr></thead>
+      <tbody id="arcBody"></tbody>
+    </table>
+    </div>
+    <p id="arcEmpty" style="display:none;color:var(--ink-3);margin-top:16px">No archived records match that search.</p>
+
+    <h3 style="font-size:19px;margin:40px 0 6px">Resident submissions</h3>
+    <p style="color:var(--ink-2);font-size:15px;max-width:72ch;margin-bottom:16px">Everything sent by residents through the feedback form &mdash; inquiries, suggestions, document requests, concerns and anything else. Each one is assigned to a responsible officer and closed once it is answered, released, or the reason for withholding it is explained.</p>
+
+    <div class="filters" role="group" aria-label="Filter resident submissions">
+      <input type="search" id="reqSearch" placeholder="Search submissions…" aria-label="Search resident submissions">
+      <button class="fbtn on" data-qf="all">All</button>
+      <button class="fbtn" data-qf="Question or inquiry">Inquiries</button>
+      <button class="fbtn" data-qf="Suggestion for a program">Suggestions</button>
+      <button class="fbtn" data-qf="Request for a document">Document requests</button>
+      <button class="fbtn" data-qf="Concern or complaint">Concerns</button>
+      <button class="fbtn" data-qf="Other">Other</button>
+    </div>
     <div id="reqLog"></div>
 
     <h3 style="font-size:19px;margin:40px 0 13px">Procedures</h3>
@@ -708,7 +938,7 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
           <li><button data-go="announcements">Announcements</button></li>
           <li><button data-go="documents">Public documents</button></li>
           <li><button data-go="programs">Programs calendar</button></li>
-          <li><button data-go="feedback">Feedback and inquiries</button></li>
+          <li><button data-go="feedback">Feedback and Inquiries</button></li>
         </ul>
       </div>
       <div class="flist">
@@ -725,6 +955,17 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
     </div>
   </div>
 </footer>
+
+<!-- official profile -->
+<div class="modal" id="personModal" role="dialog" aria-modal="true" aria-labelledby="personTitle">
+  <div class="box" style="max-width:480px">
+    <h3 id="personTitle" class="skip">Official details</h3>
+    <div id="personBody"></div>
+    <div class="row" style="margin-top:18px">
+      <button class="ghost" id="personClose" style="flex:1">Close</button>
+    </div>
+  </div>
+</div>
 
 <!-- staff modal -->
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
@@ -777,31 +1018,34 @@ var EVENTS = [
   {t:"Sports development activity",d:"2026-12-20",time:"2:00 PM onwards",v:"Barangay covered court",b:"Inter-purok games under the SK sports development program.",room:false}
 ];
 
+loadPublished();
+loadRecords();
+
 var BRGY = [
-  {n:"GO, CARLOS D.",r:"Punong Barangay",lead:true},
-  {n:"MUÑEZ, RAIN DENISE C.",r:"Sangguniang Barangay Member"},
-  {n:"LAGUNA, NAIZZER ADRIAN F.",r:"Sangguniang Barangay Member"},
-  {n:"LUCHANA, EZZER JUNE C.",r:"Sangguniang Barangay Member"},
-  {n:"MAEDA, CUESHE C.",r:"Sangguniang Barangay Member"},
-  {n:"MULDEZ, JAMES MARI S.",r:"Sangguniang Barangay Member"},
+  {n:"GO, CARLOS D.",r:"Punong Barangay",lead:true,img:"photos/los.jpg"},
+  {n:"MUÑEZ, RAIN DENISE C.",r:"Sangguniang Barangay Member",img:"photos/rain.jpg"},
+  {n:"LAGUNA, NAIZZER ADRIAN F.",r:"Sangguniang Barangay Member",img:"photos/naiz.jpg"},
+  {n:"LUCHANA, EZZER JUNE C.",r:"Sangguniang Barangay Member",img:"photos/ezzer.jpg"},
+  {n:"MAEDA, CUESHE C.",r:"Sangguniang Barangay Member",img:"photos/cue.jpg"},
+  {n:"MULDEZ, JAMES MARI S.",r:"Sangguniang Barangay Member",img:"photos/jam.jpg"},
   {n:"MUNDAS, JESENT D.",r:"Sangguniang Barangay Member"},
   {n:"JAMIAS, CHELSEA AVJAY L.",r:"Sangguniang Barangay Member"},
-  {n:"RAMOS, CHARMAE C.",r:"SK Chairperson (Ex-Officio Member)"},
-  {n:"NAMOC, JOSHUA U.",r:"Barangay Treasurer"},
-  {n:"PAGATPATAN, VENISE P.",r:"Barangay Secretary"}
+  {n:"RAMOS, CHARMAE C.",r:"SK Chairperson (Ex-Officio Member)",img:"photos/charms.jpg"},
+  {n:"NAMOC, JOSHUA U.",r:"Barangay Treasurer",img:"photos/jos.jpg"},
+  {n:"PAGATPATAN, VENISE P.",r:"Barangay Secretary",img:"photos/ven.jpg"}
 ];
 
 var SK = [
-  {n:"RAMOS, CHARMAE C.",r:"SK Chairperson",lead:true},
-  {n:"SALVALEON, CHRISTIAN JOSEPH C.",r:"SK Kagawad"},
+  {n:"RAMOS, CHARMAE C.",r:"SK Chairperson",lead:true,img:"photos/charms.jpg"},
+  {n:"SALVALEON, CHRISTIAN JOSEPH C.",r:"SK Kagawad",img:"photos/cj.jpg"},
   {n:"SINTOS, CHRISTINE D.",r:"SK Kagawad"},
   {n:"TAJONERA, FRANK LOUISE A.",r:"SK Kagawad"},
-  {n:"ABELLERA, CEBASTIAN NIL C.",r:"SK Kagawad"},
+  {n:"ABELLERA, CEBASTIAN NIL C.",r:"SK Kagawad",img:"photos/ceb.jpg"},
   {n:"AMBROSIO, PAUL JAMES E.",r:"SK Kagawad"},
-  {n:"APAT, PAOLO JAKE R.",r:"SK Kagawad"},
-  {n:"CABINGATAN, FRANCOIS ELYSHA B.",r:"SK Kagawad"},
-  {n:"BARROT, XANDREY P.",r:"SK Treasurer"},
-  {n:"DEJARME, GWYN MARIE S.",r:"SK Secretary"}
+  {n:"APAT, PAOLO JAKE R.",r:"SK Kagawad",img:"photos/pao.jpg"},
+  {n:"CABINGATAN, FRANCOIS ELYSHA B.",r:"SK Kagawad",img:"photos/fran.jpg"},
+  {n:"BARROT, XANDREY P.",r:"SK Treasurer",img:"photos/xan.jpg"},
+  {n:"DEJARME, GWYN MARIE S.",r:"SK Secretary",img:"photos/gwyn.jpg"}
 ];
 
 var RESTRICTED = [
@@ -831,7 +1075,7 @@ var QUICK = [
   {t:"Public documents",d:"Resolutions, minutes, plans and financial reports.",go:"documents",i:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>'},
   {t:"Programs calendar",d:"Upcoming activities across the six puroks.",go:"programs",i:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/>'},
   {t:"Your officials",d:"Barangay Council and Sangguniang Kabataan members.",go:"officials",i:'<path d="M17 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 20v-2a4 4 0 0 0-3-3.9"/>'},
-  {t:"Feedback and inquiries",d:"Send a question, suggestion or concern.",go:"feedback",i:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l2-5.2A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/>'},
+  {t:"Feedback and Inquiries",d:"Send a question, suggestion or concern.",go:"feedback",i:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l2-5.2A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/>'},
   {t:"Purok directory",d:"Who to reach in each of the six puroks.",go:"programs",i:'<path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'}
 ];
 
@@ -882,13 +1126,26 @@ window.addEventListener("hashchange",function(){
 
 /* ---------------- staff gate ---------------- */
 var STAFF_CODES={
+  "101010":"BACKEND_CODER",
   "12345":"Punong Barangay",
   "00000":"SK Chairperson",
+  "0213":"SK Secretary",
+  "3333":"SK Treasurer",
   "1111":"SK Kagawad",
   "2222":"Barangay Kagawad"
 };
 /* roles that may see the login log */
-var LOG_ROLES=["Punong Barangay","SK Chairperson"];
+var LOG_ROLES=["BACKEND_CODER","Punong Barangay","SK Chairperson","SK Secretary","SK Treasurer"];
+/* roles that may edit: classifications, submission statuses, and site content */
+var EDIT_ROLES=["BACKEND_CODER","Punong Barangay","SK Chairperson","SK Secretary"];
+/* roles that may clear the access log */
+var CLEAR_ROLES=["BACKEND_CODER","Punong Barangay","SK Secretary"];
+/* roles that may delete records */
+var DEL_ROLES=["BACKEND_CODER","Punong Barangay"];
+function canDelete(){return DEL_ROLES.indexOf(currentRole)>=0;}
+/* BACKEND_CODER may also delete documents, archive entries and submissions */
+function canDeleteAll(){return currentRole==="BACKEND_CODER";}
+function canEditNow(){return EDIT_ROLES.indexOf(currentRole)>=0;}
 var currentRole="";
 
 function openModal(){$("#modal").classList.add("open");setTimeout(function(){$("#code").focus();},40);}
@@ -919,17 +1176,18 @@ function drawLoginLog(){
     el.innerHTML='<p style="color:var(--ink-3);font-size:14.5px">No logins recorded on this device yet.</p>';
     return;
   }
-  el.innerHTML='<table class="docs"><thead><tr>'+
+  el.innerHTML='<div class="tablewrap"><table class="docs" style="min-width:520px"><thead><tr>'+
     '<th scope="col">#</th><th scope="col">Position</th><th scope="col">Date</th><th scope="col">Time</th></tr></thead><tbody>'+
     log.map(function(e,i){
       return '<tr><td style="color:var(--ink-3);width:36px">'+(i+1)+'</td>'+
         '<td style="font-weight:600">'+esc(e.role)+'</td>'+
         '<td>'+esc(e.date)+'</td>'+
         '<td>'+esc(e.time)+'</td></tr>';
-    }).join("")+'</tbody></table>';
+    }).join("")+'</tbody></table></div>';
 }
 
 function clearLog(){
+  if(CLEAR_ROLES.indexOf(currentRole)<0){toast("Your position cannot clear the access log.");return;}
   if(confirm("Clear the entire access log on this device?")){
     try{store("dalawinon_loginlog",[]);}catch(e){}
     drawLoginLog();
@@ -962,11 +1220,24 @@ function updateRoleBadge(){
   }
   /* show view-only notice for limited roles when signed in */
   var von=$("#viewOnlyNotice");
-  if(von)von.style.display=(currentRole&&!priv)?"block":"none";
+  if(von)von.style.display=(currentRole&&!canEditNow())?"block":"none";
+  var clr=$("#clearLoginLog2");
+  if(clr)clr.style.display=(CLEAR_ROLES.indexOf(currentRole)>=0)?"inline-block":"none";
   /* re-render tables so dropdowns appear/disappear based on current role */
   drawRestricted();
+  drawDocs();
+  drawArchive();
   drawRequests();
+  showManage();
+  showAddRecord();
+  showDev();
 }
+$("#devbtn").addEventListener("click",function(){devMode(!devOn);});
+$("#devToggle2").addEventListener("click",function(){
+  devMode(!devOn);
+  this.textContent=devOn?"Turn edit mode off":"Turn edit mode on";
+});
+$("#devReset").addEventListener("click",devReset);
 $("#codeGo").addEventListener("click",tryCode);
 $("#accesslogbtn").addEventListener("click",function(){go("accesslog");});
 $("#clearLoginLog2").addEventListener("click",clearLog);
@@ -987,6 +1258,7 @@ function setSignedIn(on){
   if(on){startIdle();}else{clearTimeout(idleTimer);idleTimer=null;}
 }
 function signOut(auto){
+  if(devOn)devMode(false);
   currentRole="";
   updateRoleBadge();
   setSignedIn(false);
@@ -1017,7 +1289,8 @@ function annCard(a){
     '<span>'+longDate(a.d)+'</span></div>'+
     '<h3>'+esc(a.t)+'</h3><p>'+esc(a.b)+'</p></article>';
 }
-$("#homeAnn").innerHTML=ANN.slice(0,3).map(annCard).join("");
+function drawHomeAnn(){ $("#homeAnn").innerHTML=ANN.slice(0,3).map(annCard).join(""); }
+drawHomeAnn();
 
 var annFilter="all";
 function drawAnn(){
@@ -1059,6 +1332,7 @@ function miniTable(head,rows,foot){
     '</tbody>'+(foot||"")+'</table>';
 }
 function docPreview(d){
+  if(d.file)return filePreview(d.file);
   var council=d.c==="SK"?"SANGGUNIANG KABATAAN":"SANGGUNIANG BARANGAY";
   var note='<div style="margin-top:13px;padding:11px 14px;background:var(--surface-2);border-left:3px solid var(--gold);border-radius:7px;font-size:13px;color:var(--ink-2)"><strong>Sample content.</strong> Placeholder text standing in for the approved document.</div>';
 
@@ -1133,7 +1407,9 @@ function drawDocs(){
   });
   $("#docBody").innerHTML=rows.map(function(d){
     return '<tr><td class="t">'+esc(d.t)+'</td><td>'+esc(d.ty)+'</td><td>'+(d.c==="SK"?"Sangguniang Kabataan":"Barangay Council")+'</td><td>'+longDate(d.d)+'</td>'+
-      '<td><button class="docbtn" data-doc="'+esc(d.t)+'">View</button></td></tr>';
+      '<td style="white-space:nowrap"><button class="docbtn" data-doc="'+esc(d.t)+'">View</button>'+
+      (canDeleteAll()?' <button class="docbtn delbtn" data-deldoc="'+esc(d.t)+'">Delete</button>':'')+
+      '</td></tr>';
   }).join("");
   $("#docEmpty").style.display=rows.length?"none":"block";
 }
@@ -1160,6 +1436,7 @@ document.addEventListener("click",function(e){
   row.after(tr);
 });
 
+function drawPrograms(){
 var today=new Date();today.setHours(0,0,0,0);
 var upcoming=EVENTS.filter(function(e){return parse(e.d)>=today;});
 var shown=upcoming.length?upcoming:EVENTS;
@@ -1186,13 +1463,92 @@ $("#roomStatus").innerHTML=
   (nextRoom?'<dl style="margin:0"><div class="kv"><dt>Next booked for</dt><dd>'+esc(nextRoom.t)+'</dd></div>'+
   '<div class="kv"><dt>On</dt><dd>'+longDate(nextRoom.d)+'</dd></div>'+
   '<div class="kv"><dt>Time</dt><dd>'+esc(nextRoom.time)+'</dd></div></dl>':"");
+}
+drawPrograms();
 
-$("#brgyList").innerHTML=BRGY.map(function(p){
-  return '<div class="person'+(p.lead?" lead":"")+'"><div class="nm">'+esc(p.n)+'</div><div class="ro">'+esc(p.r)+'</div></div>';
-}).join("");
-$("#skList").innerHTML=SK.map(function(p){
-  return '<div class="person'+(p.lead?" lead":"")+'"><div class="nm">'+esc(p.n)+'</div><div class="ro">'+esc(p.r)+'</div></div>';
-}).join("");
+/* ---------- official profiles ---------- */
+var COMMITTEES=["Education","Health and Nutrition","Environment and Sanitation","Sports and Recreation",
+  "Peace and Order","Livelihood and Employment","Infrastructure","Youth and Gender Development",
+  "Agriculture","Disaster Risk Reduction"];
+var SCHOOLS=["Magsaysay National High School","Davao del Sur State College","University of Mindanao",
+  "Cor Jesu College","Holy Cross of Davao College","Magsaysay Institute of Technology"];
+var COURSES=["BS Agriculture","BS Education","BS Criminology","BS Business Administration",
+  "BS Information Technology","BS Social Work","Senior High School, STEM","BS Public Administration"];
+
+function phoneFor(i){
+  var pre=["905","906","915","917","918","926","935","936","945","955","965","975","995","997"];
+  return "+63 "+pre[(i*5)%pre.length]+" "+((((i+2)*191)%900)+100)+" "+((((i+7)*877)%9000)+1000);
+}
+function emailFor(name){
+  var parts=name.replace(/[^A-Za-z, ]/g,"").split(",");
+  var last=(parts[0]||"").trim().toLowerCase().replace(/\s+/g,"");
+  var first=((parts[1]||"").trim().toLowerCase().split(/\s+/)[0])||"office";
+  return first+"."+last+"@dalawinon.gov.local";
+}
+function profileFor(p,i,council){
+  var purok="Purok "+((i%6)+1);
+  var term=p.r.indexOf("Punong")>=0||p.r.indexOf("Chairperson")>=0?"2026\u20132029 (1st term)":
+           (i%3===0?"2026\u20132029 (1st term)":"2023\u20132029 (2nd term)");
+  return {
+    phone:phoneFor(i), email:emailFor(p.n), purok:purok, term:term,
+    committee:COMMITTEES[i%COMMITTEES.length],
+    school:SCHOOLS[(i*3)%SCHOOLS.length],
+    course:COURSES[(i*2)%COURSES.length],
+    days:(i%2===0?"Monday, Wednesday, Friday":"Tuesday and Thursday"),
+    hours:(i%2===0?"8:00 AM \u2013 12:00 NN":"1:00 PM \u2013 5:00 PM"),
+    council:council
+  };
+}
+function personCard(p,i,council){
+  var key=council+"-"+i;
+  var face=p.img
+    ? '<img class="face" src="'+p.img+'" alt="" width="46" height="46" loading="lazy">'
+    : '<span class="face noimg" aria-hidden="true">'+esc((p.n.match(/[A-Z]/g)||["?"]).slice(0,2).join(""))+'</span>';
+  return '<button class="person'+(p.lead?" lead":"")+'" data-person="'+key+'" aria-expanded="false">'+
+    '<div class="prow">'+face+'<span><span class="nm">'+esc(p.n)+'</span>'+
+    '<span class="ro">'+esc(p.r)+'</span></span></div>'+
+    '<span class="moreinfo">View details</span></button>';
+}
+$("#brgyList").innerHTML=BRGY.map(function(p,i){return personCard(p,i,"brgy");}).join("");
+$("#skList").innerHTML=SK.map(function(p,i){return personCard(p,i,"sk");}).join("");
+
+function openPerson(key){
+  var parts=key.split("-"), council=parts[0], i=+parts[1];
+  var p=(council==="brgy"?BRGY:SK)[i];
+  if(!p)return;
+  var d=profileFor(p,i,council==="brgy"?"Barangay Council":"Sangguniang Kabataan");
+  var row=function(k,v){return '<div class="kv"><dt>'+k+'</dt><dd>'+v+'</dd></div>';};
+  $("#personBody").innerHTML=
+    '<div style="display:flex;gap:16px;align-items:center;margin-bottom:18px">'+
+      (p.img
+        ? '<img class="avatar" src="'+p.img+'" alt="Photograph of '+esc(p.n)+'" width="54" height="54">'
+        : '<div class="avatar" aria-hidden="true">'+esc((p.n.match(/[A-Z]/g)||["?"]).slice(0,2).join(""))+'</div>')+
+      '<div><div style="font-family:\'Libre Baskerville\',serif;font-size:19px;font-weight:700;line-height:1.25">'+esc(p.n)+'</div>'+
+      '<div style="color:var(--ink-3);font-size:14px;margin-top:3px">'+esc(p.r)+' &middot; '+esc(d.council)+'</div></div>'+
+    '</div>'+
+    '<dl style="margin:0">'+
+      row("Term",d.term)+
+      row("Committee",esc(d.committee))+
+      row("Purok",esc(d.purok))+
+      row("Office days",esc(d.days))+
+      row("Office hours",esc(d.hours))+
+      row("Contact number",'<span style="white-space:nowrap">'+d.phone+'</span>')+
+      row("Email",esc(d.email))+
+      row("Education",esc(d.course))+
+      row("School",esc(d.school))+
+    '</dl>'+
+    '<p style="margin:16px 0 0;font-size:12.5px;color:var(--ink-3)">'+(p.img?'Placeholder profile. Details to be verified by the council.':'Placeholder profile. Photograph and verified details to be supplied by the council.')+'</p>';
+  $("#personModal").classList.add("open");
+  setTimeout(function(){var c=$("#personClose");if(c)c.focus();},40);
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-person]");
+  if(b){openPerson(b.getAttribute("data-person"));return;}
+  if(e.target.id==="personModal"||e.target.id==="personClose"){$("#personModal").classList.remove("open");}
+});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){var m=$("#personModal");if(m)m.classList.remove("open");}
+});
 
 var puroks="";
 for(var i=1;i<=6;i++){
@@ -1212,10 +1568,18 @@ var KK = [
   ["DELA PEÑA, NICOLAS III J.","M"],["DELOS SANTOS, BENNA LOUISE E.","F"],["ESTERON, HANNA JOY Y.","F"],
   ["GALARIANA, KEN DOMINIC A.","M"],["GO, CARLOS D.","M","25&ndash;26"]
 ];
+/* Invented PH mobile numbers for the sample masterlist, stable per row. */
+function kkNumber(i){
+  var prefixes=["905","906","915","916","917","918","926","927","935","936","945","946","955","956","965","966","975","976","995","997"];
+  var p=prefixes[(i*7)%prefixes.length];
+  var a=(((i+3)*137)%900)+100;
+  var b=(((i+11)*613)%9000)+1000;
+  return "+63 "+p+" "+a+" "+b;
+}
 function kkPreview(){
   var rows=KK.map(function(r,i){
     return '<tr><td class="num">'+(i+1)+'</td><td>'+esc(r[0])+'</td><td>'+(r[2]||"20&ndash;21")+'</td><td>'+
-      (r[1]==="F"?"Female":"Male")+'</td><td><span class="redact">0000000000</span></td></tr>';
+      (r[1]==="F"?"Female":"Male")+'</td><td style="white-space:nowrap">'+kkNumber(i)+'</td></tr>';
   }).join("");
   return '<div style="margin-top:14px;padding:13px 15px;background:#fdeceb;border:1px solid #f0bfbc;border-left:3px solid #b3261e;border-radius:8px;color:#7d2220;font-size:13.5px">'+
     '<strong>Local copy only.</strong> This masterlist is personal data under the Data Privacy Act of 2012. This build is for offline demonstration on your own device and must not be deployed to the public site.</div>'+
@@ -1277,6 +1641,748 @@ function resolutionPreview(){
     '</div>';
 }
 
+/* ---------------- publishing from the staff page ---------------- */
+var TODAY_NOTES=[];
+function drawToday(){
+  var el=$("#todayNotices");
+  if(!el)return;
+  el.innerHTML=TODAY_NOTES.map(function(n){
+    return '<div class="panel" style="border-left:4px solid var(--gold)">'+
+      '<div class="meta" style="font-size:13px;color:var(--ink-3);display:flex;gap:8px;margin-bottom:6px">'+
+      '<span class="chip '+(n.c==="SK"?"sk":"brgy")+'">'+(n.c==="SK"?"Sangguniang Kabataan":"Barangay Council")+'</span>'+
+      '<span>'+longDate(n.d)+'</span></div>'+
+      '<h3 style="font-size:17px;margin-bottom:5px">'+esc(n.t)+'</h3>'+
+      '<p style="font-size:14.5px;color:var(--ink-2);margin:0">'+esc(n.b)+'</p></div>';
+  }).join("");
+}
+function idOf(x){return x.t+"|"+x.d;}
+function loadPublished(){
+  try{
+    var p=store("dalawinon_pub");
+    if(!p)return;
+    (p.ann||[]).forEach(function(a){if(!ANN.some(function(x){return idOf(x)===idOf(a);}))ANN.unshift(a);});
+    (p.ev||[]).forEach(function(e){if(!EVENTS.some(function(x){return idOf(x)===idOf(e);}))EVENTS.push(e);});
+    TODAY_NOTES=(p.today||[]);
+    /* items staff removed stay removed across reloads, built-in ones included */
+    var rm=p.removed||{};
+    if((rm.ann||[]).length)ANN=ANN.filter(function(x){return rm.ann.indexOf(idOf(x))<0;});
+    if((rm.ev||[]).length)EVENTS=EVENTS.filter(function(x){return rm.ev.indexOf(idOf(x))<0;});
+    if((rm.today||[]).length)TODAY_NOTES=TODAY_NOTES.filter(function(x){return rm.today.indexOf(idOf(x))<0;});
+    EVENTS.sort(function(a,b){return parse(a.d)-parse(b.d);});
+    ANN.sort(function(a,b){return parse(b.d)-parse(a.d);});
+  }catch(e){}
+}
+function savePublished(){
+  try{
+    var p=store("dalawinon_pub")||{ann:[],ev:[],today:[]};
+    store("dalawinon_pub",p);
+  }catch(e){}
+}
+function pubStore(){ return store("dalawinon_pub")||{ann:[],ev:[],today:[]}; }
+
+function fmtTime(v){
+  if(!v)return "";
+  var p=v.split(":"), h=+p[0], m=p[1]||"00";
+  var ampm=h>=12?"PM":"AM"; var hh=h%12||12;
+  if(h===12&&m==="00")return "12:00 NN";
+  return hh+":"+m+" "+ampm;
+}
+function timeRange(a,b){
+  var s1=fmtTime(a), s2=fmtTime(b);
+  if(!s1&&!s2)return "To be announced";
+  if(s1&&s2)return s1+" \u2013 "+s2;
+  return s1||s2;
+}
+var mgKind="ann";
+function setMgKind(k){
+  mgKind=k;
+  var prog=k==="prog";
+  $("#mgProgFields").style.display=prog?"grid":"none";
+  $("#mgRoomField").style.display=prog?"block":"none";
+  $("#mgDateField").style.display="block";
+  if(typeof editing!=="undefined"&&editing){
+    $("#mgForm").querySelector("button.submit").textContent="Save changes";
+  }else{
+    $("#mgForm").querySelector("button.submit").textContent =
+      k==="ann"?"Publish announcement":(prog?"Publish program":"Publish notice");
+  }
+}
+function drawMgList(){
+  /* everything currently live on the public pages, whichever build it came from */
+  var items=[].concat(
+    ANN.map(function(x){return {k:"Announcement",t:x.t,d:x.d,id:x.t+"|"+x.d,kind:"ann"};}),
+    EVENTS.map(function(x){return {k:"Program",t:x.t,d:x.d,id:x.t+"|"+x.d,kind:"ev"};}),
+    TODAY_NOTES.map(function(x){return {k:"Barangay today",t:x.t,d:x.d,id:x.t+"|"+x.d,kind:"today"};})
+  );
+  items.sort(function(a,b){return parse(b.d)-parse(a.d);});
+  $("#mgList").innerHTML=items.length
+    ? '<h4 style="font-size:15.5px;margin-bottom:4px">Recently Published</h4>'+
+      '<p style="color:var(--ink-3);font-size:13.5px;margin-bottom:12px">Everything currently showing on the public pages. Edit an item to change what residents see, or remove it to take it off the site.</p>'+
+      items.map(function(i){
+        return '<article class="item" style="padding:14px 18px"><div class="meta">'+
+          '<span class="chip">'+i.k+'</span><span>'+longDate(i.d)+'</span>'+
+          '<button class="docbtn" data-edit="'+i.kind+'" data-id="'+esc(i.id)+'" style="margin-left:auto">Edit</button>'+
+          '<button class="docbtn" data-unpub="'+i.kind+'" data-id="'+esc(i.id)+'" style="color:#b3261e;border-color:#e0a9a5">Remove</button>'+
+          '</div><div style="font-weight:600;font-size:15px">'+esc(i.t)+'</div></article>';
+      }).join("")
+    : '<p style="color:var(--ink-3);font-size:14px">Nothing is published on the public pages.</p>';
+}
+function showManage(){
+  var w=$("#manageWrap");
+  if(w)w.style.display=canEditNow()?"block":"none";
+}
+$$('[data-mf]').forEach(function(b){
+  b.addEventListener("click",function(){
+    $$('[data-mf]').forEach(function(x){x.classList.remove("on");});
+    this.classList.add("on");setMgKind(this.getAttribute("data-mf"));
+  });
+});
+var editing=null;   /* {kind,id} while an existing item is being edited */
+
+function startEdit(kind,id){
+  var list=kind==="ann"?ANN:(kind==="ev"?EVENTS:TODAY_NOTES);
+  var item=list.filter(function(x){return idOf(x)===id;})[0];
+  if(!item)return;
+  editing={kind:kind,id:id};
+  var tab=kind==="ann"?"ann":(kind==="ev"?"prog":"today");
+  $$('[data-mf]').forEach(function(x){x.classList.toggle("on",x.getAttribute("data-mf")===tab);});
+  setMgKind(tab);
+  $("#mgTitle").value=item.t;
+  $("#mgDate").value=item.d;
+  $("#mgBody").value=item.b||"";
+  if(item.c)$("#mgCouncil").value=item.c;
+  if(kind==="ev"){
+    $("#mgVenue").value=item.v||"";
+    var m=(item.time||"").split("\u2013");
+    $("#mgStart").value=to24(m[0]); $("#mgEnd").value=to24(m[1]);
+    $("#mgRoom").value=item.room?"yes":"no";
+  }
+  $("#mgCancel").style.display="inline-block";
+  $("#mgForm").querySelector("button.submit").textContent="Save changes";
+  $("#mgForm").scrollIntoView({behavior:"smooth",block:"center"});
+  $("#mgTitle").focus();
+}
+function to24(txt){
+  if(!txt)return "";
+  txt=txt.trim();
+  if(/^12:00\s*NN$/i.test(txt))return "12:00";
+  var m=txt.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if(!m)return "";
+  var h=+m[1]%12; if(/PM/i.test(m[3]))h+=12;
+  return (h<10?"0":"")+h+":"+m[2];
+}
+function cancelEdit(){
+  editing=null;
+  $("#mgForm").reset();
+  $("#mgCancel").style.display="none";
+  setMgKind(mgKind);
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-edit]");
+  if(!b||!canEditNow())return;
+  startEdit(b.getAttribute("data-edit"),b.getAttribute("data-id"));
+});
+$("#mgCancel").addEventListener("click",function(e){e.preventDefault();cancelEdit();toast("Edit cancelled.");});
+
+$("#mgForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  if(!canEditNow())return;
+  var t=$("#mgTitle").value.trim(), d=$("#mgDate").value, b=$("#mgBody").value.trim();
+  if(!t||!d||!b){$("#mgErr").classList.add("show");return;}
+  $("#mgErr").classList.remove("show");
+  var c=$("#mgCouncil").value, p=pubStore();
+
+  if(editing){
+    var kind=editing.kind, oldId=editing.id;
+    var fresh = kind==="ev"
+      ? {t:t,d:d,time:timeRange($("#mgStart").value,$("#mgEnd").value),
+         v:($("#mgVenue").value.trim()||"Barangay hall common room"),b:b,room:$("#mgRoom").value==="yes"}
+      : {t:t,c:c,d:d,b:b};
+    function swap(arr){return arr.map(function(x){return idOf(x)===oldId?fresh:x;});}
+    if(kind==="ann"){ ANN=swap(ANN); ANN.sort(function(x,y){return parse(y.d)-parse(x.d);}); drawHomeAnn(); drawAnn(); }
+    if(kind==="ev"){ EVENTS=swap(EVENTS); EVENTS.sort(function(x,y){return parse(x.d)-parse(y.d);}); drawPrograms(); }
+    if(kind==="today"){ TODAY_NOTES=swap(TODAY_NOTES); drawToday(); }
+    /* keep the stored copy in step: edited built-ins are saved as overrides */
+    var key=kind==="ann"?"ann":(kind==="ev"?"ev":"today");
+    p[key]=(p[key]||[]).filter(function(x){return idOf(x)!==oldId;}).concat([fresh]);
+    p.removed=p.removed||{ann:[],ev:[],today:[]};
+    p.removed[key]=(p.removed[key]||[]);
+    if(p.removed[key].indexOf(oldId)<0)p.removed[key].push(oldId);
+    store("dalawinon_pub",p);
+    cancelEdit(); drawMgList();
+    toast("Changes saved.");
+    return;
+  }
+
+  if(mgKind==="ann"){
+    var a={t:t,c:c,d:d,b:b};
+    p.ann=(p.ann||[]).concat([a]); ANN.unshift(a);
+    ANN.sort(function(x,y){return parse(y.d)-parse(x.d);});
+    drawHomeAnn(); drawAnn();
+  }else if(mgKind==="prog"){
+    var ev={t:t,d:d,time:timeRange($("#mgStart").value,$("#mgEnd").value),
+            v:($("#mgVenue").value.trim()||"Barangay hall common room"),
+            b:b,room:$("#mgRoom").value==="yes"};
+    p.ev=(p.ev||[]).concat([ev]); EVENTS.push(ev);
+    EVENTS.sort(function(x,y){return parse(x.d)-parse(y.d);});
+    drawPrograms();
+  }else{
+    var n={t:t,c:c,d:d,b:b};
+    p.today=(p.today||[]).concat([n]); TODAY_NOTES.push(n);
+    drawToday();
+  }
+  store("dalawinon_pub",p);
+  this.reset(); setMgKind(mgKind); drawMgList();
+  toast(mgKind==="ann"?"Announcement published.":(mgKind==="prog"?"Program published.":"Notice published."));
+});
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-unpub]");
+  if(!b||!canEditNow())return;
+  var kind=b.getAttribute("data-unpub"), id=b.getAttribute("data-id");
+  var p=pubStore();
+  p.removed=p.removed||{ann:[],ev:[],today:[]};
+  p.removed[kind]=(p.removed[kind]||[]);
+  if(p.removed[kind].indexOf(id)<0)p.removed[kind].push(id);
+  function keep(arr){return (arr||[]).filter(function(x){return idOf(x)!==id;});}
+  if(kind==="ann"){ p.ann=keep(p.ann); ANN=keep(ANN); drawHomeAnn(); drawAnn(); }
+  if(kind==="ev"){ p.ev=keep(p.ev); EVENTS=keep(EVENTS); drawPrograms(); }
+  if(kind==="today"){ p.today=keep(p.today); TODAY_NOTES=keep(TODAY_NOTES); drawToday(); }
+  store("dalawinon_pub",p);
+  drawMgList();
+  toast("Removed from the public pages.");
+});
+
+/* Placeholder file contents for the archive, chosen by what the record is. */
+function archivePreview(rec){
+  var t=(rec.t||"").toLowerCase(), term=rec.term||"", by=rec.by||"";
+  var head='<div style="margin-top:12px;font-size:12.5px;color:var(--ink-3)">Archived file &middot; '+term+' &middot; turned over by '+by+'</div>';
+  function sheet(inner){
+    return head+'<div style="margin-top:8px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px 24px;max-height:320px;overflow:auto;font-size:13.5px;line-height:1.65">'+inner+'</div>';
+  }
+  function mini(cols,rows,foot){
+    return '<table class="mini" style="margin-top:10px"><thead><tr>'+cols.map(function(c){return '<th>'+c+'</th>';}).join("")+
+      '</tr></thead><tbody>'+rows.map(function(r){return '<tr>'+r.map(function(c,i){
+        return '<td'+(i===r.length-1?' style="text-align:right;white-space:nowrap"':'')+'>'+c+'</td>';}).join("")+'</tr>';}).join("")+
+      '</tbody>'+(foot||"")+'</table>';
+  }
+  if(t.indexOf("cbydp")>=0||t.indexOf("development plan")>=0){
+    return sheet('<strong>Comprehensive Barangay Youth Development Plan</strong><br>Covered period: '+term+
+      mini(["Center of participation","Programs","Total budget"],[
+        ["Education","Scholarship assistance, school supplies drive","&#8369;98,000.00"],
+        ["Health","Youth health orientation, feeding support","&#8369;42,000.00"],
+        ["Environment","Clean-up drives, tree planting","&#8369;55,000.00"],
+        ["Sports development","Inter-purok league, equipment","&#8369;120,000.00"],
+        ["Livelihood","Skills training for out-of-school youth","&#8369;75,000.00"],
+        ["Governance","Leadership training, SK assemblies","&#8369;38,000.00"]],
+        '<tfoot><tr><td colspan="2" style="font-weight:700;border-top:2px solid var(--line)">Total, three-year plan</td><td style="text-align:right;font-weight:700;border-top:2px solid var(--line)">&#8369;428,000.00</td></tr></tfoot>')+
+      '<p style="margin-top:12px;color:var(--ink-3);font-size:12.5px">Adopted by the Council in session and submitted to the Local Youth Development Office.</p>');
+  }
+  if(t.indexOf("abyip")>=0||t.indexOf("investment program")>=0){
+    return sheet('<strong>Annual Barangay Youth Investment Program</strong><br>Years covered: 2024, 2025, 2026'+
+      mini(["Year","Programs funded","Appropriation"],[
+        ["2024","9 programs across six centers","&#8369;138,000.00"],
+        ["2025","11 programs across six centers","&#8369;145,500.00"],
+        ["2026","10 programs across six centers","&#8369;144,500.00"]]));
+  }
+  if(t.indexOf("resolution")>=0||t.indexOf("ordinance")>=0){
+    return sheet('<strong>Index of issuances, '+term+'</strong>'+
+      mini(["Number","Subject","Date approved"],[
+        ["Res. No. 01, s. 2024","Adopting the annual youth investment program","Jan 18, 2024"],
+        ["Res. No. 04, s. 2024","Appropriating funds for the inter-purok league","Mar 22, 2024"],
+        ["Res. No. 09, s. 2025","Requesting assistance from the municipal government","Feb 11, 2025"],
+        ["Res. No. 02, s. 2026","Adopting the youth profiling activity","Jan 30, 2026"],
+        ["Res. No. 07, s. 2026","Authorising the turnover of records and accounts","Sep 14, 2026"]])+
+      '<p style="margin-top:12px;color:#8a5a12;font-size:12.5px">Note: issuances from 2023 are listed in the index but the signed copies were not located during turnover.</p>');
+  }
+  if(t.indexOf("minutes")>=0){
+    return sheet('<strong>Minutes of regular sessions, '+term+'</strong>'+
+      '<p style="margin-top:10px">Bound folder containing the minutes of regular and special sessions. Each entry records the call to order, roll call, business arising, new business and adjournment.</p>'+
+      mini(["Volume","Sessions covered","Condition"],[
+        ["Volume 1","January 2024 to December 2024","Readable"],
+        ["Volume 2","January 2025 to December 2025","Readable"],
+        ["Volume 3","January 2026 to September 2026","Readable"],
+        ["Volume 4","2023 sessions","Incomplete"]]));
+  }
+  if(t.indexOf("financial")>=0||t.indexOf("liquidation")>=0){
+    return sheet('<strong>Financial reports and liquidations, '+term+'</strong>'+
+      mini(["Period","Funds received","Funds used","Ending balance"],[
+        ["CY 2024","&#8369;138,000.00","&#8369;121,430.00","&#8369;16,570.00"],
+        ["CY 2025","&#8369;145,500.00","&#8369;139,880.00","&#8369;22,190.00"],
+        ["CY 2026 (to Sep)","&#8369;108,375.00","&#8369;86,210.00","&#8369;44,355.00"]])+
+      '<p style="margin-top:12px;color:var(--ink-3);font-size:12.5px">Disbursement vouchers and official receipts are filed with each report.</p>');
+  }
+  if(t.indexOf("accomplishment")>=0){
+    return sheet('<strong>Accomplishment reports, '+term+'</strong>'+
+      mini(["Period","Programs implemented","Youth reached"],[
+        ["1st semester 2024","6","210"],
+        ["2nd semester 2024","5","186"],
+        ["1st semester 2025","7","243"],
+        ["2nd semester 2025","6","198"],
+        ["1st semester 2026","5","175"]]));
+  }
+  if(t.indexOf("masterlist")>=0||t.indexOf("profiling")>=0){
+    return sheet('<strong>Summary only</strong>'+
+      '<p style="margin-top:10px">Individual records are withheld. Aggregate figures per purok:</p>'+
+      mini(["Purok","Registered youth","Male","Female"],[
+        ["Purok 1","142","70","72"],["Purok 2","118","61","57"],["Purok 3","97","48","49"],
+        ["Purok 4","131","65","66"],["Purok 5","109","54","55"],["Purok 6","88","41","47"]],
+        '<tfoot><tr><td style="font-weight:700;border-top:2px solid var(--line)">Total</td><td style="font-weight:700;border-top:2px solid var(--line)">685</td><td style="font-weight:700;border-top:2px solid var(--line)">339</td><td style="text-align:right;font-weight:700;border-top:2px solid var(--line)">346</td></tr></tfoot>')+
+      '<p style="margin-top:12px;color:#7d2220;font-size:12.5px">Names and contact details are personal data under RA 10173 and are not shown here.</p>');
+  }
+  if(t.indexOf("inventory")>=0||t.indexOf("equipment")>=0||t.indexOf("property")>=0){
+    return sheet('<strong>Turnover inventory, 2026</strong>'+
+      mini(["Item","Quantity","Condition"],[
+        ["Monobloc chairs","48","Serviceable"],
+        ["Folding tables","6","Serviceable"],
+        ["Sound system with speakers","1 set","Serviceable"],
+        ["Basketballs and volleyballs","9","Used"],
+        ["Steel filing cabinet","2","Serviceable"],
+        ["Laptop (donated 2024)","1","For repair"]])+
+      '<p style="margin-top:12px;color:var(--ink-3);font-size:12.5px">Signed by the outgoing and incoming officers and witnessed by the Punong Barangay.</p>');
+  }
+  if(t.indexOf("photo")>=0||t.indexOf("documentation")>=0){
+    return sheet('<strong>Activity documentation, '+term+'</strong>'+
+      mini(["Activity","Date","Files"],[
+        ["Inter-purok sports league","March 2024","64 photos, 1 attendance sheet"],
+        ["Tree planting, Purok 5","June 2024","28 photos"],
+        ["Youth assembly","February 2025","41 photos, 1 attendance sheet"],
+        ["Leadership training","August 2025","Attendance sheet only"],
+        ["Clean-up drive","January 2026","Not recovered"]])+
+      '<p style="margin-top:12px;color:#8a5a12;font-size:12.5px">Some files were stored on a personal account and could not be retrieved at turnover.</p>');
+  }
+  return sheet('<strong>'+rec.t+'</strong><p style="margin-top:10px">Archived record from the '+term+' term. In the live site this opens the stored file held by the councils.</p>');
+}
+
+/* Archive turned over by earlier administrations. */
+var ARCHIVE = [
+  {t:"CBYDP 2023&ndash;2026 (previous term)",term:"2023&ndash;2026",by:"SK Chairperson, 2023&ndash;2026",cond:"Complete, digital copy",
+   note:"Three-year youth development plan adopted by the previous Council, with the centers of participation and indicative budgets it set."},
+  {t:"ABYIP 2024, 2025 and 2026",term:"2023&ndash;2026",by:"SK Chairperson, 2023&ndash;2026",cond:"Complete, digital copy",
+   note:"Annual investment programs for each year of the previous term."},
+  {t:"SK resolutions, Series of 2023 to 2026",term:"2023&ndash;2026",by:"SK Secretary, 2023&ndash;2026",cond:"Partial &mdash; printed only",
+   note:"Signed resolutions of the previous Council. Several from 2023 were not found during turnover and remain missing."},
+  {t:"Minutes of SK sessions, 2023 to 2026",term:"2023&ndash;2026",by:"SK Secretary, 2023&ndash;2026",cond:"Partial &mdash; printed only",
+   note:"Session minutes kept in a folder at the barangay hall. Not yet scanned."},
+  {t:"SK financial reports and liquidations, 2023 to 2026",term:"2023&ndash;2026",by:"SK Treasurer, 2023&ndash;2026",cond:"Complete, printed",
+   note:"Quarterly financial reports with liquidation attachments for the previous term."},
+  {t:"Accomplishment reports, 2023 to 2026",term:"2023&ndash;2026",by:"SK Chairperson, 2023&ndash;2026",cond:"Complete, digital copy",
+   note:"Semestral accomplishment reports covering programs implemented in the previous term."},
+  {t:"Turnover inventory, 2026",term:"2023&ndash;2026",by:"Outgoing SK Council, 2026",cond:"Complete, signed",
+   note:"Signed inventory of documents, equipment and funds handed over to the incoming Council."},
+  {t:"Barangay resolutions and ordinances, 2018 to 2023",term:"2018&ndash;2023",by:"Barangay Secretary, 2018&ndash;2023",cond:"Partial &mdash; printed only",
+   note:"Issuances of the earlier Barangay Council. Some years are incomplete."},
+  {t:"Barangay development plans, 2018 to 2023",term:"2018&ndash;2023",by:"Punong Barangay, 2018&ndash;2023",cond:"Complete, printed",
+   note:"Development plans and annual investment programs of the earlier administration."},
+  {t:"SK records, 2018 to 2023",term:"2018&ndash;2023",by:"Not turned over",cond:"Missing",
+   note:"No records from this term were handed over. This gap is the reason the Council adopted a documented turnover procedure."},
+  {t:"Katipunan ng Kabataan masterlist, 2023",term:"2023&ndash;2026",by:"SK Secretary, 2023&ndash;2026",cond:"Complete, printed",
+   note:"Registered youth list used for the 2023 elections. Retained for reference only; personal data is not published."},
+  {t:"Youth profiling summary, 2024",term:"2023&ndash;2026",by:"SK Chairperson, 2023&ndash;2026",cond:"Complete, digital copy",
+   note:"Aggregate profile of the youth population per purok, without individual names."},
+  {t:"Photo and activity documentation, 2023 to 2026",term:"2023&ndash;2026",by:"SK Kagawad, 2023&ndash;2026",cond:"Partial &mdash; digital copy",
+   note:"Photographs and attendance sheets of past programs. Some files were kept on a personal account and could not be recovered."},
+  {t:"Equipment and property inventory, 2026",term:"2023&ndash;2026",by:"Outgoing SK Treasurer, 2026",cond:"Complete, signed",
+   note:"Sports equipment, chairs and sound system turned over to the incoming Council."},
+  {t:"Barangay Council session minutes, 2018 to 2023",term:"2018&ndash;2023",by:"Barangay Secretary, 2018&ndash;2023",cond:"Partial &mdash; printed only",
+   note:"Minutes of the earlier Barangay Council. Several volumes show water damage from storage."},
+  {t:"Barangay financial statements, 2018 to 2023",term:"2018&ndash;2023",by:"Barangay Treasurer, 2018&ndash;2023",cond:"Complete, printed",
+   note:"Annual financial statements of the earlier administration, kept at the barangay hall."},
+  {t:"Purok leaders directory, 2018 to 2023",term:"2018&ndash;2023",by:"Not turned over",cond:"Missing",
+   note:"The list of purok volunteer leaders for this term was not recorded and had to be rebuilt from memory."},
+  {t:"Old barangay website files",term:"2018&ndash;2023",by:"Not turned over",cond:"Missing",
+   note:"No prior website or digital platform existed for the barangay. Information was posted only on personal social media accounts."}
+];
+var arcFilter="all";
+function drawArchive(){
+  var q=$("#arcSearch")?$("#arcSearch").value.trim().toLowerCase():"";
+  var rows=ARCHIVE.filter(function(a){
+    var okF=arcFilter==="all"||a.term===arcFilter;
+    var okQ=!q||(a.t+" "+a.by+" "+a.cond+" "+a.note).toLowerCase().indexOf(q)>=0;
+    return okF&&okQ;
+  });
+  $("#arcBody").innerHTML=rows.map(function(a){
+    var cls=a.cond.indexOf("Missing")>=0?"conf":(a.cond.indexOf("Partial")>=0?"restr":"ok");
+    return '<tr><td class="t">'+a.t+'</td><td style="white-space:nowrap">'+a.term+'</td>'+
+      '<td style="color:var(--ink-2)">'+a.by+'</td>'+
+      '<td><span class="chip '+cls+'">'+a.cond+'</span></td>'+
+      '<td style="white-space:nowrap"><button class="docbtn" data-arc="'+esc(a.t)+'">Open</button>'+
+      (canDeleteAll()?' <button class="docbtn delbtn" data-delarc="'+esc(a.t)+'">Delete</button>':'')+
+      '</td></tr>';
+  }).join("");
+  $("#arcEmpty").style.display=rows.length?"none":"block";
+}
+if($("#arcSearch"))$("#arcSearch").addEventListener("input",drawArchive);
+$$('[data-af2]').forEach(function(b){
+  b.addEventListener("click",function(){
+    $$('[data-af2]').forEach(function(x){x.classList.remove("on");});
+    this.classList.add("on");arcFilter=this.getAttribute("data-af2");drawArchive();
+  });
+});
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-arc]");
+  if(!b)return;
+  var row=b.closest("tr");
+  if(row.nextElementSibling&&row.nextElementSibling.className==="prev"){row.nextElementSibling.remove();return;}
+  var title=b.getAttribute("data-arc");
+  var rec=ARCHIVE.filter(function(a){return a.t===title;})[0]||{note:""};
+  var tr=document.createElement("tr");
+  tr.className="prev";
+  tr.innerHTML='<td colspan="5" style="background:var(--surface-2);color:var(--ink-2);font-size:14px">'+
+    '<strong>'+title+'</strong><br>'+rec.note+
+    (rec.cond&&rec.cond.indexOf("Missing")>=0
+      ? '<div style="margin-top:10px;padding:10px 13px;background:#fdeceb;border-left:3px solid #b3261e;border-radius:7px;color:#7d2220;font-size:13.5px">Nothing was turned over for this term. Loss of records at turnover is the gap this archive exists to prevent.</div>'
+      : archivePreview(rec))+
+    '</td>';
+  row.after(tr);
+});
+drawArchive();
+
+/* ---------------- deleting ---------------- */
+function delStore(){ return store("dalawinon_deleted")||{rec:[],doc:[],arc:[],sub:[]}; }
+function markDeleted(kind,id){
+  var d=delStore(); d[kind]=d[kind]||[];
+  if(d[kind].indexOf(id)<0)d[kind].push(id);
+  try{store("dalawinon_deleted",d);}catch(e){}
+}
+function applyDeleted(){
+  var d=delStore();
+  if((d.rec||[]).length)RESTRICTED=RESTRICTED.filter(function(x){return d.rec.indexOf(x.t)<0;});
+  if((d.doc||[]).length)DOCS=DOCS.filter(function(x){return d.doc.indexOf(x.t)<0;});
+  if((d.arc||[]).length)ARCHIVE=ARCHIVE.filter(function(x){return d.arc.indexOf(x.t)<0;});
+  if((d.sub||[]).length)SAMPLE_REQS=SAMPLE_REQS.filter(function(x){return d.sub.indexOf(x.msg)<0;});
+}
+
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-delrec]");
+  if(!b)return;
+  if(!canDelete()){toast("Your position cannot delete records.");return;}
+  var t=b.getAttribute("data-delrec");
+  if(!confirm("Delete the record \u201c"+t+"\u201d?\n\nIt is removed from the staff records, and from the public Documents tab if it is listed there."))return;
+  RESTRICTED=RESTRICTED.filter(function(x){return x.t!==t;});
+  DOCS=DOCS.filter(function(x){return x.t!==t;});
+  RECS_ADDED=RECS_ADDED.filter(function(x){return x.t!==t;});
+  markDeleted("rec",t); markDeleted("doc",t); saveRecords();
+  drawRestricted(); drawDocs();
+  toast("Record deleted.");
+});
+
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-deldoc]");
+  if(!b)return;
+  if(!canDeleteAll()){toast("Only BACKEND_CODER can delete published documents.");return;}
+  var t=b.getAttribute("data-deldoc");
+  if(!confirm("Remove \u201c"+t+"\u201d from the public Documents tab?"))return;
+  DOCS=DOCS.filter(function(x){return x.t!==t;});
+  markDeleted("doc",t);
+  drawDocs();
+  toast("Document removed from the public pages.");
+});
+
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-delarc]");
+  if(!b)return;
+  if(!canDeleteAll()){toast("Only BACKEND_CODER can delete archive entries.");return;}
+  var t=b.getAttribute("data-delarc");
+  if(!confirm("Delete the archived record \u201c"+t+"\u201d?"))return;
+  ARCHIVE=ARCHIVE.filter(function(x){return x.t!==t;});
+  markDeleted("arc",t);
+  drawArchive();
+  toast("Archived record deleted.");
+});
+
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-delsub]");
+  if(!b)return;
+  if(!canDeleteAll()){toast("Only BACKEND_CODER can delete submissions.");return;}
+  var i=+b.getAttribute("data-delsub"), live=b.getAttribute("data-live2")==="1";
+  if(!confirm("Delete this resident submission?"))return;
+  if(live){
+    var log=store("dalawinon_fb")||[];
+    log.splice(i,1);
+    try{store("dalawinon_fb",log);}catch(e){}
+  }else{
+    var gone=SAMPLE_REQS[i];
+    if(gone)markDeleted("sub",gone.msg);
+    SAMPLE_REQS.splice(i,1);
+  }
+  drawRequests();
+  toast("Submission deleted.");
+});
+
+/* ---------------- BACKEND_CODER: edit any text on the page ---------------- */
+var DEV_ROLE="BACKEND_CODER";
+function isDev(){return currentRole===DEV_ROLE;}
+var devOn=false;
+
+/* containers rebuilt by script — editing inside them would be overwritten */
+var DEV_SKIP=["quick","homeAnn","annList","docBody","resBody","arcBody","reqLog","calList",
+  "purokList","brgyList","skList","staffDocs","mgList","todayNotices","nextEvent","roomStatus",
+  "accessLogContent","personBody","searchResults","fbLog","mgCancel"];
+
+function devEditable(){
+  var sel="h1,h2,h3,h4,p,li,td,th,label,span.eyebrow,span.tag,.brand b,.brand span span,footer.site h4,.proto span";
+  return [].slice.call(document.querySelectorAll(sel)).filter(function(el){
+    if(el.closest("#personModal")||el.closest("#modal"))return false;
+    for(var i=0;i<DEV_SKIP.length;i++){ if(el.closest("#"+DEV_SKIP[i]))return false; }
+    if(el.classList.contains("skip"))return false;
+    if(!el.textContent.trim())return false;
+    if(el.querySelector("input,select,textarea,button"))return false;
+    return true;
+  });
+}
+function devKey(el,i){
+  var sec=el.closest("section")||el.closest("header")||el.closest("footer");
+  return (sec&&sec.id?sec.id:(sec?sec.tagName.toLowerCase():"doc"))+":"+el.tagName.toLowerCase()+":"+i;
+}
+function devApply(){
+  var saved=store("dalawinon_text")||{};
+  if(!Object.keys(saved).length)return;
+  devEditable().forEach(function(el,i){
+    var k=devKey(el,i);
+    if(saved[k]!==undefined&&saved[k]!==el.textContent)el.textContent=saved[k];
+  });
+}
+function devSave(el,i){
+  var saved=store("dalawinon_text")||{};
+  saved[devKey(el,i)]=el.textContent;
+  store("dalawinon_text",saved);
+}
+function devMode(on){
+  devOn=on&&isDev();
+  document.body.classList.toggle("devmode",devOn);
+  devEditable().forEach(function(el,i){
+    if(devOn){
+      el.setAttribute("contenteditable","true");
+      el.setAttribute("spellcheck","false");
+      el.dataset.devi=i;
+      if(!el.__devBound){
+        el.addEventListener("blur",function(){devSave(el,+el.dataset.devi);});
+        el.addEventListener("keydown",function(e){ if(e.key==="Escape")el.blur(); });
+        el.__devBound=true;
+      }
+    }else{
+      el.removeAttribute("contenteditable");
+    }
+  });
+  var b=$("#devbtn");
+  if(b){b.classList.toggle("on",devOn);b.title=devOn?"Editing on — click to stop":"Edit page text";
+    var lab=b.querySelector(".devlabel"); if(lab)lab.textContent=devOn?"Editing":"Edit text";}
+  if(on&&isDev())toast("Edit mode on. Click any text to change it; changes save when you click away.");
+}
+function devReset(){
+  if(!isDev())return;
+  if(confirm("Undo every text edit made on this device?")){
+    try{store("dalawinon_text",{});}catch(e){}
+    location.reload();
+  }
+}
+function showDev(){
+  var w=$("#devWrap"), b=$("#devbtn");
+  if(w)w.style.display=isDev()?"block":"none";
+  if(b)b.classList.toggle("show",isDev());
+  if(!isDev()&&devOn)devMode(false);
+}
+
+/* ---------------- adding records ---------------- */
+var REC_ROLES=["BACKEND_CODER","Punong Barangay","SK Chairperson","SK Secretary"];   /* any record */
+var FIN_ROLE="SK Treasurer";                                          /* financial records only */
+var FIN_CATS=["Financial report","Liquidation or voucher"];
+function canAddRecords(){return REC_ROLES.indexOf(currentRole)>=0||currentRole===FIN_ROLE;}
+function finOnly(){return currentRole===FIN_ROLE;}
+
+function showAddRecord(){
+  var w=$("#addRecWrap");
+  if(!w)return;
+  w.style.display=canAddRecords()?"block":"none";
+  if(!canAddRecords())return;
+  var sel=$("#recCat");
+  [].forEach.call(sel.options,function(o){
+    var fin=FIN_CATS.indexOf(o.textContent)>=0;
+    o.disabled=finOnly()&&!fin;
+    o.hidden=finOnly()&&!fin;
+  });
+  if(finOnly()&&FIN_CATS.indexOf(sel.selectedOptions[0]&&sel.selectedOptions[0].textContent)<0){
+    for(var i=0;i<sel.options.length;i++){ if(!sel.options[i].disabled){sel.selectedIndex=i;break;} }
+  }
+  $("#recScope").textContent=finOnly()
+    ? "As SK Treasurer you may add financial records \u2014 financial reports, liquidations and vouchers."
+    : "Added records appear in the table below, and in the public Documents tab when you list them there.";
+}
+
+/* a file is kept as a data URL; big files stay in memory only */
+var pendingFile=null;
+$("#recFile").addEventListener("change",function(){
+  var f=this.files&&this.files[0];
+  pendingFile=null;
+  if(!f)return;
+  if(f.size>2*1024*1024){toast("That file is over 2 MB. Choose a smaller one.");this.value="";return;}
+  var r=new FileReader();
+  r.onload=function(){ pendingFile={name:f.name,type:f.type||"",size:f.size,data:r.result}; };
+  r.readAsDataURL(f);
+});
+
+function fileSize(n){
+  return n<1024?n+" B":(n<1048576?(n/1024).toFixed(0)+" KB":(n/1048576).toFixed(1)+" MB");
+}
+function filePreview(f){
+  if(!f)return "";
+  var head='<div style="margin-top:12px;font-size:12.5px;color:var(--ink-3)">Attached file &middot; '+esc(f.name)+' &middot; '+fileSize(f.size)+'</div>';
+  var box=function(inner){return head+'<div style="margin-top:8px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;max-height:420px;overflow:auto">'+inner+'</div>';};
+  if(/^image\//.test(f.type))
+    return box('<img src="'+f.data+'" alt="'+esc(f.name)+'" style="max-width:100%;border-radius:6px;display:block">');
+  if(f.type==="application/pdf")
+    return box('<iframe src="'+f.data+'" title="'+esc(f.name)+'" style="width:100%;height:380px;border:0;border-radius:6px"></iframe>');
+  if(/^text\//.test(f.type)||/\.(txt|csv|md)$/i.test(f.name)){
+    var txt="";
+    try{ txt=decodeURIComponent(escape(atob((f.data.split(",")[1]||"")))); }catch(e){ txt="(could not read the text)"; }
+    return box('<pre style="margin:0;white-space:pre-wrap;font-size:12.5px;line-height:1.55">'+esc(txt.slice(0,4000))+'</pre>');
+  }
+  return head+'<p style="margin-top:8px;font-size:13px;color:var(--ink-2)">This file type cannot be previewed here. The council opens it from its own storage.</p>';
+}
+
+function saveRecords(){
+  try{
+    var light=RECS_ADDED.map(function(r){
+      var c=JSON.parse(JSON.stringify(r));
+      if(c.file&&c.file.size>400*1024)delete c.file;   /* keep storage small */
+      return c;
+    });
+    store("dalawinon_recs",light);
+  }catch(e){}
+}
+var RECS_ADDED=[];
+function loadRecords(){
+  try{
+    var r=store("dalawinon_recs");
+    if(!r||!r.length)return;
+    RECS_ADDED=r;
+    r.forEach(function(x){
+      if(!RESTRICTED.some(function(y){return y.t===x.t;}))
+        RESTRICTED.unshift({t:x.t,cl:x.cl,w:x.w,rel:x.rel,file:x.file,added:true});
+      if(x.pub&&!DOCS.some(function(y){return y.t===x.t;}))
+        DOCS.unshift({t:x.t,ty:x.ty,c:x.c,d:x.d,file:x.file,added:true});
+    });
+  }catch(e){}
+}
+
+$("#recForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  if(!canAddRecords())return;
+  var t=$("#recTitle").value.trim(), why=$("#recWhy").value.trim();
+  var catSel=$("#recCat"), catLabel=catSel.selectedOptions[0]?catSel.selectedOptions[0].textContent:"";
+  if(!t||!why||!catLabel){$("#recErr").classList.add("show");return;}
+  if(finOnly()&&FIN_CATS.indexOf(catLabel)<0){toast("As SK Treasurer you may add financial records only.");return;}
+  $("#recErr").classList.remove("show");
+  var rec={
+    t:t, cl:$("#recCls").value, w:why,
+    rel:($("#recRel").value.trim()||"On request, subject to approval."),
+    ty:catSel.value, c:$("#recCouncil").value,
+    d:($("#recDate").value||new Date().toISOString().slice(0,10)),
+    pub:$("#recPublish").checked, file:pendingFile, added:true
+  };
+  RECS_ADDED.unshift(rec);
+  RESTRICTED.unshift({t:rec.t,cl:rec.cl,w:rec.w,rel:rec.rel,file:rec.file,added:true});
+  if(rec.pub)DOCS.unshift({t:rec.t,ty:rec.ty,c:rec.c,d:rec.d,file:rec.file,added:true});
+  saveRecords();
+  drawRestricted(); drawDocs();
+  this.reset(); pendingFile=null; showAddRecord();
+  toast(rec.pub?"Record added and listed in Documents.":"Record added to the staff records.");
+});
+
+/* Placeholder contents for each restricted record. */
+function recordPreview(rec){
+  var t=(rec.t||"").toLowerCase();
+  function sheet(inner){
+    return '<div style="margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px 24px;max-height:330px;overflow:auto;font-size:13.5px;line-height:1.65">'+inner+'</div>';
+  }
+  function mini(cols,rows,foot){
+    return '<table class="mini" style="margin-top:10px"><thead><tr>'+cols.map(function(c){return '<th>'+c+'</th>';}).join("")+
+      '</tr></thead><tbody>'+rows.map(function(r){return '<tr>'+r.map(function(c,i){
+        return '<td'+(i===r.length-1?' style="text-align:right;white-space:nowrap"':'')+'>'+c+'</td>';}).join("")+'</tr>';}).join("")+
+      '</tbody>'+(foot||"")+'</table>';
+  }
+  if(t.indexOf("youth profiling")>=0){
+    return sheet('<strong>Youth profiling forms &mdash; summary sheet</strong>'+
+      '<p style="margin-top:10px">Individual forms are withheld. Aggregate figures only:</p>'+
+      mini(["Purok","Forms received","In school","Out of school","Working"],[
+        ["Purok 1","142","108","19","15"],["Purok 2","118","91","14","13"],["Purok 3","97","74","12","11"],
+        ["Purok 4","131","99","18","14"],["Purok 5","109","83","15","11"],["Purok 6","88","66","12","10"]],
+        '<tfoot><tr><td style="font-weight:700;border-top:2px solid var(--line)">Total</td><td style="font-weight:700;border-top:2px solid var(--line)">685</td><td style="font-weight:700;border-top:2px solid var(--line)">521</td><td style="font-weight:700;border-top:2px solid var(--line)">90</td><td style="text-align:right;font-weight:700;border-top:2px solid var(--line)">74</td></tr></tfoot>')+
+      '<p style="margin-top:12px;color:#7d2220;font-size:12.5px">Household details and contact numbers are personal data under RA 10173 and are not shown.</p>');
+  }
+  if(t.indexOf("feedback and inquiry")>=0){
+    return sheet('<strong>Feedback and inquiry submissions &mdash; register</strong>'+
+      mini(["Ref.","Date","Type","Status"],[
+        ["FB-2026-041","Nov 15, 2026","Question or inquiry","New"],
+        ["FB-2026-040","Nov 13, 2026","Suggestion for a program","In progress"],
+        ["FB-2026-039","Nov 12, 2026","Concern or complaint","New"],
+        ["FB-2026-038","Nov 8, 2026","Other","Done"],
+        ["FB-2026-037","Nov 6, 2026","Request for a document","Done"]])+
+      '<p style="margin-top:12px;color:#7d2220;font-size:12.5px">Message text and sender details are visible only in the Resident submissions panel, to authorised officers.</p>');
+  }
+  if(t.indexOf("liquidation")>=0){
+    return sheet('<strong>Liquidation report, third quarter 2026</strong>'+
+      mini(["Particulars","Supporting document","Amount"],[
+        ["Clean-up drive materials","OR 4471, DV 031","&#8369;4,850.00"],
+        ["Tarpaulins and advisories","OR 1182, DV 032","&#8369;2,400.00"],
+        ["Meals, CBYDP consultation","OR 9930, DV 033","&#8369;6,200.00"],
+        ["Sports equipment","OR 2217, DV 034","&#8369;7,500.00"],
+        ["Office supplies","OR 7741, DV 035","&#8369;1,970.00"],
+        ["Transport service","OR 3302, DV 036","&#8369;3,000.00"]],
+        '<tfoot><tr><td colspan="2" style="font-weight:700;border-top:2px solid var(--line)">Total liquidated</td><td style="text-align:right;font-weight:700;border-top:2px solid var(--line)">&#8369;25,920.00</td></tr></tfoot>')+
+      '<p style="margin-top:12px;color:var(--ink-3);font-size:12.5px">Attachments: 6 official receipts, 6 disbursement vouchers, 2 certificates of acceptance.</p>');
+  }
+  if(t.indexOf("contact directory")>=0){
+    return sheet('<strong>Officials and purok leaders directory</strong>'+
+      mini(["Position","Name","Mobile"],[
+        ["Punong Barangay","Withheld",'<span class="redact">0000000000</span>'],
+        ["SK Chairperson","Withheld",'<span class="redact">0000000000</span>'],
+        ["SK Secretary","Withheld",'<span class="redact">0000000000</span>'],
+        ["Purok 1 volunteer leader","Withheld",'<span class="redact">0000000000</span>'],
+        ["Purok 2 volunteer leader","Withheld",'<span class="redact">0000000000</span>']])+
+      '<p style="margin-top:12px;color:#7d2220;font-size:12.5px">Personal mobile numbers are withheld even in the staff view. Residents reach officials through the barangay hall or the feedback form.</p>');
+  }
+  if(t.indexOf("minutes pending")>=0){
+    return sheet('<strong>Minutes pending approval &mdash; October 2026 session</strong>'+
+      '<p style="margin-top:10px"><strong>Call to order.</strong> The session was called to order at the barangay hall common room.</p>'+
+      '<p><strong>Roll call.</strong> A quorum was declared present. Two members were on official business.</p>'+
+      '<p><strong>Business arising.</strong> Status of the clean-up drive and the sports activity was reported.</p>'+
+      '<p><strong>New business.</strong> The proposed information portal was taken up and referred for drafting.</p>'+
+      '<p style="margin-top:14px;padding:10px 13px;background:#e6eaf2;border-left:3px solid #3b4a66;border-radius:7px;color:#3b4a66;font-size:12.5px">Working draft. Subject to correction and approval at the next regular session; not published until approved.</p>');
+  }
+  if(t.indexOf("cbydp revisions")>=0){
+    return sheet('<strong>Draft CBYDP revisions</strong>'+
+      mini(["Center of participation","Current","Proposed"],[
+        ["Education","&#8369;35,000.00","&#8369;45,000.00"],
+        ["Health","&#8369;12,000.00","&#8369;15,000.00"],
+        ["Environment","&#8369;18,000.00","&#8369;18,000.00"],
+        ["Sports development","&#8369;40,000.00","&#8369;32,000.00"],
+        ["Livelihood","&#8369;25,000.00","&#8369;35,000.00"],
+        ["Governance","&#8369;15,000.00","&#8369;15,000.00"]])+
+      '<p style="margin-top:12px;padding:10px 13px;background:#e6eaf2;border-left:3px solid #3b4a66;border-radius:7px;color:#3b4a66;font-size:12.5px">Working copy under consultation. Figures are not final until adopted in session.</p>');
+  }
+  if(t.indexOf("turnover inventory")>=0){
+    return sheet('<strong>Turnover inventory and administrative credentials</strong>'+
+      mini(["Item","Detail","Status"],[
+        ["Website administrator account","Held under council control","Active"],
+        ["Official email account","Held under council control","Active"],
+        ["Document folders, 2026","Digital and printed","Complete"],
+        ["Financial records, 2026","With the Treasurer","Complete"],
+        ["Equipment inventory","Signed by both parties","Complete"]])+
+      '<p style="margin-top:12px;color:#7d2220;font-size:12.5px">Passwords and recovery details are not displayed here. They are reassigned in person at turnover.</p>');
+  }
+  if(t.indexOf("incident and complaint")>=0){
+    return sheet('<strong>Incident and complaint records &mdash; register</strong>'+
+      mini(["Ref.","Date","Nature","Status"],[
+        ["IR-2026-012","Nov 12, 2026","Unlit road, safety concern","Referred to the Barangay Council"],
+        ["IR-2026-011","Oct 29, 2026","Noise during an activity","Settled"],
+        ["IR-2026-010","Oct 14, 2026","Damaged equipment","Settled"]])+
+      '<p style="margin-top:12px;color:#7d2220;font-size:12.5px">Names of the individuals involved are withheld. Case details are handled by the responsible officer only.</p>');
+  }
+  return sheet('<strong>'+rec.t+'</strong><p style="margin-top:10px">'+(rec.w||"")+'</p>'+
+    '<p style="margin-top:10px;color:var(--ink-3);font-size:12.5px">Placeholder record. In the live site this opens the stored file held by the councils.</p>');
+}
+
 var resFilter="all";
 function drawRestricted(){
   var q=$("#resSearch").value.trim().toLowerCase();
@@ -1285,7 +2391,7 @@ function drawRestricted(){
     var okQ=!q||(r.t+" "+r.w+" "+r.cl).toLowerCase().indexOf(q)>=0;
     return okF&&okQ;
   });
-  var canEdit=["Punong Barangay","SK Chairperson"].indexOf(currentRole)>=0;
+  var canEdit=canEditNow();
   $("#resBody").innerHTML=rows.map(function(r){
     var cls=r.cl==="Confidential"?"conf":(r.cl==="Draft"?"draft":"restr");
     var i=RESTRICTED.indexOf(r);
@@ -1300,7 +2406,9 @@ function drawRestricted(){
       '<td><span class="chip '+cls+'">'+esc(r.cl)+'</span>'+clsControl+'</td>'+
       '<td style="color:var(--ink-2)">'+r.w+'</td>'+
       '<td style="color:var(--ink-2)">'+esc(r.rel)+'</td>'+
-      '<td><button class="docbtn" data-res="'+esc(r.t)+'">Open</button></td></tr>';
+      '<td style="white-space:nowrap"><button class="docbtn" data-res="'+esc(r.t)+'">Open</button>'+
+      (canDelete()?' <button class="docbtn delbtn" data-delrec="'+esc(r.t)+'">Delete</button>':'')+
+      '</td></tr>';
   }).join("");
   $("#resEmpty").style.display=rows.length?"none":"block";
 }
@@ -1334,53 +2442,102 @@ document.addEventListener("click",function(e){
   if(title.indexOf("Katipunan ng Kabataan")===0) extra=kkPreview();
   else if(title.indexOf("Disbursement vouchers")===0) extra=voucherPreview();
   else if(title.indexOf("Draft SK Resolution")===0) extra=resolutionPreview();
+  var recObj=RESTRICTED.filter(function(r){return r.t===title;})[0]||{t:title};
+  if(!extra)extra=(recObj.file?filePreview(recObj.file):recordPreview(recObj));
   tr.innerHTML='<td colspan="5" style="background:var(--surface-2);color:var(--ink-2);font-size:14px">'+
-    '<strong>'+esc(title)+'</strong><br>Placeholder entry. In the live site this opens the stored file for authorised officers. Access is logged, and nothing here is published to the public pages.'+extra+'</td>';
+    '<strong>'+esc(title)+'</strong><br>Access is logged, and nothing here is published to the public pages unless the council lists it.'+extra+'</td>';
   row.after(tr);
 });
 
 /* Sample request log — placeholder entries showing the release workflow. */
 var SAMPLE_REQS = [
-  {st:"New",when:"November 14, 2026",purok:"Purok 2",rec:"SK accomplishment report, first semester 2026",
+  {st:"New",ty:"Question or inquiry",when:"November 15, 2026",purok:"Purok 6",who:"Rhea M.",contact:"09xx-xxx-2093",rec:"",
+   msg:"Good day po. Ano po ang requirements para maka-apply sa scholarship na inannounce ng SK? Saan po kami pwedeng magpasa?",officer:"SK Secretary"},
+  {st:"In progress",ty:"Suggestion for a program",when:"November 13, 2026",purok:"Purok 1",who:"Anonymous",contact:"",rec:"",
+   msg:"Suggestion po sana na magkaroon ng libreng computer at internet literacy training para sa mga out-of-school youth dito sa amin.",officer:"SK Chairperson"},
+  {st:"New",ty:"Concern or complaint",when:"November 12, 2026",purok:"Purok 3",who:"Danilo T.",contact:"09xx-xxx-7745",rec:"",
+   msg:"Wala pong ilaw sa daan papunta sa covered court kaya delikado po sa mga bata na umuuwi ng gabi mula sa practice.",officer:"Punong Barangay"},
+  {st:"Done",ty:"Other",when:"November 8, 2026",purok:"Purok 2",who:"Grace A.",contact:"09xx-xxx-3318",rec:"",
+   msg:"Nais po sana naming mag-volunteer ng ilang kabataan sa clean-up drive. Sino po ang pwedeng lapitan?",officer:"SK Secretary"},
+  {st:"New",ty:"Request for a document",when:"November 14, 2026",purok:"Purok 2",who:"Jhona R.",contact:"09xx-xxx-4821",rec:"SK accomplishment report, first semester 2026",
    msg:"Good day po. May I ask for a copy of the SK accomplishment report? I am preparing a school requirement about youth programs in our barangay.",officer:"SK Secretary"},
-  {st:"In progress",when:"November 11, 2026",purok:"Purok 5",rec:"SK financial report, third quarter 2026",
+  {st:"In progress",ty:"Request for a document",when:"November 11, 2026",purok:"Purok 5",who:"Anonymous",contact:"",rec:"SK financial report, third quarter 2026",
    msg:"Requesting the breakdown of the SK funds used for the sports activity last quarter.",officer:"SK Treasurer"},
-  {st:"Done",when:"November 6, 2026",purok:"Purok 1",rec:"Minutes of the SK regular session, September 2026",
+  {st:"Done",ty:"Request for a document",when:"November 6, 2026",purok:"Purok 1",who:"Mark L.",contact:"09xx-xxx-1174",rec:"Minutes of the SK regular session, September 2026",
    msg:"Pwede po bang makakuha ng kopya ng minutes ng huling session? Salamat po.",officer:"SK Secretary"},
-  {st:"Done",when:"October 30, 2026",purok:"Purok 4",rec:"Comprehensive Barangay Youth Development Plan",
+  {st:"Done",ty:"Request for a document",when:"October 30, 2026",purok:"Purok 4",who:"Purok 4 Youth Org",contact:"09xx-xxx-6630",rec:"Comprehensive Barangay Youth Development Plan",
    msg:"Requesting a copy of the CBYDP for our purok youth organisation reference.",officer:"SK Chairperson"},
-  {st:"Withheld",when:"October 24, 2026",purok:"Purok 3",rec:"Katipunan ng Kabataan masterlist",
+  {st:"Withheld",ty:"Request for a document",when:"October 24, 2026",purok:"Purok 3",who:"Anonymous",contact:"",rec:"Katipunan ng Kabataan masterlist",
    msg:"Asking for the list of registered youth voters in our purok with their contact numbers.",officer:"SK Secretary",
    note:"Withheld. The masterlist is personal data under RA 10173. Aggregate counts per purok were provided instead."}
 ];
 var REQ_STATES=["New","In progress","Done","Withheld"];
-function reqCard(r,idx){
+var TYPE_CHIP={"Question or inquiry":"brgy","Suggestion for a program":"draft",
+  "Request for a document":"restr","Concern or complaint":"conf","Other":"pend"};
+function reqCard(r,idx,live){
   var cls=r.st==="Done"?"ok":(r.st==="Withheld"?"conf":(r.st==="In progress"?"brgy":"pend"));
-  var canEditReq=["Punong Barangay","SK Chairperson"].indexOf(currentRole)>=0;
+  var canEditReq=canEditNow();
   var sel="";
   if(idx!==undefined&&canEditReq){
-    sel='<label class="skip" for="req'+idx+'">Status of this request</label>'+
-      '<select class="sel" id="req'+idx+'" data-req="'+idx+'" style="margin-left:auto">'+
+    var attr=live?'data-live="'+idx+'"':'data-req="'+idx+'"';
+    var id=(live?"live":"req")+idx;
+    sel='<label class="skip" for="'+id+'">Status of this submission</label>'+
+      '<select class="sel" id="'+id+'" '+attr+' style="margin-left:auto">'+
       REQ_STATES.map(function(o){return '<option'+(o===r.st?" selected":"")+'>'+o+'</option>';}).join("")+
       '</select>';
   }
   return '<article class="item"><div class="meta">'+
-    '<span class="chip '+cls+'">'+esc(r.st)+'</span><span>'+esc(r.when)+'</span>'+
+    '<span class="chip '+cls+'">'+esc(r.st)+'</span>'+
+    (r.ty?'<span class="chip '+(TYPE_CHIP[r.ty]||"pend")+'">'+esc(r.ty)+'</span>':'')+
+    '<span>'+esc(r.when)+'</span>'+
     '<span>'+esc(r.purok||"Purok not given")+'</span>'+
-    (r.officer?'<span>Assigned: '+esc(r.officer)+'</span>':'')+sel+'</div>'+
+    (r.officer?'<span>Assigned: '+esc(r.officer)+'</span>':'')+sel+
+    (idx!==undefined&&canDeleteAll()?'<button class="docbtn delbtn" data-delsub="'+idx+'" data-live2="'+(live?1:0)+'" style="margin-left:'+(sel?'8px':'auto')+'">Delete</button>':'')+'</div>'+
+    '<div style="font-size:13px;color:var(--ink-3);margin-bottom:7px">From: '+
+      esc(r.who||"Not given")+(r.contact?' &middot; '+esc(r.contact):' &middot; no contact given')+'</div>'+
     (r.rec?'<div style="font-weight:600;font-size:15px;margin-bottom:5px">'+esc(r.rec)+'</div>':'')+
     '<p>'+esc(r.msg)+'</p>'+
     (r.note?'<p style="margin-top:9px;font-size:13.5px;color:#7d2220;background:#fdeceb;border-left:3px solid #b3261e;border-radius:6px;padding:9px 12px">'+esc(r.note)+'</p>':'')+
     '</article>';
 }
-function drawRequests(){
-  var log=(store("dalawinon_fb")||[]).filter(function(m){return m.type==="Request for a document";})
-    .map(function(m){return {st:"New",when:m.when,purok:m.purok,msg:m.msg,officer:"SK Secretary",rec:""};});
-  var head=log.length?'<p style="color:var(--ink-3);font-size:13.5px;margin-bottom:10px">Submitted from this device</p>':'';
-  $("#reqLog").innerHTML=head+log.map(function(r){return reqCard(r);}).join("")+
-    (log.length?'<p style="color:var(--ink-3);font-size:13.5px;margin:18px 0 10px">Earlier requests</p>':'')+
-    SAMPLE_REQS.map(function(r,i){return reqCard(r,i);}).join("");
+
+var reqFilter="all";
+function liveSubs(){
+  return (store("dalawinon_fb")||[]).map(function(m){
+    return {st:m.st||"New",ty:m.type,when:m.when,purok:m.purok,who:m.who||"Anonymous",
+            contact:m.contact||"",msg:m.msg,officer:"SK Secretary",rec:""};
+  });
 }
+function matchReq(r){
+  var q=($("#reqSearch")?$("#reqSearch").value.trim().toLowerCase():"");
+  var okF=reqFilter==="all"||r.ty===reqFilter;
+  var okQ=!q||((r.msg||"")+" "+(r.ty||"")+" "+(r.rec||"")+" "+(r.who||"")+" "+(r.purok||"")).toLowerCase().indexOf(q)>=0;
+  return okF&&okQ;
+}
+function drawRequests(){
+  var live=liveSubs(), out="", shown=0;
+  var liveRows=live.map(function(r,i){return matchReq(r)?(shown++,reqCard(r,i,true)):"";}).join("");
+  if(liveRows)out+='<p style="color:var(--ink-3);font-size:13.5px;margin-bottom:10px">Recent submissions</p>'+liveRows;
+  var sampleRows=SAMPLE_REQS.map(function(r,i){return matchReq(r)?(shown++,reqCard(r,i,false)):"";}).join("");
+  if(sampleRows)out+=(liveRows?'<p style="color:var(--ink-3);font-size:13.5px;margin:18px 0 10px">Earlier submissions</p>':'')+sampleRows;
+  $("#reqLog").innerHTML=shown?out:'<p style="color:var(--ink-3)">No submissions match that search.</p>';
+}
+if($("#reqSearch"))$("#reqSearch").addEventListener("input",drawRequests);
+$$('[data-qf]').forEach(function(b){
+  b.addEventListener("click",function(){
+    $$('[data-qf]').forEach(function(x){x.classList.remove("on");});
+    this.classList.add("on");reqFilter=this.getAttribute("data-qf");drawRequests();
+  });
+});
+document.addEventListener("change",function(e){
+  var sel=e.target.closest("[data-live]");
+  if(!sel)return;
+  var i=+sel.getAttribute("data-live");
+  var log=store("dalawinon_fb")||[];
+  if(log[i]){log[i].st=sel.value;store("dalawinon_fb",log);}
+  drawRequests();
+  toast("Submission marked as "+sel.value+".");
+});
 document.addEventListener("change",function(e){
   var sel=e.target.closest("[data-req]");
   if(!sel)return;
@@ -1405,8 +2562,18 @@ function saveOverrides(){
     if(q&&q.length===SAMPLE_REQS.length)q.forEach(function(v,i){if(v)SAMPLE_REQS[i].st=v;});
   }catch(e){}
 })();
+applyDeleted();
 drawRestricted();
+drawArchive();
+drawDocs();
 drawRequests();
+drawToday();
+setMgKind("ann");
+drawMgList();
+showManage();
+showAddRecord();
+showDev();
+devApply();
 
 $("#staffDocs").innerHTML=STAFFDOCS.map(function(s){
   return '<article class="item"><h3>'+esc(s.t)+'</h3><p>'+esc(s.b)+'</p></article>';
@@ -1468,7 +2635,9 @@ $("#fbForm").addEventListener("submit",function(e){
   if(!type||!msg){$("#fbErr").classList.add("show");return;}
   $("#fbErr").classList.remove("show");
   var log=store("dalawinon_fb")||[];
-  log.unshift({type:type,purok:$("#fbPurok").value,msg:msg,when:longDate(new Date().toISOString().slice(0,10))});
+  log.unshift({type:type,purok:$("#fbPurok").value,msg:msg,st:"New",
+    who:($("#fbName").value.trim()||"Anonymous"),contact:$("#fbContact").value.trim(),
+    when:longDate(new Date().toISOString().slice(0,10))});
   store("dalawinon_fb",log.slice(0,20));
   drawRequests();
   this.reset();
