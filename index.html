@@ -2213,7 +2213,7 @@ var DEFAULT_PERMS={
   "BACKEND_CODER":   {edit:1,records:1,delete:1,logs:1,clearlogs:1},
   "Punong Barangay": {edit:1,records:1,delete:1,logs:1,clearlogs:1},
   "SK Chairperson":  {edit:1,records:1,delete:0,logs:1,clearlogs:0},
-  "SK Secretary":    {edit:1,records:1,delete:0,logs:1,clearlogs:1},
+  "SK Secretary":    {edit:1,records:1,delete:0,logs:0,clearlogs:0},
   "SK Treasurer":    {edit:0,records:1,delete:0,logs:1,clearlogs:0},
   "SK Kagawad":      {edit:0,records:0,delete:0,logs:0,clearlogs:0},
   "Barangay Kagawad":{edit:0,records:0,delete:0,logs:0,clearlogs:0}
@@ -2802,6 +2802,12 @@ function previewFor(title){
   }
   var file=(obj&&obj.file)||(rec&&rec.file)||(doc&&doc.file);
   if(file)return filePreview(file);
+  /* a few records show a hand-built preview (the actual KK roster, a sample
+     voucher, a draft resolution) instead of the generic placeholder text —
+     matched by title so both tabs render the same thing */
+  if(title.indexOf("Katipunan ng Kabataan")===0) return kkPreview();
+  if(title.indexOf("Disbursement vouchers")===0) return voucherPreview();
+  if(title.indexOf("Draft SK Resolution")===0) return resolutionPreview();
   if(kind==="rec")return recordPreview(obj);
   if(kind==="doc")return docPreview(obj);
   return recordPreview({t:title});
@@ -3032,13 +3038,9 @@ document.addEventListener("click",function(e){
   var tr=document.createElement("tr");
   tr.className="prev";
   var title=b.getAttribute("data-res");
-  var extra="";
-  if(title.indexOf("Katipunan ng Kabataan")===0) extra=kkPreview();
-  else if(title.indexOf("Disbursement vouchers")===0) extra=voucherPreview();
-  else if(title.indexOf("Draft SK Resolution")===0) extra=resolutionPreview();
   var recObj=RESTRICTED.filter(function(r){return r.t===title;})[0];
   var docObj=DOCS.filter(function(d){return d.t===title;})[0];
-  if(!extra)extra=previewFor(title);
+  var extra=previewFor(title);
   tr.innerHTML='<td colspan="5" style="background:var(--surface-2);color:var(--ink-2);font-size:14px">'+
     '<strong>'+esc(title)+'</strong><br>'+
     (docObj&&!recObj
