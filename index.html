@@ -294,6 +294,16 @@ table.docs tbody tr:last-child td{border-bottom:0}
 table.docs td.t{font-weight:600;color:var(--ink)}
 .docbtn{border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:6px 11px;cursor:pointer;font-size:13px;font-weight:600;color:var(--green);white-space:nowrap}
 .docbtn:hover{border-color:var(--green);background:#f3f7f4}
+.mctl{display:inline-flex;gap:3px;margin-right:7px;vertical-align:middle}
+.mrow{display:flex;gap:4px;align-items:center;margin-top:10px}
+.mbtn{
+  border:1px solid #c3cada;background:#eef1f7;color:#3b4a66;border-radius:6px;
+  padding:2px 7px;font-size:11px;line-height:1.5;cursor:pointer;font-family:inherit
+}
+.mbtn:hover:not(:disabled){border-color:#3b4a66;background:#dde3ef}
+.mbtn:disabled{opacity:.35;cursor:default}
+.mbtn.del{color:#b3261e;border-color:#e0a9a5;background:#fdeceb}
+.mbtn.del:hover{background:#f8cbc7}
 .delbtn{color:#b3261e;border-color:#e0a9a5}
 .delbtn:hover{border-color:#b3261e;background:#fdeceb}
 
@@ -310,14 +320,15 @@ table.docs td.t{font-weight:600;color:var(--ink)}
 .person{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:15px 17px}
 .person .nm{font-weight:600;font-size:15.5px;line-height:1.3}
 .person .ro{font-size:13px;color:var(--ink-3);margin-top:3px}
-button.person{display:block;width:100%;text-align:left;cursor:pointer;font-family:inherit;color:inherit;transition:border-color .15s,box-shadow .15s,transform .15s}
+.person[role=button]{display:block;width:100%;text-align:left;cursor:pointer;font-family:inherit;color:inherit;transition:border-color .15s,box-shadow .15s,transform .15s}
 .prow{display:flex;align-items:center;gap:11px}
 .prow>span{min-width:0}
 .prow .nm,.prow .ro{display:block}
 .face{width:46px;height:46px;flex:none;border-radius:50%;object-fit:cover;background:var(--surface-2)}
 .face.noimg{display:grid;place-items:center;background:var(--green);color:#f0d79a;font-family:'Libre Baskerville',serif;font-weight:700;font-size:14px}
 img.avatar{object-fit:cover}
-button.person:hover{border-color:var(--green);box-shadow:var(--shadow);transform:translateY(-2px)}
+.person[role=button]:hover{border-color:var(--green);box-shadow:var(--shadow);transform:translateY(-2px)}
+.person[role=button]:focus-visible{outline:3px solid var(--gold-lt);outline-offset:2px}
 .moreinfo{display:inline-block;margin-top:9px;font-size:12.5px;font-weight:600;color:var(--green)}
 .avatar{width:54px;height:54px;flex:none;border-radius:50%;background:var(--green);color:#f0d79a;display:grid;place-items:center;font-family:'Libre Baskerville',serif;font-weight:700;font-size:17px;letter-spacing:.02em}
 #personBody .kv dt{font-size:13.5px}
@@ -765,9 +776,32 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
         <h3 style="font-size:17px;margin-bottom:6px">Developer mode</h3>
         <p style="font-size:14.5px;color:var(--ink-2)">Signed in as <strong>BACKEND_CODER</strong>. You hold every permission on the site, and you can rewrite any text on any page directly.</p>
         <p style="font-size:14px;color:var(--ink-2);margin-bottom:14px">Switch on <strong>Edit page text</strong> in the top bar, then click a heading, paragraph or label and type over it. Changes save when you click away and persist in this browser. Lists that the site builds automatically &mdash; announcements, programs, records, officials &mdash; are edited through their own panels instead.</p>
-        <div class="row" style="margin-top:0">
+        <div class="row" style="margin-top:0;flex-wrap:wrap">
           <button class="submit" type="button" id="devToggle2">Turn edit mode on</button>
           <button class="ghost" type="button" id="devReset">Undo all text edits</button>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
+
+        <h4 style="font-size:15.5px;margin-bottom:4px">Move and remove</h4>
+        <p style="font-size:14px;color:var(--ink-2);margin-bottom:0">While signed in as BACKEND_CODER, small <strong>&#9650; &#9660;</strong> buttons appear beside records, archived files, announcements, programs and officials &mdash; use them to reorder any list. A red <strong>&#10005;</strong> on an official card removes that person, and Delete buttons appear on every table. Order and removals are kept on this device.</p>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
+
+        <h4 style="font-size:15.5px;margin-bottom:10px">Pages shown in the menu</h4>
+        <div id="hideRows"></div>
+        <p style="font-size:13px;color:var(--ink-3);margin:4px 0 0">Unticking a page hides it from the public menu. Home and the staff area always stay.</p>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
+
+        <h4 style="font-size:15.5px;margin-bottom:4px">Backup and restore</h4>
+        <p style="font-size:14px;color:var(--ink-2);margin-bottom:10px">Everything changed on this device lives in this browser. Export it as text to carry it to another machine, or paste a backup in and restore.</p>
+        <label class="skip" for="devData">Backup data</label>
+        <textarea id="devData" style="width:100%;min-height:110px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;border:1px solid var(--line);border-radius:9px;padding:11px 13px" placeholder="Export writes the backup here. Paste one here to restore."></textarea>
+        <div class="row" style="margin-top:12px;flex-wrap:wrap">
+          <button class="ghost" type="button" id="devExport">Export</button>
+          <button class="ghost" type="button" id="devImport">Restore from text</button>
+          <button class="ghost" type="button" id="devResetAll" style="color:#b3261e;border-color:#e0a9a5">Reset everything</button>
         </div>
       </div>
     </div>
@@ -853,6 +887,7 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
       <button class="fbtn" data-rf="Confidential">Confidential</button>
       <button class="fbtn" data-rf="Restricted">Restricted</button>
       <button class="fbtn" data-rf="Draft">Working draft</button>
+      <button class="fbtn" data-rf="Published">Published</button>
     </div>
 
     <div class="tablewrap">
@@ -896,6 +931,22 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
       <button class="fbtn" data-qf="Other">Other</button>
     </div>
     <div id="reqLog"></div>
+
+    <h3 style="font-size:19px;margin:40px 0 6px">Designated volunteer youth leaders</h3>
+    <p style="color:var(--ink-2);font-size:15px;max-width:72ch;margin-bottom:16px">One volunteer leader for each of the six puroks. They relay announcements to residents with limited internet access and help organise local activities, so the site never becomes the only way information travels.</p>
+
+    <div id="purokWrap" style="display:none;margin-bottom:8px">
+      <form class="fb" id="purokForm" novalidate style="padding:22px">
+        <p style="color:var(--ink-3);font-size:13.5px;margin-bottom:16px">Names entered here appear under <strong>Coverage</strong> on the Programs page. Leave a field blank to keep showing &ldquo;to be listed&rdquo;.</p>
+        <div id="purokRows"></div>
+        <div class="row" style="margin-top:14px">
+          <button class="submit" type="submit">Save leaders</button>
+          <button class="ghost" type="button" id="purokClear">Clear all</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="purokView"></div>
 
     <h3 style="font-size:19px;margin:40px 0 13px">Procedures</h3>
     <div id="staffDocs"></div>
@@ -1228,8 +1279,11 @@ function updateRoleBadge(){
   drawDocs();
   drawArchive();
   drawRequests();
+  drawOfficials();
+  drawMgList();
   showManage();
   showAddRecord();
+  showPurokPanel();
   showDev();
 }
 $("#devbtn").addEventListener("click",function(){devMode(!devOn);});
@@ -1238,6 +1292,9 @@ $("#devToggle2").addEventListener("click",function(){
   this.textContent=devOn?"Turn edit mode off":"Turn edit mode on";
 });
 $("#devReset").addEventListener("click",devReset);
+$("#devExport").addEventListener("click",exportAll);
+$("#devImport").addEventListener("click",importAll);
+$("#devResetAll").addEventListener("click",resetAll);
 $("#codeGo").addEventListener("click",tryCode);
 $("#accesslogbtn").addEventListener("click",function(){go("accesslog");});
 $("#clearLoginLog2").addEventListener("click",clearLog);
@@ -1504,13 +1561,22 @@ function personCard(p,i,council){
   var face=p.img
     ? '<img class="face" src="'+p.img+'" alt="" width="46" height="46" loading="lazy">'
     : '<span class="face noimg" aria-hidden="true">'+esc((p.n.match(/[A-Z]/g)||["?"]).slice(0,2).join(""))+'</span>';
-  return '<button class="person'+(p.lead?" lead":"")+'" data-person="'+key+'" aria-expanded="false">'+
+  /* a div, not a button: it may contain the MASTER controls, and nested buttons are invalid inside one */
+  return '<div class="person'+(p.lead?" lead":"")+'" data-person="'+key+'" role="button" tabindex="0" aria-label="View details for '+esc(p.n)+'">'+
     '<div class="prow">'+face+'<span><span class="nm">'+esc(p.n)+'</span>'+
     '<span class="ro">'+esc(p.r)+'</span></span></div>'+
-    '<span class="moreinfo">View details</span></button>';
+    '<span class="moreinfo">View details</span>'+
+    (canDeleteAll()
+      ? '<span class="mrow">'+moveCtl(council,i,(council==="brgy"?BRGY:SK).length)+
+        '<button class="mbtn del" data-deloff="'+council+'-'+i+'" title="Remove" aria-label="Remove '+esc(p.n)+'">&#10005;</button></span>'
+      : '')+
+    '</div>';
 }
-$("#brgyList").innerHTML=BRGY.map(function(p,i){return personCard(p,i,"brgy");}).join("");
-$("#skList").innerHTML=SK.map(function(p,i){return personCard(p,i,"sk");}).join("");
+function drawOfficials(){
+  $("#brgyList").innerHTML=BRGY.map(function(p,i){return personCard(p,i,"brgy");}).join("");
+  $("#skList").innerHTML=SK.map(function(p,i){return personCard(p,i,"sk");}).join("");
+}
+drawOfficials();
 
 function openPerson(key){
   var parts=key.split("-"), council=parts[0], i=+parts[1];
@@ -1542,19 +1608,96 @@ function openPerson(key){
   setTimeout(function(){var c=$("#personClose");if(c)c.focus();},40);
 }
 document.addEventListener("click",function(e){
+  if(e.target.closest("[data-mv],[data-deloff]"))return;   /* MASTER controls, not the card */
   var b=e.target.closest("[data-person]");
   if(b){openPerson(b.getAttribute("data-person"));return;}
   if(e.target.id==="personModal"||e.target.id==="personClose"){$("#personModal").classList.remove("open");}
 });
 document.addEventListener("keydown",function(e){
   if(e.key==="Escape"){var m=$("#personModal");if(m)m.classList.remove("open");}
+  if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches("[data-person]")){
+    e.preventDefault();
+    openPerson(e.target.getAttribute("data-person"));
+  }
 });
 
-var puroks="";
-for(var i=1;i<=6;i++){
-  puroks+='<div class="person"><div class="nm">Purok '+i+'</div><div class="ro tbd">Volunteer youth leader to be listed</div></div>';
+/* ---------------- designated volunteer youth leaders ---------------- */
+var PUROKS=[];
+for(var pi=1;pi<=6;pi++)PUROKS.push({p:pi,leader:"",contact:""});
+(function loadPuroks(){
+  try{
+    var sv=store("dalawinon_puroks");
+    if(sv&&sv.length===6)PUROKS=sv;
+  }catch(e){}
+})();
+function drawPuroks(){
+  $("#purokList").innerHTML=PUROKS.map(function(k){
+    return '<div class="person'+(k.leader?" lead":"")+'"><div class="nm">Purok '+k.p+'</div>'+
+      (k.leader
+        ? '<div class="ro">'+esc(k.leader)+'</div>'+
+          '<div class="ro" style="margin-top:3px">Designated volunteer youth leader</div>'+
+          (k.contact?'<div class="ro" style="margin-top:3px;white-space:nowrap">'+esc(k.contact)+'</div>':'')
+        : '<div class="ro tbd">Volunteer youth leader to be listed</div>')+
+      '</div>';
+  }).join("");
 }
-$("#purokList").innerHTML=puroks;
+drawPuroks();
+
+function drawPurokForm(){
+  var el=$("#purokRows");
+  if(!el)return;
+  el.innerHTML=PUROKS.map(function(k,i){
+    return '<div class="grid g2" style="gap:12px;align-items:end;margin-bottom:10px">'+
+      '<div class="field" style="margin:0">'+
+        '<label for="pk'+i+'">Purok '+k.p+' &mdash; leader</label>'+
+        '<input id="pk'+i+'" type="text" value="'+esc(k.leader)+'" placeholder="Name of the volunteer youth leader" autocomplete="off">'+
+      '</div>'+
+      '<div class="field" style="margin:0">'+
+        '<label for="pc'+i+'">Contact</label>'+
+        '<input id="pc'+i+'" type="text" value="'+esc(k.contact)+'" placeholder="+63 9xx xxx xxxx" autocomplete="off">'+
+      '</div>'+
+    '</div>';
+  }).join("");
+}
+/* read-only list, so roles that cannot edit still see who is designated */
+function drawPurokView(){
+  var el=$("#purokView");
+  if(!el)return;
+  var any=PUROKS.some(function(k){return k.leader;});
+  el.innerHTML='<div class="people">'+PUROKS.map(function(k){
+    return '<div class="person'+(k.leader?" lead":"")+'"><div class="nm">Purok '+k.p+'</div>'+
+      (k.leader
+        ? '<div class="ro">'+esc(k.leader)+'</div>'+(k.contact?'<div class="ro" style="margin-top:3px;white-space:nowrap">'+esc(k.contact)+'</div>':'')
+        : '<div class="ro tbd">Not yet designated</div>')+
+      '</div>';
+  }).join("")+'</div>'+
+  (any?'':'<p style="color:var(--ink-3);font-size:13.5px;margin-top:12px">No leaders have been designated yet.</p>');
+}
+function showPurokPanel(){
+  var w=$("#purokWrap");
+  if(!w)return;
+  w.style.display=canEditNow()?"block":"none";
+  if(canEditNow())drawPurokForm();
+  drawPurokView();
+}
+$("#purokForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  if(!canEditNow())return;
+  PUROKS=PUROKS.map(function(k,i){
+    return {p:k.p,leader:($("#pk"+i).value||"").trim(),contact:($("#pc"+i).value||"").trim()};
+  });
+  try{store("dalawinon_puroks",PUROKS);}catch(e){}
+  drawPuroks(); drawPurokForm(); drawPurokView();
+  toast("Purok leaders saved.");
+});
+$("#purokClear").addEventListener("click",function(){
+  if(!canEditNow())return;
+  if(!confirm("Clear every purok leader entry?"))return;
+  PUROKS=PUROKS.map(function(k){return {p:k.p,leader:"",contact:""};});
+  try{store("dalawinon_puroks",PUROKS);}catch(e){}
+  drawPuroks(); drawPurokForm(); drawPurokView();
+  toast("Purok leaders cleared.");
+});
 
 /* Sample KK masterlist. Invented names — never real residents, since the page is shareable. */
 var KK = [
@@ -1721,6 +1864,9 @@ function drawMgList(){
       items.map(function(i){
         return '<article class="item" style="padding:14px 18px"><div class="meta">'+
           '<span class="chip">'+i.k+'</span><span>'+longDate(i.d)+'</span>'+
+          (i.kind==="ann"||i.kind==="ev"
+            ? moveCtl(i.kind,listFor(i.kind).findIndex(function(x){return idOf(x)===i.id;}),listFor(i.kind).length)
+            : '')+
           '<button class="docbtn" data-edit="'+i.kind+'" data-id="'+esc(i.id)+'" style="margin-left:auto">Edit</button>'+
           '<button class="docbtn" data-unpub="'+i.kind+'" data-id="'+esc(i.id)+'" style="color:#b3261e;border-color:#e0a9a5">Remove</button>'+
           '</div><div style="font-weight:600;font-size:15px">'+esc(i.t)+'</div></article>';
@@ -2002,7 +2148,7 @@ function drawArchive(){
   });
   $("#arcBody").innerHTML=rows.map(function(a){
     var cls=a.cond.indexOf("Missing")>=0?"conf":(a.cond.indexOf("Partial")>=0?"restr":"ok");
-    return '<tr><td class="t">'+a.t+'</td><td style="white-space:nowrap">'+a.term+'</td>'+
+    return '<tr><td class="t">'+moveCtl("arc",ARCHIVE.indexOf(a),ARCHIVE.length)+a.t+'</td><td style="white-space:nowrap">'+a.term+'</td>'+
       '<td style="color:var(--ink-2)">'+a.by+'</td>'+
       '<td><span class="chip '+cls+'">'+a.cond+'</span></td>'+
       '<td style="white-space:nowrap"><button class="docbtn" data-arc="'+esc(a.t)+'">Open</button>'+
@@ -2109,6 +2255,150 @@ document.addEventListener("click",function(e){
   toast("Submission deleted.");
 });
 
+/* ---------------- MASTER: developer tools ---------------- */
+function mstr(){return canDeleteAll();}
+
+/* up / down / delete controls shown only to MASTER */
+function moveCtl(kind,i,n){
+  if(!mstr())return "";
+  return '<span class="mctl">'+
+    '<button class="mbtn" data-mv="'+kind+'" data-i="'+i+'" data-dir="-1" title="Move up" aria-label="Move up"'+(i===0?" disabled":"")+'>&#9650;</button>'+
+    '<button class="mbtn" data-mv="'+kind+'" data-i="'+i+'" data-dir="1" title="Move down" aria-label="Move down"'+(i===n-1?" disabled":"")+'>&#9660;</button>'+
+    '</span>';
+}
+function listFor(kind){
+  return kind==="rec"?RESTRICTED:kind==="arc"?ARCHIVE:kind==="doc"?DOCS:
+         kind==="ann"?ANN:kind==="ev"?EVENTS:kind==="brgy"?BRGY:kind==="sk"?SK:
+         kind==="sub"?SAMPLE_REQS:null;
+}
+function saveOrder(kind){
+  try{
+    var o=store("dalawinon_order")||{};
+    o[kind]=listFor(kind).map(function(x){return x.t||x.n||x.msg;});
+    store("dalawinon_order",o);
+  }catch(e){}
+}
+function applyOrder(){
+  var o=store("dalawinon_order")||{};
+  Object.keys(o).forEach(function(kind){
+    var arr=listFor(kind); if(!arr)return;
+    var want=o[kind], key=function(x){return x.t||x.n||x.msg;};
+    arr.sort(function(a,b){
+      var ia=want.indexOf(key(a)), ib=want.indexOf(key(b));
+      if(ia<0)ia=9999; if(ib<0)ib=9999;
+      return ia-ib;
+    });
+  });
+}
+function redrawFor(kind){
+  if(kind==="rec")drawRestricted();
+  if(kind==="arc")drawArchive();
+  if(kind==="doc"){drawDocs();drawRestricted();}
+  if(kind==="ann"){drawHomeAnn();drawAnn();drawMgList();}
+  if(kind==="ev"){drawPrograms();drawMgList();}
+  if(kind==="sub")drawRequests();
+  if(kind==="brgy"||kind==="sk")drawOfficials();
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-mv]");
+  if(!b||!mstr())return;
+  var kind=b.getAttribute("data-mv"), i=+b.getAttribute("data-i"), dir=+b.getAttribute("data-dir");
+  var arr=listFor(kind); if(!arr)return;
+  var j=i+dir;
+  if(j<0||j>=arr.length)return;
+  var tmp=arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+  saveOrder(kind); redrawFor(kind);
+});
+
+/* delete an official */
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-deloff]");
+  if(!b)return;
+  e.stopPropagation();
+  if(!mstr()){toast("Only BACKEND_CODER can remove officials.");return;}
+  var parts=b.getAttribute("data-deloff").split("-");
+  var arr=parts[0]==="brgy"?BRGY:SK, i=+parts[1];
+  if(!arr[i])return;
+  if(!confirm("Remove "+arr[i].n+" from the list of officials?"))return;
+  var gone=arr[i].n;
+  arr.splice(i,1);
+  try{
+    var d=store("dalawinon_deloff")||[];
+    if(d.indexOf(gone)<0)d.push(gone);
+    store("dalawinon_deloff",d);
+  }catch(err){}
+  drawOfficials();
+  toast("Official removed.");
+});
+function applyDeletedOfficials(){
+  try{
+    var d=store("dalawinon_deloff")||[];
+    if(!d.length)return;
+    BRGY=BRGY.filter(function(x){return d.indexOf(x.n)<0;});
+    SK=SK.filter(function(x){return d.indexOf(x.n)<0;});
+  }catch(e){}
+}
+
+/* hide whole sections from the public nav */
+var NAVABLE=["announcements","documents","programs","officials","feedback"];
+function hiddenSections(){ return store("dalawinon_hidden")||[]; }
+function applyHidden(){
+  var h=hiddenSections();
+  NAVABLE.forEach(function(id){
+    var link=document.querySelector('nav.main a[data-go="'+id+'"]');
+    if(link)link.style.display=(h.indexOf(id)>=0)?"none":"";
+  });
+  if(h.indexOf((location.hash||"").replace("#",""))>=0)go("home",false);
+}
+function drawHideToggles(){
+  var el=$("#hideRows");
+  if(!el)return;
+  var h=hiddenSections();
+  el.innerHTML=NAVABLE.map(function(id){
+    var on=h.indexOf(id)<0;
+    return '<label style="display:flex;gap:9px;align-items:center;font-size:14.5px;margin-bottom:9px;cursor:pointer">'+
+      '<input type="checkbox" data-hide="'+id+'" style="width:auto"'+(on?" checked":"")+'>'+
+      '<span>'+id.charAt(0).toUpperCase()+id.slice(1)+'</span></label>';
+  }).join("");
+}
+document.addEventListener("change",function(e){
+  var c=e.target.closest("[data-hide]");
+  if(!c||!mstr())return;
+  var id=c.getAttribute("data-hide"), h=hiddenSections();
+  if(c.checked)h=h.filter(function(x){return x!==id;});
+  else if(h.indexOf(id)<0)h.push(id);
+  try{store("dalawinon_hidden",h);}catch(err){}
+  applyHidden();
+  toast(c.checked?("“"+id+"” is visible again."):("“"+id+"” is hidden from the menu."));
+});
+
+/* export, import and reset every local change */
+var LOCAL_KEYS=["dalawinon_pub","dalawinon_recs","dalawinon_deleted","dalawinon_text",
+  "dalawinon_order","dalawinon_hidden","dalawinon_puroks","dalawinon_cls","dalawinon_req",
+  "dalawinon_fb","dalawinon_loginlog","dalawinon_deloff","dalawinon_clsmap"];
+function exportAll(){
+  var out={};
+  LOCAL_KEYS.forEach(function(k){ var v=store(k); if(v!==null&&v!==undefined)out[k]=v; });
+  var txt=JSON.stringify(out,null,2);
+  var box=$("#devData");
+  if(box){box.value=txt;box.focus();box.select();}
+  toast("Exported. Copy the text below to keep a backup.");
+}
+function importAll(){
+  var box=$("#devData");
+  if(!box||!box.value.trim()){toast("Paste a backup into the box first.");return;}
+  var data;
+  try{ data=JSON.parse(box.value); }catch(e){ toast("That is not valid backup text."); return; }
+  Object.keys(data).forEach(function(k){ if(LOCAL_KEYS.indexOf(k)>=0){ try{store(k,data[k]);}catch(e){} } });
+  toast("Backup restored. Reloading…");
+  setTimeout(function(){location.reload();},900);
+}
+function resetAll(){
+  if(!confirm("Undo every change made on this device — content, order, deletions, text edits and uploads?\n\nThe site returns to how it shipped."))return;
+  LOCAL_KEYS.forEach(function(k){ try{localStorage.removeItem(k);}catch(e){} });
+  location.reload();
+}
+
 /* ---------------- BACKEND_CODER: edit any text on the page ---------------- */
 var DEV_ROLE="BACKEND_CODER";
 function isDev(){return currentRole===DEV_ROLE;}
@@ -2178,6 +2468,7 @@ function devReset(){
 }
 function showDev(){
   var w=$("#devWrap"), b=$("#devbtn");
+  if(isDev())drawHideToggles();
   if(w)w.style.display=isDev()?"block":"none";
   if(b)b.classList.toggle("show",isDev());
   if(!isDev()&&devOn)devMode(false);
@@ -2384,25 +2675,38 @@ function recordPreview(rec){
 }
 
 var resFilter="all";
+/* every public document also appears here, so Records is the full picture */
+function allRecords(){
+  var list=RESTRICTED.slice();
+  DOCS.forEach(function(d){
+    if(list.some(function(r){return r.t===d.t;}))return;
+    list.push({t:d.t,cl:"Published",
+      w:"Published openly on the Documents tab. No restriction applies.",
+      rel:"Public. Anyone may open it from the Documents tab.",
+      file:d.file,fromDocs:true});
+  });
+  return list;
+}
 function drawRestricted(){
   var q=$("#resSearch").value.trim().toLowerCase();
-  var rows=RESTRICTED.filter(function(r){
+  var all=allRecords();
+  var rows=all.filter(function(r){
     var okF=resFilter==="all"||r.cl===resFilter;
     var okQ=!q||(r.t+" "+r.w+" "+r.cl).toLowerCase().indexOf(q)>=0;
     return okF&&okQ;
   });
   var canEdit=canEditNow();
   $("#resBody").innerHTML=rows.map(function(r){
-    var cls=r.cl==="Confidential"?"conf":(r.cl==="Draft"?"draft":"restr");
+    var cls=r.cl==="Confidential"?"conf":(r.cl==="Draft"?"draft":(r.cl==="Published"?"ok":"restr"));
     var i=RESTRICTED.indexOf(r);
     var clsControl=canEdit
-      ? '<label class="skip" for="cls'+i+'">Classification for '+esc(r.t)+'</label>'+
-        '<select class="sel" id="cls'+i+'" data-cls="'+i+'" style="margin-top:7px;display:block">'+
-        ["Confidential","Restricted","Draft"].map(function(o){
+      ? '<label class="skip" for="cls'+esc(r.t)+'">Classification for '+esc(r.t)+'</label>'+
+        '<select class="sel" data-cls="'+esc(r.t)+'" style="margin-top:7px;display:block">'+
+        ["Published","Confidential","Restricted","Draft"].map(function(o){
           return '<option'+(o===r.cl?" selected":"")+'>'+o+'</option>';}).join("")+
         '</select>'
       : '';
-    return '<tr><td class="t">'+r.t+'</td>'+
+    return '<tr><td class="t">'+(r.fromDocs?"":moveCtl("rec",i,RESTRICTED.length))+r.t+'</td>'+
       '<td><span class="chip '+cls+'">'+esc(r.cl)+'</span>'+clsControl+'</td>'+
       '<td style="color:var(--ink-2)">'+r.w+'</td>'+
       '<td style="color:var(--ink-2)">'+esc(r.rel)+'</td>'+
@@ -2416,12 +2720,74 @@ $("#resSearch").addEventListener("input",drawRestricted);
 document.addEventListener("change",function(e){
   var sel=e.target.closest("[data-cls]");
   if(!sel)return;
-  var i=+sel.getAttribute("data-cls");
-  RESTRICTED[i].cl=sel.value;
+  if(!canEditNow()){toast("Your position cannot change a classification.");return;}
+  var title=sel.getAttribute("data-cls"), to=sel.value;
+  var rec=RESTRICTED.filter(function(x){return x.t===title;})[0];
+  var doc=DOCS.filter(function(x){return x.t===title;})[0];
+
+  if(to==="Published"){
+    /* publish it: it leaves the restricted list and appears on the Documents tab */
+    if(!doc){
+      var src=rec||{};
+      var saved=(RECS_ADDED.filter(function(x){return x.t===title;})[0])||{};
+      DOCS.unshift({t:title, ty:(saved.ty||"Report"), c:(saved.c||"SK"),
+        d:(saved.d||new Date().toISOString().slice(0,10)), file:src.file, added:true});
+    }
+    RESTRICTED=RESTRICTED.filter(function(x){return x.t!==title;});
+    toast("“"+title+"” is now published on the Documents tab.");
+  }else{
+    /* restrict it: it comes off the Documents tab and joins the records */
+    if(doc){
+      /* no delete marker here: the classification map alone decides this on reload,
+         so the record can still be rebuilt from the document it came from */
+      DOCS=DOCS.filter(function(x){return x.t!==title;});
+    }
+    if(rec){ rec.cl=to; }
+    else{
+      RESTRICTED.unshift({t:title, cl:to,
+        w:"Withheld by the council. Classification changed from published.",
+        rel:"On request, subject to approval.",
+        file:(doc&&doc.file)||undefined, added:true});
+    }
+    toast(doc ? ("“"+title+"” was removed from the Documents tab and is now "+to.toLowerCase()+".")
+              : ("Classification changed to "+to+"."));
+  }
+
+  /* remember the choice so it survives a reload */
+  try{
+    var rc=RECS_ADDED.filter(function(x){return x.t===title;})[0];
+    if(rc){ rc.cl=to; rc.pub=(to==="Published"); saveRecords(); }
+    var cm=store("dalawinon_clsmap")||{};
+    cm[title]=to;
+    store("dalawinon_clsmap",cm);
+  }catch(err){}
+
   saveOverrides();
-  drawRestricted();
-  toast("Classification changed to "+sel.value+".");
+  drawRestricted(); drawDocs();
 });
+
+/* reapply classification changes made on this device */
+function applyClsMap(){
+  try{
+    var cm=store("dalawinon_clsmap")||{};
+    Object.keys(cm).forEach(function(title){
+      var to=cm[title];
+      var rec=RESTRICTED.filter(function(x){return x.t===title;})[0];
+      var doc=DOCS.filter(function(x){return x.t===title;})[0];
+      if(to==="Published"){
+        if(!doc&&rec)DOCS.unshift({t:title,ty:"Report",c:"SK",
+          d:new Date().toISOString().slice(0,10),file:rec.file,added:true});
+        RESTRICTED=RESTRICTED.filter(function(x){return x.t!==title;});
+      }else{
+        if(doc)DOCS=DOCS.filter(function(x){return x.t!==title;});
+        if(rec)rec.cl=to;
+        else if(doc)RESTRICTED.unshift({t:title,cl:to,
+          w:"Withheld by the council. Classification changed from published.",
+          rel:"On request, subject to approval.",file:doc.file,added:true});
+      }
+    });
+  }catch(e){}
+}
 $$('[data-rf]').forEach(function(b){
   b.addEventListener("click",function(){
     $$('[data-rf]').forEach(function(x){x.classList.remove("on");});
@@ -2442,10 +2808,18 @@ document.addEventListener("click",function(e){
   if(title.indexOf("Katipunan ng Kabataan")===0) extra=kkPreview();
   else if(title.indexOf("Disbursement vouchers")===0) extra=voucherPreview();
   else if(title.indexOf("Draft SK Resolution")===0) extra=resolutionPreview();
-  var recObj=RESTRICTED.filter(function(r){return r.t===title;})[0]||{t:title};
-  if(!extra)extra=(recObj.file?filePreview(recObj.file):recordPreview(recObj));
+  var recObj=RESTRICTED.filter(function(r){return r.t===title;})[0];
+  var docObj=DOCS.filter(function(d){return d.t===title;})[0];
+  if(!extra){
+    if(recObj)extra=(recObj.file?filePreview(recObj.file):recordPreview(recObj));
+    else if(docObj)extra=docPreview(docObj);
+    else extra=recordPreview({t:title});
+  }
   tr.innerHTML='<td colspan="5" style="background:var(--surface-2);color:var(--ink-2);font-size:14px">'+
-    '<strong>'+esc(title)+'</strong><br>Access is logged, and nothing here is published to the public pages unless the council lists it.'+extra+'</td>';
+    '<strong>'+esc(title)+'</strong><br>'+
+    (docObj&&!recObj
+      ? 'Published on the Documents tab. Residents can open this without asking.'
+      : 'Access is logged, and nothing here is published to the public pages unless the council lists it.')+extra+'</td>';
   row.after(tr);
 });
 
@@ -2563,6 +2937,11 @@ function saveOverrides(){
   }catch(e){}
 })();
 applyDeleted();
+applyClsMap();
+applyDeletedOfficials();
+applyOrder();
+applyHidden();
+drawOfficials();
 drawRestricted();
 drawArchive();
 drawDocs();
@@ -2572,6 +2951,7 @@ setMgKind("ann");
 drawMgList();
 showManage();
 showAddRecord();
+showPurokPanel();
 showDev();
 devApply();
 
