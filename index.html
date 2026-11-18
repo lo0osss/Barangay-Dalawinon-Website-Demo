@@ -794,6 +794,23 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
 
         <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
 
+        <h4 style="font-size:15.5px;margin-bottom:4px">Access codes</h4>
+        <p style="font-size:14px;color:var(--ink-2);margin-bottom:10px">Each position signs in with its own code. Add a new position, or edit or remove one. <strong>BACKEND_CODER</strong> is the master control and cannot be renamed, recoded or removed.</p>
+        <div id="codeRows" style="margin-bottom:10px"></div>
+        <div class="row" style="margin-top:0;flex-wrap:wrap;gap:8px">
+          <input id="newCodeLabel" type="text" placeholder="Position name, e.g. SK Auditor" style="flex:1;min-width:160px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:14px">
+          <input id="newCodeValue" type="text" placeholder="Access code" style="width:140px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:14px">
+          <button class="submit" type="button" id="addCodeBtn">Add position</button>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
+
+        <h4 style="font-size:15.5px;margin-bottom:4px">What each position can control</h4>
+        <p style="font-size:14px;color:var(--ink-2);margin-bottom:10px">Tick what a position is allowed to do. <strong>BACKEND_CODER</strong> always has every permission and cannot be changed.</p>
+        <div id="permTable"></div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
+
         <h4 style="font-size:15.5px;margin-bottom:4px">Backup and restore</h4>
         <p style="font-size:14px;color:var(--ink-2);margin-bottom:10px">Everything changed on this device lives in this browser. Export it as text to carry it to another machine, or paste a backup in and restore.</p>
         <label class="skip" for="devData">Backup data</label>
@@ -1147,7 +1164,7 @@ var unlocked=false;
 function go(id,push){
   if(VALID.indexOf(id)<0) id="home";
   if(id==="staff"&&!unlocked){openModal();return;}
-  if(id==="accesslog"&&LOG_ROLES.indexOf(currentRole)<0){return;}
+  if(id==="accesslog"&&!can("logs")){return;}
   $$("main>section").forEach(function(s){s.classList.toggle("live",s.id===id);});
   $$("nav.main a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-go")===id);});
   /* highlight accesslogbtn when on that tab */
@@ -1193,10 +1210,10 @@ var EDIT_ROLES=["BACKEND_CODER","Punong Barangay","SK Chairperson","SK Secretary
 var CLEAR_ROLES=["BACKEND_CODER","Punong Barangay","SK Secretary"];
 /* roles that may delete records */
 var DEL_ROLES=["BACKEND_CODER","Punong Barangay"];
-function canDelete(){return DEL_ROLES.indexOf(currentRole)>=0;}
+function canDelete(){return can("delete");}
 /* BACKEND_CODER may also delete documents, archive entries and submissions */
 function canDeleteAll(){return currentRole==="BACKEND_CODER";}
-function canEditNow(){return EDIT_ROLES.indexOf(currentRole)>=0;}
+function canEditNow(){return can("edit");}
 var currentRole="";
 
 function openModal(){$("#modal").classList.add("open");setTimeout(function(){$("#code").focus();},40);}
@@ -1238,7 +1255,7 @@ function drawLoginLog(){
 }
 
 function clearLog(){
-  if(CLEAR_ROLES.indexOf(currentRole)<0){toast("Your position cannot clear the access log.");return;}
+  if(!can("clearlogs")){toast("Your position cannot clear the access log.");return;}
   if(confirm("Clear the entire access log on this device?")){
     try{store("dalawinon_loginlog",[]);}catch(e){}
     drawLoginLog();
@@ -1264,7 +1281,7 @@ function updateRoleBadge(){
   }
   /* show/hide the Access Logs nav button */
   var alb=$("#accesslogbtn");
-  var priv=LOG_ROLES.indexOf(currentRole)>=0;
+  var priv=can("logs");
   if(alb){
     alb.classList.toggle("show",priv);
     if(!priv)alb.classList.remove("on");
@@ -1273,7 +1290,7 @@ function updateRoleBadge(){
   var von=$("#viewOnlyNotice");
   if(von)von.style.display=(currentRole&&!canEditNow())?"block":"none";
   var clr=$("#clearLoginLog2");
-  if(clr)clr.style.display=(CLEAR_ROLES.indexOf(currentRole)>=0)?"inline-block":"none";
+  if(clr)clr.style.display=can("clearlogs")?"inline-block":"none";
   /* re-render tables so dropdowns appear/disappear based on current role */
   drawRestricted();
   drawDocs();
@@ -1489,7 +1506,7 @@ document.addEventListener("click",function(e){
   tr.className="prev";
   tr.innerHTML='<td colspan="5" style="background:var(--surface-2);color:var(--ink-2);font-size:14px">'+
     '<strong>'+esc(title)+'</strong><br>Placeholder entry. In the live site this opens the approved document file uploaded by the council.'+
-    docPreview(doc)+'</td>';
+    previewFor(title)+'</td>';
   row.after(tr);
 });
 
@@ -2183,6 +2200,194 @@ document.addEventListener("click",function(e){
 });
 drawArchive();
 
+/* ---------------- what each position may control ---------------- */
+var MASTER_ROLE="BACKEND_CODER";
+var CAPS=[
+  {k:"edit",     label:"Edit content and classifications"},
+  {k:"records",  label:"Add records"},
+  {k:"delete",   label:"Delete records"},
+  {k:"logs",     label:"See the access log"},
+  {k:"clearlogs",label:"Clear the access log"}
+];
+var DEFAULT_PERMS={
+  "BACKEND_CODER":   {edit:1,records:1,delete:1,logs:1,clearlogs:1},
+  "Punong Barangay": {edit:1,records:1,delete:1,logs:1,clearlogs:1},
+  "SK Chairperson":  {edit:1,records:1,delete:0,logs:1,clearlogs:0},
+  "SK Secretary":    {edit:1,records:1,delete:0,logs:1,clearlogs:1},
+  "SK Treasurer":    {edit:0,records:1,delete:0,logs:1,clearlogs:0},
+  "SK Kagawad":      {edit:0,records:0,delete:0,logs:0,clearlogs:0},
+  "Barangay Kagawad":{edit:0,records:0,delete:0,logs:0,clearlogs:0}
+};
+function permMap(){
+  var saved={};
+  try{ saved=store("dalawinon_perms")||{}; }catch(e){}
+  var out={};
+  /* driven by the live roster (STAFF_CODES), so a renamed or newly added
+     position still gets a sensible permission row after a reload */
+  rolesList().forEach(function(r){
+    out[r]=Object.assign({edit:0,records:0,delete:0,logs:0,clearlogs:0}, DEFAULT_PERMS[r]||{}, saved[r]||{});
+  });
+  out[MASTER_ROLE]={edit:1,records:1,delete:1,logs:1,clearlogs:1};   /* never editable */
+  return out;
+}
+function can(cap,role){
+  role=role||currentRole;
+  if(!role)return false;
+  if(role===MASTER_ROLE)return true;
+  var m=permMap()[role];
+  return !!(m&&m[cap]);
+}
+
+/* ---------------- access codes (master-only) ---------------- */
+var MASTER_CODE="101010";
+function codeForRole(role){
+  var codes=Object.keys(STAFF_CODES);
+  for(var i=0;i<codes.length;i++){ if(STAFF_CODES[codes[i]]===role) return codes[i]; }
+  return null;
+}
+function rolesList(){
+  var seen=[],out=[];
+  Object.keys(STAFF_CODES).forEach(function(c){
+    var r=STAFF_CODES[c];
+    if(seen.indexOf(r)<0){ seen.push(r); out.push(r); }
+  });
+  if(seen.indexOf(MASTER_ROLE)<0)out.unshift(MASTER_ROLE);
+  return out;
+}
+function sanitizeCodes(){
+  Object.keys(STAFF_CODES).forEach(function(c){
+    if(STAFF_CODES[c]===MASTER_ROLE&&c!==MASTER_CODE)delete STAFF_CODES[c];
+  });
+  STAFF_CODES[MASTER_CODE]=MASTER_ROLE;
+}
+function loadCodes(){
+  try{
+    var saved=store("dalawinon_codes");
+    if(saved&&typeof saved==="object"&&Object.keys(saved).length)STAFF_CODES=saved;
+  }catch(e){}
+  sanitizeCodes();
+}
+function saveCodes(){ sanitizeCodes(); try{store("dalawinon_codes",STAFF_CODES);}catch(e){} }
+function drawCodeRows(){
+  var el=$("#codeRows");
+  if(!el)return;
+  el.innerHTML=rolesList().map(function(role){
+    var code=codeForRole(role),locked=(role===MASTER_ROLE);
+    return '<div class="row" style="align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px">'+
+      '<input data-codelabel-old="'+esc(role)+'" type="text" value="'+esc(role)+'" style="flex:1;min-width:150px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;font-size:13.5px"'+(locked?" disabled":"")+'>'+
+      '<input data-codevalue="'+esc(role)+'" type="text" value="'+esc(code||"")+'" style="width:120px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;font-size:13.5px"'+(locked?" disabled":"")+'>'+
+      (locked
+        ? '<span style="font-size:12px;color:var(--ink-3);padding:6px 4px">Master &mdash; locked</span>'
+        : '<button class="ghost" type="button" data-coderemove="'+esc(role)+'" style="color:#b3261e;border-color:#e0a9a5">Remove</button>')+
+      '</div>';
+  }).join("");
+}
+function renameRole(oldLabel,newLabel){
+  newLabel=(newLabel||"").trim();
+  if(oldLabel===MASTER_ROLE){toast("The master position cannot be renamed.");drawCodeRows();return;}
+  if(!newLabel){drawCodeRows();return;}
+  if(newLabel===oldLabel)return;
+  if(newLabel===MASTER_ROLE||rolesList().indexOf(newLabel)>=0){toast("That position name is already used.");drawCodeRows();return;}
+  var code=codeForRole(oldLabel);
+  if(code)STAFF_CODES[code]=newLabel;
+  saveCodes();
+  try{
+    var perms=store("dalawinon_perms")||{};
+    if(perms[oldLabel]){ perms[newLabel]=perms[oldLabel]; delete perms[oldLabel]; store("dalawinon_perms",perms); }
+  }catch(e){}
+  if(currentRole===oldLabel){ currentRole=newLabel; updateRoleBadge(); }
+  drawCodeRows();drawPermTable();
+  toast("Renamed to “"+newLabel+"”.");
+}
+function changeCode(role,newCode){
+  newCode=(newCode||"").trim();
+  if(role===MASTER_ROLE){toast("The master code cannot be changed.");drawCodeRows();return;}
+  if(!newCode){drawCodeRows();return;}
+  if(newCode===MASTER_CODE||(STAFF_CODES[newCode]&&STAFF_CODES[newCode]!==role)){toast("That code is already in use.");drawCodeRows();return;}
+  var oldCode=codeForRole(role);
+  if(oldCode)delete STAFF_CODES[oldCode];
+  STAFF_CODES[newCode]=role;
+  saveCodes();
+  drawCodeRows();
+  toast("Access code updated for "+role+".");
+}
+function removeRole(role){
+  if(role===MASTER_ROLE){toast("The master position cannot be removed.");return;}
+  if(!confirm("Remove the position “"+role+"”? Its access code will stop working."))return;
+  var code=codeForRole(role);
+  if(code)delete STAFF_CODES[code];
+  saveCodes();
+  try{
+    var perms=store("dalawinon_perms")||{};
+    if(perms[role]){ delete perms[role]; store("dalawinon_perms",perms); }
+  }catch(e){}
+  if(currentRole===role){ currentRole=""; setSignedIn(false); go("home"); }
+  drawCodeRows();drawPermTable();
+  toast("“"+role+"” removed.");
+}
+function addRole(label,code){
+  label=(label||"").trim(); code=(code||"").trim();
+  if(!label||!code){toast("Enter both a position name and an access code.");return;}
+  if(label===MASTER_ROLE||rolesList().indexOf(label)>=0){toast("That position name is already used.");return;}
+  if(code===MASTER_CODE||STAFF_CODES[code]){toast("That access code is already in use.");return;}
+  STAFF_CODES[code]=label;
+  saveCodes();
+  var a=$("#newCodeLabel"),b=$("#newCodeValue");
+  if(a)a.value=""; if(b)b.value="";
+  drawCodeRows();drawPermTable();
+  toast("“"+label+"” added.");
+}
+function drawPermTable(){
+  var el=$("#permTable");
+  if(!el)return;
+  var pm=permMap();
+  el.innerHTML='<div class="tablewrap"><table class="docs" style="min-width:560px"><thead><tr><th scope="col">Position</th>'+
+    CAPS.map(function(c){return '<th scope="col" style="text-align:center;font-size:12px">'+esc(c.label)+'</th>';}).join("")+
+    '</tr></thead><tbody>'+
+    rolesList().map(function(role){
+      var locked=(role===MASTER_ROLE),rp=pm[role]||{};
+      return '<tr><td style="font-weight:600">'+esc(role)+(locked?' <span style="color:var(--ink-3);font-weight:400;font-size:12px">(master)</span>':'')+'</td>'+
+        CAPS.map(function(c){
+          return '<td style="text-align:center"><input type="checkbox" data-permrole="'+esc(role)+'" data-permcap="'+c.k+'"'+(rp[c.k]?' checked':'')+(locked?' disabled':'')+' style="width:auto"></td>';
+        }).join("")+
+        '</tr>';
+    }).join("")+
+    '</tbody></table></div>';
+}
+document.addEventListener("change",function(e){
+  var row=e.target.closest("[data-codelabel-old],[data-codevalue]");
+  if(row&&mstr()){
+    if(e.target.hasAttribute("data-codelabel-old")){
+      renameRole(e.target.getAttribute("data-codelabel-old"),e.target.value);
+    }else if(e.target.hasAttribute("data-codevalue")){
+      changeCode(e.target.getAttribute("data-codevalue"),e.target.value);
+    }
+    return;
+  }
+  var cb=e.target.closest("[data-permrole]");
+  if(cb&&mstr()){
+    var role=cb.getAttribute("data-permrole"),cap=cb.getAttribute("data-permcap");
+    if(role===MASTER_ROLE){ cb.checked=true; return; }
+    try{
+      var perms=store("dalawinon_perms")||{};
+      perms[role]=Object.assign({}, DEFAULT_PERMS[role]||{}, perms[role]||{});
+      perms[role][cap]=cb.checked?1:0;
+      store("dalawinon_perms",perms);
+    }catch(err){}
+    toast("Updated what “"+role+"” can control.");
+  }
+});
+document.addEventListener("click",function(e){
+  var rm=e.target.closest("[data-coderemove]");
+  if(rm&&mstr()){ removeRole(rm.getAttribute("data-coderemove")); return; }
+});
+(function(){
+  var btn=$("#addCodeBtn");
+  if(btn)btn.addEventListener("click",function(){
+    addRole(($("#newCodeLabel")||{}).value,($("#newCodeValue")||{}).value);
+  });
+})();
+
 /* ---------------- deleting ---------------- */
 function delStore(){ return store("dalawinon_deleted")||{rec:[],doc:[],arc:[],sub:[]}; }
 function markDeleted(kind,id){
@@ -2375,7 +2580,8 @@ document.addEventListener("change",function(e){
 /* export, import and reset every local change */
 var LOCAL_KEYS=["dalawinon_pub","dalawinon_recs","dalawinon_deleted","dalawinon_text",
   "dalawinon_order","dalawinon_hidden","dalawinon_puroks","dalawinon_cls","dalawinon_req",
-  "dalawinon_fb","dalawinon_loginlog","dalawinon_deloff","dalawinon_clsmap"];
+  "dalawinon_fb","dalawinon_loginlog","dalawinon_deloff","dalawinon_clsmap",
+  "dalawinon_codes","dalawinon_perms"];
 function exportAll(){
   var out={};
   LOCAL_KEYS.forEach(function(k){ var v=store(k); if(v!==null&&v!==undefined)out[k]=v; });
@@ -2468,7 +2674,7 @@ function devReset(){
 }
 function showDev(){
   var w=$("#devWrap"), b=$("#devbtn");
-  if(isDev())drawHideToggles();
+  if(isDev()){ drawHideToggles(); drawCodeRows(); drawPermTable(); }
   if(w)w.style.display=isDev()?"block":"none";
   if(b)b.classList.toggle("show",isDev());
   if(!isDev()&&devOn)devMode(false);
@@ -2478,7 +2684,7 @@ function showDev(){
 var REC_ROLES=["BACKEND_CODER","Punong Barangay","SK Chairperson","SK Secretary"];   /* any record */
 var FIN_ROLE="SK Treasurer";                                          /* financial records only */
 var FIN_CATS=["Financial report","Liquidation or voucher"];
-function canAddRecords(){return REC_ROLES.indexOf(currentRole)>=0||currentRole===FIN_ROLE;}
+function canAddRecords(){return can("records");}
 function finOnly(){return currentRole===FIN_ROLE;}
 
 function showAddRecord(){
@@ -2579,6 +2785,27 @@ $("#recForm").addEventListener("submit",function(e){
   this.reset(); pendingFile=null; showAddRecord();
   toast(rec.pub?"Record added and listed in Documents.":"Record added to the staff records.");
 });
+
+/* one source of truth for what a record or document shows, in either tab.
+   Toggling Published<->Restricted more than once chains src/srcDoc references
+   together, so this walks that chain all the way to the original content
+   instead of stopping at the first link. */
+function previewFor(title){
+  var rec=RESTRICTED.filter(function(x){return x.t===title;})[0];
+  var doc=DOCS.filter(function(x){return x.t===title;})[0];
+  var obj=rec||doc, kind=rec?"rec":(doc?"doc":null);
+  var hops=0;
+  while(obj&&hops++<8){
+    if(kind==="doc"&&obj.src){ obj=obj.src; kind="rec"; continue; }
+    if(kind==="rec"&&obj.srcDoc){ obj=obj.srcDoc; kind="doc"; continue; }
+    break;
+  }
+  var file=(obj&&obj.file)||(rec&&rec.file)||(doc&&doc.file);
+  if(file)return filePreview(file);
+  if(kind==="rec")return recordPreview(obj);
+  if(kind==="doc")return docPreview(obj);
+  return recordPreview({t:title});
+}
 
 /* Placeholder contents for each restricted record. */
 function recordPreview(rec){
@@ -2731,7 +2958,8 @@ document.addEventListener("change",function(e){
       var src=rec||{};
       var saved=(RECS_ADDED.filter(function(x){return x.t===title;})[0])||{};
       DOCS.unshift({t:title, ty:(saved.ty||"Report"), c:(saved.c||"SK"),
-        d:(saved.d||new Date().toISOString().slice(0,10)), file:src.file, added:true});
+        d:(saved.d||new Date().toISOString().slice(0,10)), file:src.file,
+        src:(rec?rec:undefined), added:true});
     }
     RESTRICTED=RESTRICTED.filter(function(x){return x.t!==title;});
     toast("“"+title+"” is now published on the Documents tab.");
@@ -2747,7 +2975,7 @@ document.addEventListener("change",function(e){
       RESTRICTED.unshift({t:title, cl:to,
         w:"Withheld by the council. Classification changed from published.",
         rel:"On request, subject to approval.",
-        file:(doc&&doc.file)||undefined, added:true});
+        file:(doc&&doc.file)||undefined, srcDoc:doc, added:true});
     }
     toast(doc ? ("“"+title+"” was removed from the Documents tab and is now "+to.toLowerCase()+".")
               : ("Classification changed to "+to+"."));
@@ -2776,14 +3004,14 @@ function applyClsMap(){
       var doc=DOCS.filter(function(x){return x.t===title;})[0];
       if(to==="Published"){
         if(!doc&&rec)DOCS.unshift({t:title,ty:"Report",c:"SK",
-          d:new Date().toISOString().slice(0,10),file:rec.file,added:true});
+          d:new Date().toISOString().slice(0,10),file:rec.file,src:rec,added:true});
         RESTRICTED=RESTRICTED.filter(function(x){return x.t!==title;});
       }else{
         if(doc)DOCS=DOCS.filter(function(x){return x.t!==title;});
         if(rec)rec.cl=to;
         else if(doc)RESTRICTED.unshift({t:title,cl:to,
           w:"Withheld by the council. Classification changed from published.",
-          rel:"On request, subject to approval.",file:doc.file,added:true});
+          rel:"On request, subject to approval.",file:doc.file,srcDoc:doc,added:true});
       }
     });
   }catch(e){}
@@ -2810,11 +3038,7 @@ document.addEventListener("click",function(e){
   else if(title.indexOf("Draft SK Resolution")===0) extra=resolutionPreview();
   var recObj=RESTRICTED.filter(function(r){return r.t===title;})[0];
   var docObj=DOCS.filter(function(d){return d.t===title;})[0];
-  if(!extra){
-    if(recObj)extra=(recObj.file?filePreview(recObj.file):recordPreview(recObj));
-    else if(docObj)extra=docPreview(docObj);
-    else extra=recordPreview({t:title});
-  }
+  if(!extra)extra=previewFor(title);
   tr.innerHTML='<td colspan="5" style="background:var(--surface-2);color:var(--ink-2);font-size:14px">'+
     '<strong>'+esc(title)+'</strong><br>'+
     (docObj&&!recObj
@@ -3041,6 +3265,7 @@ $("#fbAgain").addEventListener("click",function(){
 drawLog();
 
 /* ---------------- boot ---------------- */
+loadCodes();
 go((location.hash||"").replace("#","")||"home",false);
 })();
 /* hero background slideshow: crossfade every 5 seconds */
