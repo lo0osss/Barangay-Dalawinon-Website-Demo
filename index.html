@@ -124,11 +124,13 @@ body.devmode [contenteditable="true"]:focus{outline:2px solid #3b4a66;outline-of
   /* on mobile, hide text labels to save space; icons remain */
   .staffbar .t{display:none}
   .staffbar{margin-left:4px;gap:4px}
-  .lockbtn,.accesslogbtn,.devbtn{
+  .accesslogbtn,.devbtn{
   display:none;align-items:center;gap:7px;margin-left:8px;cursor:pointer;
   border:1px solid #c3cada;background:#eef1f7;color:#3b4a66;
   padding:8px 13px;border-radius:8px;font-size:14px;font-weight:600
 }
+  /* the Staff button is never role-gated, so it must stay visible at every width */
+  .lockbtn{display:inline-flex;margin-left:8px}
 .devbtn.show{display:inline-flex}
 .devbtn:hover{border-color:#3b4a66}
 .devbtn.on{background:#3b4a66;border-color:#3b4a66;color:#fff}
@@ -791,6 +793,12 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
         <h4 style="font-size:15.5px;margin-bottom:10px">Pages shown in the menu</h4>
         <div id="hideRows"></div>
         <p style="font-size:13px;color:var(--ink-3);margin:4px 0 0">Unticking a page hides it from the public menu. Home and the staff area always stay.</p>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
+
+        <h4 style="font-size:15.5px;margin-bottom:10px">Feedback page</h4>
+        <div id="fbVisToggle"></div>
+        <p style="font-size:13px;color:var(--ink-3);margin:4px 0 0">Off by default. Residents can still submit feedback either way &mdash; this only controls whether they see their own past messages listed back to them on the page.</p>
 
         <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
 
@@ -2581,7 +2589,7 @@ document.addEventListener("change",function(e){
 var LOCAL_KEYS=["dalawinon_pub","dalawinon_recs","dalawinon_deleted","dalawinon_text",
   "dalawinon_order","dalawinon_hidden","dalawinon_puroks","dalawinon_cls","dalawinon_req",
   "dalawinon_fb","dalawinon_loginlog","dalawinon_deloff","dalawinon_clsmap",
-  "dalawinon_codes","dalawinon_perms"];
+  "dalawinon_codes","dalawinon_perms","dalawinon_fblogvis"];
 function exportAll(){
   var out={};
   LOCAL_KEYS.forEach(function(k){ var v=store(k); if(v!==null&&v!==undefined)out[k]=v; });
@@ -2674,7 +2682,7 @@ function devReset(){
 }
 function showDev(){
   var w=$("#devWrap"), b=$("#devbtn");
-  if(isDev()){ drawHideToggles(); drawCodeRows(); drawPermTable(); }
+  if(isDev()){ drawHideToggles(); drawFbVisToggle(); drawCodeRows(); drawPermTable(); }
   if(w)w.style.display=isDev()?"block":"none";
   if(b)b.classList.toggle("show",isDev());
   if(!isDev()&&devOn)devMode(false);
@@ -3226,10 +3234,22 @@ document.addEventListener("click",function(e){
 });
 
 /* ---------------- feedback ---------------- */
+/* MASTER can switch the "sent from this device" list on or off for residents */
+function fbLogVisible(){ var v=store("dalawinon_fblogvis"); return v===true; }
+function setFbLogVisible(on){ try{store("dalawinon_fblogvis",!!on);}catch(e){} drawLog(); drawFbVisToggle(); }
+function drawFbVisToggle(){
+  var el=$("#fbVisToggle");
+  if(!el)return;
+  el.innerHTML='<label style="display:flex;gap:9px;align-items:center;font-size:14.5px;cursor:pointer">'+
+    '<input type="checkbox" id="fbVisCb" style="width:auto"'+(fbLogVisible()?" checked":"")+'>'+
+    '<span>Show residents the messages they sent from their own device, on the Feedback page</span></label>';
+  var cb=$("#fbVisCb");
+  if(cb)cb.addEventListener("change",function(){ setFbLogVisible(this.checked); });
+}
 function drawLog(){
   var log=store("dalawinon_fb")||[];
+  if(!fbLogVisible()){ $("#fbLog").innerHTML=""; return; }
   $("#fbLog").innerHTML=log.length?
-    '<h3 style="font-size:17px;margin-bottom:12px">Messages you sent from this device</h3>'+
     log.map(function(m){
       return '<article class="item"><div class="meta"><span class="chip">'+esc(m.type)+'</span><span>'+esc(m.when)+'</span>'+
         (m.purok?'<span>'+esc(m.purok)+'</span>':'')+'</div><p>'+esc(m.msg)+'</p></article>';
