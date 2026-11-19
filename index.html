@@ -103,7 +103,7 @@ body.devmode [contenteditable="true"]:hover{outline-style:solid;outline-color:#6
 body.devmode [contenteditable="true"]:focus{outline:2px solid #3b4a66;outline-offset:3px}
 .devbtn .devlabel{display:none}
 @media(min-width:1500px){.devbtn .devlabel{display:inline}}
-@media(max-width:1260px){.devbtn{width:100%;justify-content:center;margin:6px 0 0}.devbtn .devlabel{display:inline}}
+@media(max-width:1300px){.devbtn{width:100%;justify-content:center;margin:6px 0 0}.devbtn .devlabel{display:inline}}
 .signout{
   display:none;align-items:center;gap:7px;cursor:pointer;
   border:1px solid #e0a9a5;background:#fbdedb;color:#9f201a;
@@ -112,7 +112,7 @@ body.devmode [contenteditable="true"]:focus{outline:2px solid #3b4a66;outline-of
 .signout:hover{border-color:#b3261e;background:#f8cbc7}
 .signout.show{display:inline-flex}
 .burger{display:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 11px;cursor:pointer}
-@media(max-width:1260px){
+@media(max-width:1300px){
   nav.main{
     position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;
     background:var(--surface);border-bottom:1px solid var(--line);padding:10px;gap:2px;display:none;
@@ -139,7 +139,7 @@ body.devmode [contenteditable="true"]:hover{outline-style:solid;outline-color:#6
 body.devmode [contenteditable="true"]:focus{outline:2px solid #3b4a66;outline-offset:3px}
 .devbtn .devlabel{display:none}
 @media(min-width:1500px){.devbtn .devlabel{display:inline}}
-@media(max-width:1260px){.devbtn{width:100%;justify-content:center;margin:6px 0 0}.devbtn .devlabel{display:inline}}
+@media(max-width:1300px){.devbtn{width:100%;justify-content:center;margin:6px 0 0}.devbtn .devlabel{display:inline}}
 .signout{padding:9px 11px}
 }
 
@@ -669,7 +669,7 @@ footer.site .flist button:hover{color:#fff;text-decoration:underline}
       <p>Records and working guidance for the officials who maintain this site. Kept separate from the public pages so documents, procedures and turnover notes stay in one institutional place rather than in any one officer&rsquo;s personal files.</p>
     </div>
 
-    <div class="lockline">
+    <div class="lockline" id="lockline">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       <span>
         <strong>You are signed in to the staff area.</strong>
@@ -1188,6 +1188,9 @@ function go(id,push){
 }
 
 document.addEventListener("click",function(e){
+  /* while editing page text, clicking into an editable span inside a nav
+     link (e.g. the brand logo text) should place the cursor, not navigate */
+  if(devOn&&e.target.closest('[contenteditable="true"]'))return;
   var el=e.target.closest("[data-go]");
   if(el){e.preventDefault();go(el.getAttribute("data-go"));}
 });
@@ -1287,6 +1290,9 @@ function updateRoleBadge(){
     badge.textContent=currentRole?currentRole:"";
     badge.style.display=currentRole?"inline-block":"none";
   }
+  /* the master account is never auto-signed-out, so the idle warning doesn't apply to it */
+  var ll=$("#lockline");
+  if(ll)ll.style.display=(currentRole===MASTER_ROLE)?"none":"";
   /* show/hide the Access Logs nav button */
   var alb=$("#accesslogbtn");
   var priv=can("logs");
@@ -1350,6 +1356,8 @@ function signOut(auto){
 }
 function startIdle(){
   clearTimeout(idleTimer);
+  idleTimer=null;
+  if(currentRole===MASTER_ROLE)return;  /* the master account never auto-signs-out */
   idleTimer=setTimeout(function(){signOut(true);},IDLE_MS);
 }
 ["mousemove","mousedown","keydown","scroll","touchstart","click"].forEach(function(ev){
